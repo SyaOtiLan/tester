@@ -1,8 +1,8 @@
 /**
  * warehouse — directed (user) share lifecycle (WH-API-050, 051, 052, 054).
  *
- * Owner (acquireToken) shares an owned file to a second real user (the wallet
- * identity) and then:
+ * Owner (acquireToken) shares an owned file to a separate, stable SIWE test
+ * identity and then:
  *   - WH-API-050: GET /share/user/list returns the share to the owner.
  *   - WH-API-051: GET /share/user/received returns the shared resource to the
  *     target.
@@ -13,7 +13,7 @@
  *
  * Requires:
  *   - WAREHOUSE_WEBDAV_URL          (backend API+WebDAV origin)
- *   - WAREHOUSE_WALLET_PRIVATE_KEY  (the target/audience user; SIWE auto-creates it)
+ *   - WAREHOUSE_WALLET_PRIVATE_KEY  (used to derive a separate test identity)
  *   - one working owner credential for acquireToken()
  *
  * Source: handler/share_user.go HandleListMine {items:[{id,...}]},
@@ -21,6 +21,7 @@
  * (?shareId=&path=) {items:[...]}, HandleRevoke {id}; a revoked share resolves
  * to ErrShareNotFound → 404.
  */
+import { createHmac } from 'node:crypto';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, loginWithWallet, authedRequest } from '../helpers/auth';
 import { createDirectedShare, putOwnedFile, revokeDirectedShare } from '../helpers/share';
@@ -29,20 +30,25 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 function targetKey(): string | undefined {
-  return envFor('warehouse')['WAREHOUSE_WALLET_PRIVATE_KEY'];
+  const key = envFor('warehouse')['WAREHOUSE_WALLET_PRIVATE_KEY'];
+  // Reuse one distinct test account across runs instead of creating a new
+  // account each time. Never log or persist the derived private key.
+  return key
+    ? `0x${createHmac('sha256', key).update('warehouse-directed-share-target-v1').digest('hex')}`
+    : undefined;
 }
 function hasOwnerCredential(): boolean {
   const env = envFor('warehouse');
   return Boolean(
     env['WAREHOUSE_AUTH_TOKEN'] ||
-      (env['WAREHOUSE_USER'] && env['WAREHOUSE_PASS']) ||
-      env['WAREHOUSE_WALLET_PRIVATE_KEY'],
+    (env['WAREHOUSE_USER'] && env['WAREHOUSE_PASS']) ||
+    env['WAREHOUSE_WALLET_PRIVATE_KEY'],
   );
 }
 function skipGuards() {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasOwnerCredential(), 'no warehouse owner credential configured');
-  test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
+  test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');
 }
 
 test.describe('directed share lifecycle', () => {
@@ -57,6 +63,8 @@ test.describe('directed share lifecycle', () => {
   test.beforeAll(async () => {
     if (!apiBase() || !hasOwnerCredential() || !targetKey()) return;
     ownerToken = (await acquireToken(apiBase()!)).token;
+    // The configured owner credentials and wallet can resolve to the same
+    // account. Derive a different, stable test-only identity for the audience.
     const target = await loginWithWallet(apiBase()!, targetKey()!);
     targetToken = target.token;
     targetAddress = target.address;
@@ -92,30 +100,19 @@ test.describe('directed share lifecycle', () => {
 
   test('WH-API-051 the target can list the resources shared to them', async () => {
     skipGuards();
-    // NOTE: the received-list endpoint reads the V3 projection tables
-    // (internal_shared_resources / internal_share_grants), which the backend
-    // only rebuilds from internal_share_items at server startup
-    // (database.ReconcileSharedResources — "safe to run on every startup").
-    // A directed share created at test time therefore does NOT surface here
-    // until the server restarts, so we assert the endpoint returns this
-    // audience's standing received set (this wallet identity has real grants
-    // in the target environment) rather than the just-created share. The
-    // real-time create→see path is covered by WH-API-050/054 against
-    // internal_share_items directly.
     const ctx = await authedRequest(apiBase()!, targetToken);
     try {
       const res = await ctx.get('/api/v1/public/share/user/received');
       expect(res.status()).toBe(200);
       const body = (await res.json()) as {
-        items: Array<{ resourceId: string; name: string; permissions: string[] }>;
+        items: Array<{ resourceId: string; name: string; path: string; permissions: string[] }>;
       };
       expect(Array.isArray(body.items)).toBe(true);
-      expect(body.items.length).toBeGreaterThanOrEqual(1);
-      for (const it of body.items) {
-        expect(it.resourceId).toBeTruthy();
-        expect(it.name).toBeTruthy();
-        expect(Array.isArray(it.permissions)).toBe(true);
-      }
+      const received = body.items.find((item) => item.path === `/${fileName}`);
+      expect(received).toBeTruthy();
+      expect(received?.name).toBe(fileName);
+      expect(received?.resourceId).toBeTruthy();
+      expect(received?.permissions).toContain('read');
     } finally {
       await ctx.dispose();
     }
