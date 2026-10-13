@@ -17,7 +17,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('password login yields a JWT bound to a wallet address', async () => {
+test("【鉴权与会话 / API】 密码登录会产生绑定到钱包地址的 JWT", async () => {
   skipIfNoService();
   const tokens = await acquireToken(baseURLFor('warehouse')!);
   expect(tokens.token).toMatch(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/);
@@ -25,7 +25,7 @@ test('password login yields a JWT bound to a wallet address', async () => {
   expect(tokens.source).toBe('password');
 });
 
-test('GET /api/v1/public/webdav/quota with JWT returns quota payload', async () => {
+test("【鉴权与会话 / API】 GET /api/v1/public/webdav/quota 和 JWT 返回配额负载", async () => {
   skipIfNoService();
   const tokens = await acquireToken(baseURLFor('warehouse')!);
   const ctx = await authedRequest(baseURLFor('warehouse')!, tokens.token);
@@ -42,7 +42,7 @@ test('GET /api/v1/public/webdav/quota with JWT returns quota payload', async () 
   }
 });
 
-test('GET /api/v1/public/webdav/user/info returns the signed-in user', async () => {
+test("【鉴权与会话 / API】 GET /api/v1/public/webdav/user/info 返回登录用户", async () => {
   skipIfNoService();
   const tokens = await acquireToken(baseURLFor('warehouse')!);
   const ctx = await authedRequest(baseURLFor('warehouse')!, tokens.token);
@@ -58,7 +58,7 @@ test('GET /api/v1/public/webdav/user/info returns the signed-in user', async () 
   }
 });
 
-test('WebDAV PROPFIND on root with Basic auth responds 207', async () => {
+test("【鉴权与会话 / API】 具有基本身份验证的 root 上的 WebDAV PROPFIND 响应 207", async () => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(
@@ -82,7 +82,7 @@ test('WebDAV PROPFIND on root with Basic auth responds 207', async () => {
   expectStatus(res, [207, 401, 403]);
 });
 
-test('WebDAV PROPFIND on /personal/<user> with Basic auth lists user space', async () => {
+test("【鉴权与会话 / API】 /personal/<user> 上的 WebDAV PROPFIND 具有基本身份验证列出用户空间", async () => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(
@@ -106,7 +106,7 @@ test('WebDAV PROPFIND on /personal/<user> with Basic auth lists user space', asy
   expectStatus(res, [207, 404, 401, 403]);
 });
 
-test('WebDAV PUT then GET round-trip preserves bytes (Basic auth)', async () => {
+test("【鉴权与会话 / API】 WebDAV PUT 然后 GET 往返保留字节（基本身份验证）", async () => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(

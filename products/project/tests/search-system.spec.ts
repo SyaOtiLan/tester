@@ -19,7 +19,7 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project search / system (P1 API)', () => {
+test.describe("【系统、健康与错误异常】项目搜索/系统（P1 API）（project search / system (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -29,7 +29,7 @@ test.describe('project search / system (P1 API)', () => {
   });
 
   // PJ-132 搜索项目
-  test('PJ-132 search/project finds a project by keyword', async () => {
+  test("【搜索 / API】 PJ-132 搜索项目", async () => {
     const uniq = `Zsou${Date.now() % 1000000}`;
     await createProject(baseURL!, user.token, { name: `搜索项目${uniq}` });
     const body = await apiGet(baseURL!, `/api/search/project?key=${uniq}`, user.token);
@@ -39,7 +39,7 @@ test.describe('project search / system (P1 API)', () => {
   });
 
   // PJ-133 搜索任务
-  test('PJ-133 search/task finds a task by keyword', async () => {
+  test("【搜索 / API】 PJ-133 搜索任务", async () => {
     const uniq = `Ztask${Date.now() % 1000000}`;
     const { id: pid } = await createProject(baseURL!, user.token, { name: `搜任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
@@ -52,7 +52,7 @@ test.describe('project search / system (P1 API)', () => {
   });
 
   // PJ-137 获取系统设置
-  test('PJ-137 system/setting returns the public configuration', async () => {
+  test("【系统、健康与错误异常 / API】 PJ-137 获取系统设置", async () => {
     const body = await apiGet(baseURL!, '/api/system/setting', user.token);
     expect(body.ret).toBe(1);
     expect(body.data).toHaveProperty('reg');
@@ -60,7 +60,7 @@ test.describe('project search / system (P1 API)', () => {
   });
 
   // PJ-138 非法方法名返回 404 not found
-  test('PJ-138 an unknown method returns a 404-not-found envelope', async () => {
+  test("【系统、健康与错误异常 / API】 PJ-138 非法方法名返回 404 not found", async () => {
     const body = await apiPost(baseURL!, '/api/users/nonexist', {}, user.token);
     expect(body.ret).toBe(0);
     expect(body.msg).toContain('404 not found');
@@ -68,7 +68,7 @@ test.describe('project search / system (P1 API)', () => {
   });
 
   // PJ-139 缺少必填参数返回参数错误
-  test('PJ-139 a missing required parameter returns 参数错误', async () => {
+  test("【系统、健康与错误异常 / API】 PJ-139 缺少必填参数返回参数错误", async () => {
     const body = await apiGet(baseURL!, '/api/project/tag/list', user.token);
     expect(body.ret).toBe(0);
     expect(body.msg).toBe('参数错误');

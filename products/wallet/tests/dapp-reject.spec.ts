@@ -44,7 +44,7 @@ async function openDapp(context: import('@playwright/test').BrowserContext) {
   return dapp;
 }
 
-test('WL-DAPP-009: rejecting eth_requestAccounts rejects with 4001 and leaves accounts empty', async ({ recorder }) => {
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-009 连接请求被拒绝返回 4001", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -80,7 +80,7 @@ test('WL-DAPP-009: rejecting eth_requestAccounts rejects with 4001 and leaves ac
   }
 });
 
-test('WL-DAPP-002: rejecting personal_sign rejects with 4001 and produces no signature', async ({ recorder }) => {
+test("【消息签名与授权 / DAPP】 WL-DAPP-002 dApp `personal_sign` 用户拒绝返回 4001", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

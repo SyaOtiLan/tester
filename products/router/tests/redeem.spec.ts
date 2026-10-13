@@ -21,7 +21,7 @@
  */
 import { test, baseURLFor } from '../fixtures';
 
-test('redeem-code dialog input & submit (RedeemCodePage)', async () => {
+test("【令牌、充值与余额 / E2E】 兑换代码对话框输入并提交（RedeemCodePage）", async () => {
   test.skip(
     !!baseURLFor('router') || true,
     'RedeemCodePage is only mounted by unrouted pages (BalanceStatusPage/TopUpRecordsPage); ' +

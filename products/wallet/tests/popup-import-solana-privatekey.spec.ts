@@ -33,7 +33,7 @@ const TEST_SOLANA_PRIVATE_KEY =
 const EXPECTED_SOLANA_ADDRESS = '5kMDkdera2vkpd3XkjMd851WJ4EnE9nxGcukW2mW7AU3';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('import Solana private key lands on #walletPage with the expected base58 address', async ({ recorder }) => {
+test("【钱包导入 / UI】 import Solana 私钥以预期的 base58 地址登陆 #walletPage", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

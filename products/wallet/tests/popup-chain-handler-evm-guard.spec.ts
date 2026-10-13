@@ -37,7 +37,7 @@ const TEST_TRON_PRIVATE_KEY =
   '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('EVM dApp protocol calls throw UNSUPPORTED_METHOD while Tron is active', async ({ recorder }) => {
+test("【popup chain handler evm guard / DAPP】 当 Tron 处于活动状态时，EVM dApp 协议调用会抛出 UNSUPPORTED_METHOD", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

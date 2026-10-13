@@ -12,7 +12,7 @@ import { registerUser, apiGet, apiPost, createProject, firstColumnId, type Regis
 
 const baseURL = baseURLFor('project');
 
-test.describe('project columns / task lists (P1 API)', () => {
+test.describe("【任务列表(看板列)】项目栏/任务列表 (P1 API)（project columns / task lists (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -22,7 +22,7 @@ test.describe('project columns / task lists (P1 API)', () => {
   });
 
   // PJ-053 空列表名被拒
-  test('PJ-053 an empty column name is rejected', async () => {
+  test("【任务列表(看板列) / API】 PJ-053 空列表名被拒", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `空列名${Date.now() % 100000}` });
     const body = await apiPost(baseURL!, '/api/project/column/add', { project_id: pid, name: '' }, user.token);
     expect(body.ret).toBe(0);
@@ -30,7 +30,7 @@ test.describe('project columns / task lists (P1 API)', () => {
   });
 
   // PJ-054 修改列表名称/颜色
-  test('PJ-054 update a column name and color; unknown column is rejected', async () => {
+  test("【任务列表(看板列) / API】 PJ-054 修改列表名称/颜色", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `改列${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const ok = await apiPost(
@@ -49,7 +49,7 @@ test.describe('project columns / task lists (P1 API)', () => {
   });
 
   // PJ-055 删除列表(权限)
-  test('PJ-055 delete a column; unknown column is rejected', async () => {
+  test("【任务列表(看板列) / API】 PJ-055 删除列表(权限)", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `删列${Date.now() % 100000}` });
     // Add a second column so the project still has one after removal.
     const added = await apiPost(baseURL!, '/api/project/column/add', { project_id: pid, name: '待删除' }, user.token);
@@ -66,7 +66,7 @@ test.describe('project columns / task lists (P1 API)', () => {
   });
 
   // PJ-056 获取任务列表(column/lists)
-  test('PJ-056 column/lists returns the project columns, paginated', async () => {
+  test("【任务列表(看板列) / API】 PJ-056 获取任务列表(column/lists)", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `列清单${Date.now() % 100000}` });
     await apiPost(baseURL!, '/api/project/column/add', { project_id: pid, name: '需求池' }, user.token);
     const body = await apiGet(baseURL!, `/api/project/column/lists?project_id=${pid}`, user.token);

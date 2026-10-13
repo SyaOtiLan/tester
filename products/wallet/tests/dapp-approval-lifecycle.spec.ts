@@ -41,7 +41,7 @@ async function openDapp(context: BrowserContext): Promise<Page> {
   return dapp;
 }
 
-test('WL-DAPP-020: closing the approval window rejects the request with 4001', async ({
+test("【错误、异常与安全边界 / DAPP】 WL-DAPP-020 审批窗关闭/超时视为拒绝", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -83,7 +83,7 @@ test('WL-DAPP-020: closing the approval window rejects the request with 4001', a
   }
 });
 
-test('WL-DAPP-021: concurrent same-origin connect requests reuse one approval window', async ({
+test("【错误、异常与安全边界 / DAPP】 WL-DAPP-021 同源并发/重复请求复用同一审批窗", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

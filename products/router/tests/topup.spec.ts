@@ -25,7 +25,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('立即充值 opens the payment popup and creates an order (boundary only)', async ({
+test("【令牌、充值与余额 / UI】 立即充值打开付款弹出窗口并创建订单（仅限边界）", async ({
   page,
   baseURL,
   recorder,

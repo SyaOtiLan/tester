@@ -40,8 +40,8 @@ interface ShareListItem {
   expiresAt?: string;
 }
 
-test.describe('public share lifecycle', () => {
-  test('WH-API-044 my shares list contains a newly-created share', async () => {
+test.describe("【文件分享】public share lifecycle（public share lifecycle）", () => {
+  test("【公开分享 / API】 WH-API-044 我的分享列表", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -69,7 +69,7 @@ test.describe('public share lifecycle', () => {
     await revokePublicShare(apiBase()!, token, share.token);
   });
 
-  test('WH-API-046 an expired share returns 410 Gone', async () => {
+  test("【公开分享 / API】 WH-API-046 过期分享访问返回 410 Gone", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -120,7 +120,7 @@ test.describe('public share lifecycle', () => {
     await revokePublicShare(apiBase()!, token, shareToken).catch(() => undefined);
   });
 
-  test('WH-API-047 a revoked share is no longer accessible (404)', async () => {
+  test("【公开分享 / API】 WH-API-047 撤销分享后访问被拒", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

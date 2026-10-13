@@ -27,7 +27,7 @@ const TEST_SOLANA_PRIVATE_KEY =
   '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('Solana-mode fee estimate shows SOL units, not ETH', async ({ recorder }) => {
+test("【转账与交易 / UI】 Solana-模式费用估算显示 SOL 单位，而不是 ETH", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

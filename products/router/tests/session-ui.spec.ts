@@ -22,7 +22,7 @@ function skipIfNoService() {
 }
 
 // RT-UI-014 (P1)
-test('a normal user hitting /admin/* is redirected to the workspace', async ({
+test("【管理后台与工作台 / UI】 普通用户点击 /admin/* 会被重定向到工作区", async ({
   page,
   baseURL,
   recorder,
@@ -45,7 +45,7 @@ test('a normal user hitting /admin/* is redirected to the workspace', async ({
 });
 
 // RT-UI-013 (P1)
-test('the user dropdown Logout clears the session and returns to /login', async ({
+test("【管理后台与工作台 / UI】 用户下拉注销会清除会话并返回到 /login", async ({
   page,
   baseURL,
   recorder,

@@ -79,7 +79,7 @@ async function requestChain(dapp: Page, method: string, params: unknown[]) {
   ) as Promise<{ ok: boolean; result?: unknown; code?: number; message?: string }>;
 }
 
-test('WL-DAPP-011: switch to a known chain emits chainChanged; unknown chain returns 4902', async ({
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-011 `wallet_switchEthereumChain`(EIP-3326)审批 + chainChanged", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -112,7 +112,7 @@ test('WL-DAPP-011: switch to a known chain emits chainChanged; unknown chain ret
   }
 });
 
-test('WL-DAPP-012: wallet_addEthereumChain registers and activates a new chain', async ({
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-012 `wallet_addEthereumChain`(EIP-3085)审批", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -159,7 +159,7 @@ test('WL-DAPP-012: wallet_addEthereumChain registers and activates a new chain',
   }
 });
 
-test('WL-DAPP-019: a chain mismatch is refused (4902) without silently switching', async ({
+test("【错误、异常与安全边界 / DAPP】 WL-DAPP-019 链不匹配的提示与处理", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

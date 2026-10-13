@@ -24,7 +24,7 @@ const SIWE_DOMAIN = 'dapp.e2e.invalid';
 const SIWE_NONCE = 'e2e0nce12345678';
 const SIWE_URI = 'https://dapp.e2e.invalid';
 
-test('WL-DAPP-004: SIWE message is parsed into structured fields and signed', async ({ recorder }) => {
+test("【消息签名与授权 / DAPP】 WL-DAPP-004 SIWE(EIP-4361)消息结构化展示并签名", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

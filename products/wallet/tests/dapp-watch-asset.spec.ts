@@ -62,7 +62,7 @@ function watchAsset(dapp: Page) {
   ) as Promise<{ ok: boolean; result?: unknown; code?: number; message?: string }>;
 }
 
-test('WL-DAPP-013: wallet_watchAsset shows token details and approving returns true', async ({
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-013 批准 wallet_watchAsset 并返回 true", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -93,7 +93,7 @@ test('WL-DAPP-013: wallet_watchAsset shows token details and approving returns t
   }
 });
 
-test('WL-DAPP-013: rejecting wallet_watchAsset returns false', async ({ recorder }) => {
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-013 拒绝 wallet_watchAsset 并返回 false", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

@@ -11,7 +11,7 @@ function skipIfNoService() {
 }
 
 // CH-004 — liveness probe.
-test('CH-004 /health/live returns ok with no-store', async ({ request }) => {
+test("【健康检查与冒烟 / API】 CH-004 存活探针 /health/live 返回 ok", async ({ request }) => {
   skipIfNoService();
   const res = await request.get('/health/live');
   expect(res.status()).toBe(200);
@@ -21,7 +21,7 @@ test('CH-004 /health/live returns ok with no-store', async ({ request }) => {
 });
 
 // CH-005 — readiness probe reports a version string.
-test('CH-005 /health/ready returns version', async ({ request }) => {
+test("【健康检查与冒烟 / API】 CH-005 就绪探针 /health/ready 返回版本", async ({ request }) => {
   skipIfNoService();
   const res = await request.get('/health/ready');
   expect(res.status()).toBe(200);
@@ -35,7 +35,7 @@ test('CH-005 /health/ready returns version', async ({ request }) => {
 });
 
 // CH-006 — runtime public config, GET and POST, no private key leakage.
-test('CH-006 /api/config exposes public runtime fields (GET & POST)', async ({ request }) => {
+test("【健康检查与冒烟 / API】 CH-006 运行时公开配置下发 /api/config", async ({ request }) => {
   skipIfNoService();
   for (const method of ['get', 'post'] as const) {
     const res = method === 'get' ? await request.get('/api/config') : await request.post('/api/config');

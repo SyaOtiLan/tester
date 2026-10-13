@@ -53,7 +53,7 @@ async function connect(context: BrowserContext, extensionId: string, dapp: Page)
   return (await p) as string[];
 }
 
-test('WL-DAPP-016: a request against a locked wallet opens the unlock approval and then completes', async ({
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-016 钱包锁定时 dApp 请求触发解锁审批窗", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

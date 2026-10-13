@@ -21,7 +21,7 @@ function skipIfNoSPA() {
 
 const spaURL = () => envFor('social')['SOCIAL_WEB_URL']!;
 
-test('landing renders the social SPA', async ({ page }) => {
+test("【登录与服务探活 / UI】 社交应用页面正常渲染", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   await expect(page.locator('body')).toBeVisible();
@@ -29,7 +29,7 @@ test('landing renders the social SPA', async ({ page }) => {
   expect(text.length).toBeGreaterThan(50);
 });
 
-test('navigation surfaces at least one link or menu entry', async ({ page }) => {
+test("【登录与服务探活 / UI】 导航中至少显示一个链接或菜单入口", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   const entries = page.locator('a[href], [role="link"], [role="menuitem"]');
@@ -37,7 +37,7 @@ test('navigation surfaces at least one link or menu entry', async ({ page }) => 
   expect(await entries.count()).toBeGreaterThan(0);
 });
 
-test('auth or wallet-connect affordance is discoverable', async ({ page }) => {
+test("【登录与服务探活 / UI】 可找到身份验证或钱包连接入口", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   // Element Plus wraps `<input>` in a styled container; the raw

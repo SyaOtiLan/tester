@@ -35,7 +35,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('admin user management', () => {
+test.describe("【管理员用户管理】管理员用户管理（admin user management）", () => {
   test.describe.configure({ mode: 'serial' });
   let adminToken = '';
   let canManage = false;
@@ -56,7 +56,7 @@ test.describe('admin user management', () => {
     );
   }
 
-  test('WH-API-071 an admin can list all users', async () => {
+  test("【管理员用户管理 / API】 WH-API-071 管理员列出用户", async () => {
     gate();
     const ctx = await authedRequest(apiBase()!, adminToken);
     try {
@@ -70,7 +70,7 @@ test.describe('admin user management', () => {
     }
   });
 
-  test('WH-API-072 an admin can create a user', async () => {
+  test("【管理员用户管理 / API】 WH-API-072 管理员创建用户", async () => {
     gate();
     const username = `e2e-admin-create-${Date.now()}`;
     const ctx = await authedRequest(apiBase()!, adminToken);
@@ -90,7 +90,7 @@ test.describe('admin user management', () => {
     }
   });
 
-  test('WH-API-073 an admin can reset a user password', async () => {
+  test("【管理员用户管理 / API】 WH-API-073 管理员重置用户密码", async () => {
     gate();
     const username = `e2e-admin-reset-${Date.now()}`;
     const ctx = await authedRequest(apiBase()!, adminToken);

@@ -29,7 +29,7 @@ const TEST_BITCOIN_PRIVATE_KEY =
 const EXPECTED_BITCOIN_ADDRESS = 'bc1q5428vq2uzwhm3taey9sr9x5vm6tk78ew0wt525';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('import Bitcoin private key lands on #walletPage with the expected P2WPKH address', async ({ recorder }) => {
+test("【钱包导入 / UI】 import Bitcoin 私钥登陆 #walletPage 并具有预期的 P2WPKH 地址", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

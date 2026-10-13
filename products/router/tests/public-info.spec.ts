@@ -18,7 +18,7 @@ function skipIfNoService() {
 }
 
 // RT-API-003 (P2)
-test('GET /billing/currencies returns available billing currencies', async () => {
+test("【服务健康与公共信息 / API】 GET /billing/currencies 返回可用的计费货币", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -41,7 +41,7 @@ test('GET /billing/currencies returns available billing currencies', async () =>
 });
 
 // RT-API-004 (P2)
-test('public content endpoints (/about, /notice, /home_page_content) return strings', async () => {
+test("【服务健康与公共信息 / API】 公共内容端点（/about, /notice, /home_page_content) 返回字符串", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {

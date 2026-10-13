@@ -14,11 +14,11 @@ import { apiGet, apiPost, createProject, firstColumnId } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project dashboard search / badges / 404 (P2 UI)', () => {
+test.describe("【导航与 SPA 布局】项目仪表板搜索/徽章/404 (P2 UI)（project dashboard search / badges / 404 (P2 UI)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-026 仪表盘搜索快捷入口
-  test('PJ-026 the dashboard search shortcut opens the global search box', async ({ page }) => {
+  test("【仪表盘 / UI】 PJ-026 仪表盘搜索快捷入口", async ({ page }) => {
     await seedUiSession(page, baseURL!);
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
 
@@ -29,7 +29,7 @@ test.describe('project dashboard search / badges / 404 (P2 UI)', () => {
   });
 
   // PJ-033 未读消息/超期任务角标显示
-  test('PJ-033 an overdue task surfaces the dashboard nav badge', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-033 未读消息/超期任务角标显示", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `角标项目${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, acc.token, pid);
@@ -50,7 +50,7 @@ test.describe('project dashboard search / badges / 404 (P2 UI)', () => {
   });
 
   // PJ-035 访问未知路由渲染 404 页面
-  test('PJ-035 an unknown manage route renders the 404 page', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-035 访问未知路由渲染 404 页面", async ({ page }) => {
     await page.addInitScript(() => {
       try {
         (globalThis as any).localStorage.setItem('__system:languageName__', 'zh');
@@ -65,7 +65,7 @@ test.describe('project dashboard search / badges / 404 (P2 UI)', () => {
   });
 
   // PJ-140 访问不存在页面渲染 404
-  test('PJ-140 a non-existent top-level route renders the 404 page', async ({ page }) => {
+  test("【系统、健康与错误异常 / UI】 PJ-140 访问不存在页面渲染 404", async ({ page }) => {
     await page.goto('/#/no-such-page-xyz-12345', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.page-404')).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText('404').first()).toBeVisible();

@@ -25,8 +25,8 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 
-test.describe('warehouse negative auth', () => {
-  test('WH-API-006 password login with a wrong password is rejected (401, no token)', async () => {
+test.describe("【鉴权与会话】仓库负授权（warehouse negative auth）", () => {
+  test("【鉴权与会话 / API】 WH-API-006 密码登录错误口令被拒", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const username = envFor('warehouse')['WAREHOUSE_USER'];
     test.skip(!username, 'WAREHOUSE_USER not configured');
@@ -44,7 +44,7 @@ test.describe('warehouse negative auth', () => {
     }
   });
 
-  test('WH-API-007 protected API without JWT returns 401', async () => {
+  test("【鉴权与会话 / API】 WH-API-007 受保护接口缺少 JWT 返回 401", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const ctx = await apiContext(apiBase()!);
     try {
@@ -55,7 +55,7 @@ test.describe('warehouse negative auth', () => {
     }
   });
 
-  test('WH-API-022 WebDAV PROPFIND without credentials returns 401 + WWW-Authenticate', async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-022 无凭证访问 WebDAV 返回 401", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const prefix = envFor('warehouse')['WAREHOUSE_WEBDAV_PREFIX'] ?? '/dav';
     const ctx = await apiContext(apiBase()!);

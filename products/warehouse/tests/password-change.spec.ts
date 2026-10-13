@@ -56,10 +56,10 @@ async function rawLoginStatus(username: string, password: string): Promise<numbe
   }
 }
 
-test.describe('self-service password change', () => {
+test.describe("【用户资料与密码】自助修改密码（self-service password change）", () => {
   test.describe.configure({ mode: 'serial' });
 
-  test('WH-API-062 a valid password change succeeds', async () => {
+  test("【用户资料与密码 / API】 WH-API-062 修改密码成功", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     // Operate on a FRESH random wallet identity (auto-created via SIWE) rather
     // than the shared admin credential: changing a throwaway account's password
@@ -93,7 +93,7 @@ test.describe('self-service password change', () => {
     }
   });
 
-  test('WH-API-063 a too-short new password is rejected with 400', async () => {
+  test("【用户资料与密码 / API】 WH-API-063 新密码少于 6 位被拒", async () => {
     skipGuards();
     const { pass } = creds();
     const tokens = await loginWithPassword(apiBase()!);
@@ -110,7 +110,7 @@ test.describe('self-service password change', () => {
     }
   });
 
-  test('WH-API-064 a wrong old password is rejected with 401', async () => {
+  test("【用户资料与密码 / API】 WH-API-064 旧密码错误被拒", async () => {
     skipGuards();
     const { user, pass } = creds();
     const tokens = await loginWithPassword(apiBase()!);

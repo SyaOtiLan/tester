@@ -37,7 +37,7 @@ async function ensureNodeReachable(url: string) {
   }
 }
 
-test('real wallet drives node SPA: window.ethereum is the YeYing provider', async () => {
+test("【dApp 连接与 Provider / DAPP】 真实钱包驱动节点SPA：window.ethereum是YeYing提供商", async () => {
   skipIfNoNodeSPA();
   const nodeURL = baseURLFor('node')!;
   await ensureNodeReachable(nodeURL);
@@ -83,7 +83,7 @@ test('real wallet drives node SPA: window.ethereum is the YeYing provider', asyn
   }
 });
 
-test('node can request an account via the approval window', async () => {
+test("【dApp 连接与 Provider / DAPP】 节点可以通过审批窗口请求帐户", async () => {
   skipIfNoNodeSPA();
   const nodeURL = baseURLFor('node')!;
   await ensureNodeReachable(nodeURL);
@@ -129,7 +129,7 @@ test('node can request an account via the approval window', async () => {
   }
 });
 
-test('node discovers the wallet via EIP-6963 announceProvider', async () => {
+test("【dApp 连接与 Provider / DAPP】 节点通过 EIP-6963 announceProvider 发现钱包", async () => {
   skipIfNoNodeSPA();
   const nodeURL = baseURLFor('node')!;
   await ensureNodeReachable(nodeURL);

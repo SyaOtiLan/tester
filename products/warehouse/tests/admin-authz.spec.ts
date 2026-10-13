@@ -32,7 +32,7 @@ function hasCredential(): boolean {
   );
 }
 
-test('WH-API-075 non-admin JWT is forbidden on admin users/list (403)', async () => {
+test("【管理员用户管理 / API】 WH-API-075 非管理员访问 admin 接口返回 403", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasCredential(), 'no warehouse credential configured');
 

@@ -45,7 +45,7 @@ async function openTransferPage(context: import('@playwright/test').BrowserConte
   return popup;
 }
 
-test('transfer rejects malformed recipient addresses and stays on the transfer page', async ({ recorder }) => {
+test("【转账与交易 / UI】 转账会拒绝格式错误的收件人地址并停留在转账页面", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -73,7 +73,7 @@ test('transfer rejects malformed recipient addresses and stays on the transfer p
   }
 });
 
-test('transfer accepts a well-formed recipient address (validation advances to amount)', async ({ recorder }) => {
+test("【转账与交易 / UI】 转账接受格式正确的收件人地址（验证金额）", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

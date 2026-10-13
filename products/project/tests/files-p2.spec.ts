@@ -12,11 +12,11 @@ import { registerUser, apiGet, apiPost, withDeadlockRetry } from '../helpers/api
 
 const baseURL = baseURLFor('project');
 
-test.describe('project files (P2 API)', () => {
+test.describe("【文件管理(文件柜)】项目文件（P2 API）（project files (P2 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-099 保存与获取文件内容
-  test('PJ-099 file/content/save then file/content round-trips a document body', async () => {
+  test("【文件管理(文件柜) / API】 PJ-099 保存与获取文件内容", async () => {
     const user = await registerUser(baseURL!);
     const add = await withDeadlockRetry(() =>
       apiPost(baseURL!, '/api/file/add', { type: 'document', name: `笔记${Date.now() % 100000}`, pid: 0 }, user.token),
@@ -42,7 +42,7 @@ test.describe('project files (P2 API)', () => {
   });
 
   // PJ-100 文件共享设置与退出共享
-  test('PJ-100 file/share/update shares a file and a member can share/out', async () => {
+  test("【文件管理(文件柜) / API】 PJ-100 文件共享设置与退出共享", async () => {
     const owner = await registerUser(baseURL!);
     const member = await registerUser(baseURL!);
 

@@ -31,7 +31,7 @@ import { createAndUnlockWallet, waitForApproval } from '../helpers/popup';
 // content script still injects the provider because the URL is https.
 const DAPP_ORIGIN = 'https://dapp.e2e.invalid/';
 
-test('dApp personal_sign is approved and returns a valid signature', async ({ recorder }) => {
+test("【消息签名与授权 / DAPP】 dApp personal_sign 被批准并返回有效签名", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

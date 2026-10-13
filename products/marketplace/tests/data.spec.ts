@@ -32,20 +32,20 @@ import {
 // 一、文件与解析 (MP-DATA-004 .. 007)
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('MP-DATA-004 tools/index.json exists and is a non-empty JSON array', () => {
+test("【文件与解析 / DATA】 MP-DATA-004 tools/index.json 存在且为合法 JSON 数组", () => {
   expect(exists('tools/index.json'), 'tools/index.json missing').toBe(true);
   const tools = readToolsIndex();
   expect(Array.isArray(tools)).toBe(true);
   expect(tools.length).toBeGreaterThan(0);
 });
 
-test('MP-DATA-005 tools/packages.json is a JSON array, length matches tools/index.json', () => {
+test("【文件与解析 / DATA】 MP-DATA-005 tools/packages.json 存在且为合法 JSON 数组", () => {
   const pkgs = readToolsPackages();
   expect(Array.isArray(pkgs)).toBe(true);
   expect(pkgs.length).toBe(readToolsIndex().length);
 });
 
-test('MP-DATA-006 schemas dir has two well-formed JSON Schemas', () => {
+test("【文件与解析 / DATA】 MP-DATA-006 schemas 目录含两个 JSON Schema 且合法", () => {
   for (const rel of ['schemas/skill.schema.json', 'schemas/tool-server.schema.json']) {
     expect(exists(rel), `${rel} missing`).toBe(true);
     const schema = readJson<Record<string, unknown>>(rel);
@@ -55,7 +55,7 @@ test('MP-DATA-006 schemas dir has two well-formed JSON Schemas', () => {
   }
 });
 
-test('MP-DATA-007 starter templates parse and satisfy their schema required fields', () => {
+test("【文件与解析 / DATA】 MP-DATA-007 templates 起始模板存在且为合法 JSON", () => {
   const skillSchema = readSkillSchema();
   const skillTpl = readJson<Record<string, unknown>>('templates/skill.json');
   for (const field of skillSchema.required as string[]) {
@@ -72,7 +72,7 @@ test('MP-DATA-007 starter templates parse and satisfy their schema required fiel
 // 二、Schema 校验:技能包 (MP-DATA-008 .. 020) — packages.json cn/en groups
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('MP-DATA-008 every skill package has all required fields', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-008 技能包含全部必填字段", () => {
   const required = readSkillSchema().required as string[];
   for (const { pkg } of allSkillPackages()) {
     for (const field of required) {
@@ -81,25 +81,25 @@ test('MP-DATA-008 every skill package has all required fields', () => {
   }
 });
 
-test('MP-DATA-009 skill schemaVersion is const "1.0"', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-009 schemaVersion 恒为 \"1.0\"", () => {
   for (const { pkg } of allSkillPackages()) {
     expect(pkg.schemaVersion, `skill ${label(pkg)}`).toBe('1.0');
   }
 });
 
-test('MP-DATA-010 skill id is kebab-case', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-010 id 符合 kebab-case 正则", () => {
   for (const { pkg } of allSkillPackages()) {
     expect(pkg.id, `skill ${label(pkg)}`).toMatch(KEBAB);
   }
 });
 
-test('MP-DATA-011 skill version is semver', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-011 version 符合 semver 正则", () => {
   for (const { pkg } of allSkillPackages()) {
     expect(pkg.version, `skill ${label(pkg)}`).toMatch(SEMVER);
   }
 });
 
-test('MP-DATA-012 skill name/description are localizedText', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-012 name / description 为 localizedText", () => {
   for (const { pkg } of allSkillPackages()) {
     expect(isLocalizedText(pkg.name), `skill ${label(pkg)} name`).toBe(true);
     if (pkg.description !== undefined) {
@@ -108,7 +108,7 @@ test('MP-DATA-012 skill name/description are localizedText', () => {
   }
 });
 
-test('MP-DATA-013 skill launch satisfies the oneOf constraint', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-013 launch 满足 oneOf 约束", () => {
   for (const { pkg } of allSkillPackages()) {
     const launch = pkg.launch;
     expect(launch, `skill ${label(pkg)} launch`).toBeDefined();
@@ -126,7 +126,7 @@ test('MP-DATA-013 skill launch satisfies the oneOf constraint', () => {
   }
 });
 
-test('MP-DATA-014 skill instructions satisfies the oneOf constraint', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-014 instructions 满足 oneOf 约束", () => {
   for (const { pkg } of allSkillPackages()) {
     const ins = pkg.instructions;
     expect(ins, `skill ${label(pkg)} instructions`).toBeDefined();
@@ -141,7 +141,7 @@ test('MP-DATA-014 skill instructions satisfies the oneOf constraint', () => {
   }
 });
 
-test('MP-DATA-015 optional icon is well-formed', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-015 icon 结构合法", () => {
   for (const { pkg } of allSkillPackages()) {
     if (pkg.icon === undefined) continue;
     expect(['emoji', 'builtin', 'url'], `skill ${label(pkg)} icon.type`).toContain(pkg.icon.type);
@@ -150,7 +150,7 @@ test('MP-DATA-015 optional icon is well-formed', () => {
   }
 });
 
-test('MP-DATA-016 optional visibility.scope is enumerated', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-016 visibility.scope 属枚举", () => {
   for (const { pkg } of allSkillPackages()) {
     if (pkg.visibility === undefined) continue;
     expect(['private', 'organization', 'public'], `skill ${label(pkg)}`).toContain(
@@ -159,7 +159,7 @@ test('MP-DATA-016 optional visibility.scope is enumerated', () => {
   }
 });
 
-test('MP-DATA-017 permissions carries all four required fields with correct types', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-017 permissions 含必填四字段", () => {
   for (const { pkg } of allSkillPackages()) {
     if (pkg.permissions === undefined) continue;
     const p = pkg.permissions;
@@ -170,7 +170,7 @@ test('MP-DATA-017 permissions carries all four required fields with correct type
   }
 });
 
-test('MP-DATA-018 release.status / review are enumerated', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-018 release.status / review 属枚举", () => {
   for (const { pkg } of allSkillPackages()) {
     if (pkg.release === undefined) continue;
     expect(['draft', 'published', 'deprecated', 'removed'], `skill ${label(pkg)} status`).toContain(
@@ -184,7 +184,7 @@ test('MP-DATA-018 release.status / review are enumerated', () => {
   }
 });
 
-test('MP-DATA-019 toolServers[] structure and transport enum', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-019 toolServers[] 结构与 transport 枚举", () => {
   for (const { pkg } of allSkillPackages()) {
     for (const ts of pkg.toolServers ?? []) {
       expect(typeof ts.id, `skill ${label(pkg)} toolServer id`).toBe('string');
@@ -195,7 +195,7 @@ test('MP-DATA-019 toolServers[] structure and transport enum', () => {
   }
 });
 
-test('MP-DATA-020 skill packages carry no unknown top-level fields', () => {
+test("【Schema 校验:技能包 / DATA】 MP-DATA-020 技能包无未知字段(additionalProperties=false)", () => {
   const schema = readSkillSchema();
   for (const { pkg } of allSkillPackages()) {
     expect(unknownTopLevelKeys(pkg, schema), `skill ${label(pkg)} unknown keys`).toEqual([]);
@@ -206,7 +206,7 @@ test('MP-DATA-020 skill packages carry no unknown top-level fields', () => {
 // 三、Schema 校验:Tool Server 包 (MP-DATA-021 .. 027) — tools/packages.json
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('MP-DATA-021 every tool server has all required fields', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-021 Tool Server 含全部必填字段", () => {
   const required = readToolSchema().required as string[];
   for (const pkg of readToolsPackages()) {
     for (const field of required) {
@@ -215,19 +215,19 @@ test('MP-DATA-021 every tool server has all required fields', () => {
   }
 });
 
-test('MP-DATA-022 tool server id is kebab-case', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-022 Tool Server id 符合 kebab-case", () => {
   for (const pkg of readToolsPackages()) {
     expect(pkg.id).toMatch(KEBAB);
   }
 });
 
-test('MP-DATA-023 tool server configurable is a boolean', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-023 configurable 为布尔", () => {
   for (const pkg of readToolsPackages()) {
     expect(typeof pkg.configurable, `tool ${pkg.id}`).toBe('boolean');
   }
 });
 
-test('MP-DATA-024 tool server release.status / review are the tool-server enums', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-024 release.status / review 属 Tool Server 枚举", () => {
   for (const pkg of readToolsPackages()) {
     expect(['published', 'draft', 'removed'], `tool ${pkg.id} status`).toContain(pkg.release.status);
     expect(['approved', 'pending', 'rejected'], `tool ${pkg.id} review`).toContain(
@@ -236,7 +236,7 @@ test('MP-DATA-024 tool server release.status / review are the tool-server enums'
   }
 });
 
-test('MP-DATA-025 command is non-empty and baseArgs is a string array', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-025 command 非空且 baseArgs 为字符串数组", () => {
   for (const pkg of readToolsPackages()) {
     expect(typeof pkg.command, `tool ${pkg.id} command`).toBe('string');
     expect(pkg.command.length).toBeGreaterThan(0);
@@ -245,7 +245,7 @@ test('MP-DATA-025 command is non-empty and baseArgs is a string array', () => {
   }
 });
 
-test('MP-DATA-026 configurable=true tool servers provide a configSchema.properties', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-026 configurable=true 时提供 configSchema", () => {
   for (const pkg of readToolsPackages()) {
     if (pkg.configurable !== true) continue;
     expect(pkg.configSchema, `tool ${pkg.id} configSchema`).toBeDefined();
@@ -254,7 +254,7 @@ test('MP-DATA-026 configurable=true tool servers provide a configSchema.properti
   }
 });
 
-test('MP-DATA-027 tool servers carry no unknown top-level fields', () => {
+test("【Schema 校验:Tool Server 包 / DATA】 MP-DATA-027 Tool Server 无未知字段", () => {
   const schema = readToolSchema();
   for (const pkg of readToolsPackages()) {
     expect(unknownTopLevelKeys(pkg, schema), `tool ${pkg.id} unknown keys`).toEqual([]);
@@ -265,7 +265,7 @@ test('MP-DATA-027 tool servers carry no unknown top-level fields', () => {
 // 四、条目唯一性与一致性 (MP-DATA-029 .. 037) — 028 already in index.spec.ts
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('MP-DATA-029 index entries carry version / path / release', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-029 index 条目含 version/path/release", () => {
   for (const e of readIndex()) {
     expect(typeof e.version, `entry ${e.id} version`).toBe('string');
     expect(typeof e.path, `entry ${e.id} path`).toBe('string');
@@ -274,7 +274,7 @@ test('MP-DATA-029 index entries carry version / path / release', () => {
   }
 });
 
-test('MP-DATA-030 (id, lang) combination is unique', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-030 (id, lang) 组合唯一", () => {
   const seen = new Set<string>();
   for (const e of readIndex()) {
     const key = `${e.lang}:${e.id}`;
@@ -283,7 +283,7 @@ test('MP-DATA-030 (id, lang) combination is unique', () => {
   }
 });
 
-test('MP-DATA-031 id is unique within each lang', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-031 同一 lang 内 id 不重复", () => {
   for (const lang of ['cn', 'en']) {
     const ids = readIndex()
       .filter((e) => e.lang === lang)
@@ -292,25 +292,25 @@ test('MP-DATA-031 id is unique within each lang', () => {
   }
 });
 
-test('MP-DATA-032 lang is one of {cn, en}', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-032 lang 取值属 {cn, en}", () => {
   for (const e of readIndex()) {
     expect(['cn', 'en'], `entry ${e.id}`).toContain(e.lang);
   }
 });
 
-test('MP-DATA-033 index version is semver', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-033 index 的 version 符合 semver", () => {
   for (const e of readIndex()) {
     expect(e.version, `entry ${e.id}`).toMatch(SEMVER);
   }
 });
 
-test('MP-DATA-034 index.id matches the source file parent folder', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-034 index.id 与源文件父目录名一致", () => {
   for (const e of readIndex()) {
     expect(parentFolder(e.path), `entry ${e.id} path ${e.path}`).toBe(e.id);
   }
 });
 
-test('MP-DATA-035 index and packages are consistent (one-to-one, versions match)', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-035 index 与 packages 一致", () => {
   const index = readIndex();
   const groups = readPackages();
   // Every index entry has a matching package with the same version.
@@ -329,7 +329,7 @@ test('MP-DATA-035 index and packages are consistent (one-to-one, versions match)
   }
 });
 
-test('MP-DATA-036 tools/index ids unique and consistent with tools/packages', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-036 tools/index id 唯一且与 tools/packages 一致", () => {
   const idx = readToolsIndex();
   const pkgs = readToolsPackages();
   const ids = idx.map((t) => t.id);
@@ -344,7 +344,7 @@ test('MP-DATA-036 tools/index ids unique and consistent with tools/packages', ()
   }
 });
 
-test('MP-DATA-037 codex skills never enter index / packages', () => {
+test("【条目唯一性与一致性 / DATA】 MP-DATA-037 codex 技能不进入 index / packages", () => {
   const codexDir = abs('skills/codex');
   if (!existsSync(codexDir)) {
     test.skip(true, 'skills/codex absent');
@@ -366,19 +366,19 @@ test('MP-DATA-037 codex skills never enter index / packages', () => {
 // 五、引用与资源完整性 (MP-DATA-038 .. 045)
 // ─────────────────────────────────────────────────────────────────────────────
 
-test('MP-DATA-038 index.path points to an existing source file', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-038 index.path 指向真实存在的源文件", () => {
   for (const e of readIndex()) {
     expect(existsSync(abs(e.path)), `dangling index path ${e.path}`).toBe(true);
   }
 });
 
-test('MP-DATA-039 tools/index.path points to an existing file', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-039 tools/index.path 指向真实存在的文件", () => {
   for (const t of readToolsIndex()) {
     expect(existsSync(abs(t.path)), `dangling tool path ${t.path}`).toBe(true);
   }
 });
 
-test('MP-DATA-040 skill toolServers[].id reference a registered tool server', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-040 技能 toolServers[].id 引用真实存在的 Tool Server", () => {
   const toolIds = new Set(readToolsIndex().map((t) => t.id));
   for (const { pkg } of allSkillPackages()) {
     for (const ts of pkg.toolServers ?? []) {
@@ -387,7 +387,7 @@ test('MP-DATA-040 skill toolServers[].id reference a registered tool server', ()
   }
 });
 
-test('MP-DATA-041 permissions.externalTools align with declared tool dependencies', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-041 permissions.externalTools 与工具依赖一致", () => {
   for (const { pkg } of allSkillPackages()) {
     const external: string[] = pkg.permissions?.externalTools ?? [];
     if (external.length === 0) continue;
@@ -401,7 +401,7 @@ test('MP-DATA-041 permissions.externalTools align with declared tool dependencie
   }
 });
 
-test('MP-DATA-042 icon.type=url has a well-formed URL value', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-042 icon.type=url 时 value 可解析", () => {
   let seen = 0;
   for (const { pkg } of allSkillPackages()) {
     if (pkg.icon?.type !== 'url') continue;
@@ -411,7 +411,7 @@ test('MP-DATA-042 icon.type=url has a well-formed URL value', () => {
   test.skip(seen === 0, 'no icon.type=url skills (future data guard)');
 });
 
-test('MP-DATA-043 icon.type=emoji has a valid unicode code point value', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-043 icon.type=emoji 时 value 为合法 unicode 码点", () => {
   let seen = 0;
   for (const { pkg } of allSkillPackages()) {
     if (pkg.icon?.type !== 'emoji') continue;
@@ -427,7 +427,7 @@ test('MP-DATA-043 icon.type=emoji has a valid unicode code point value', () => {
   test.skip(seen === 0, 'no icon.type=emoji skills');
 });
 
-test('MP-DATA-044 instructions.type=file path points to an existing file', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-044 instructions.type=file 时 path 指向存在文件", () => {
   let seen = 0;
   for (const { pkg } of allSkillPackages()) {
     if (pkg.instructions?.type !== 'file') continue;
@@ -440,7 +440,7 @@ test('MP-DATA-044 instructions.type=file path points to an existing file', () =>
   test.skip(seen === 0, 'all instructions are inline (future data guard)');
 });
 
-test('MP-DATA-045 npx @yeying-community tool packages have local source', () => {
+test("【引用与资源完整性 / DATA】 MP-DATA-045 npx @yeying-community 包有本地源码", () => {
   let seen = 0;
   for (const pkg of readToolsPackages()) {
     if (pkg.command !== 'npx') continue;
@@ -461,7 +461,7 @@ test('MP-DATA-045 npx @yeying-community tool packages have local source', () => 
 
 const KNOWN_CATEGORIES = new Set(['productivity', 'finance', 'research']);
 
-test('MP-DATA-046 category is a non-empty string from the known set', () => {
+test("【分类、标签与排序 / DATA】 MP-DATA-046 category 为非空字符串且属已知集合", () => {
   for (const e of readIndex()) {
     expect(typeof e.category, `entry ${e.id} category type`).toBe('string');
     expect((e.category ?? '').length).toBeGreaterThan(0);
@@ -471,7 +471,7 @@ test('MP-DATA-046 category is a non-empty string from the known set', () => {
   }
 });
 
-test('MP-DATA-047 tags are a string array with unique elements', () => {
+test("【分类、标签与排序 / DATA】 MP-DATA-047 tags 为字符串数组且元素唯一", () => {
   const check = (tags: unknown, who: string) => {
     if (tags === undefined) return;
     expect(Array.isArray(tags), `${who} tags`).toBe(true);
@@ -483,7 +483,7 @@ test('MP-DATA-047 tags are a string array with unique elements', () => {
   for (const { pkg } of allSkillPackages()) check(pkg.tags, `package ${label(pkg)}`);
 });
 
-test('MP-DATA-048 packages.json is grouped by cn/en, each an array', () => {
+test("【分类、标签与排序 / DATA】 MP-DATA-048 packages.json 按 cn/en 分组且每组为数组", () => {
   const groups = readPackages() as Record<string, unknown>;
   expect(typeof groups, 'packages.json top-level').toBe('object');
   expect('cn' in groups, 'cn group').toBe(true);
@@ -492,7 +492,7 @@ test('MP-DATA-048 packages.json is grouped by cn/en, each an array', () => {
   expect(Array.isArray(groups['en']), 'en array').toBe(true);
 });
 
-test('MP-DATA-049 index entries follow the build.mjs deterministic order', () => {
+test("【分类、标签与排序 / DATA】 MP-DATA-049 index 条目按 id 稳定排序", () => {
   const chatDir = abs('skills/chat');
   const folders = readdirSync(chatDir, { withFileTypes: true })
     .filter((d) => d.isDirectory())
@@ -508,7 +508,7 @@ test('MP-DATA-049 index entries follow the build.mjs deterministic order', () =>
   expect(actual).toEqual(expected);
 });
 
-test('MP-DATA-050 tools/index follows the sorted-filename order', () => {
+test("【分类、标签与排序 / DATA】 MP-DATA-050 tools/index 按文件名稳定排序", () => {
   const files = readdirSync(abs('tools/servers'))
     .filter((f) => f.endsWith('.json'))
     .sort();

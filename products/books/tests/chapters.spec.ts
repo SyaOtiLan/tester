@@ -19,14 +19,14 @@ function diskChapterFiles(): string[] {
 }
 
 // BK-DATA-014
-test('BK-DATA-014 no orphan chapter files (every chapter is referenced by SUMMARY)', () => {
+test("【章节文件与孤儿检测 / DATA】 BK-DATA-014 agent 章节文件无孤儿(均被 SUMMARY 引用)", () => {
   const referenced = new Set(summaryChapterFiles());
   const orphans = diskChapterFiles().filter((f) => !referenced.has(f));
   expect(orphans).toEqual([]);
 });
 
 // BK-DATA-015
-test('BK-DATA-015 every SUMMARY-referenced chapter exists on disk (reverse check)', () => {
+test("【章节文件与孤儿检测 / DATA】 BK-DATA-015 SUMMARY 引用的章节文件都真实存在(反向校验)", () => {
   const onDisk = new Set(diskChapterFiles());
   const dangling = summaryChapterFiles().filter((f) => !onDisk.has(f));
   expect(dangling).toEqual([]);
@@ -35,7 +35,7 @@ test('BK-DATA-015 every SUMMARY-referenced chapter exists on disk (reverse check
 });
 
 // BK-DATA-016
-test('BK-DATA-016 every chapter file is non-empty and has a heading', () => {
+test("【章节文件与孤儿检测 / DATA】 BK-DATA-016 每个章节文件非空且含标题", () => {
   const emptyOrTitleless: string[] = [];
   for (const f of diskChapterFiles()) {
     const text = readText(`agent/chapters/${f}`);
@@ -46,7 +46,7 @@ test('BK-DATA-016 every chapter file is non-empty and has a heading', () => {
 });
 
 // BK-DATA-017
-test('BK-DATA-017 chapter file numbering matches SUMMARY order', () => {
+test("【章节文件与孤儿检测 / DATA】 BK-DATA-017 章节文件名编号与 SUMMARY 顺序对应", () => {
   const summaryNums = summaryChapterFiles()
     .map((f) => /^(\d+)-/.exec(f))
     .filter((m): m is RegExpExecArray => m != null)
@@ -64,7 +64,7 @@ test('BK-DATA-017 chapter file numbering matches SUMMARY order', () => {
 });
 
 // BK-DATA-018
-test('BK-DATA-018 yeying single-product files are complete and referenced by overview', () => {
+test("【章节文件与孤儿检测 / DATA】 BK-DATA-018 yeying 单产品说明文件齐全且被总览引用", () => {
   const dir = 'yeying/社区/产品/单产品';
   const files = readdirSync(abs(dir)).filter((f) => f.endsWith('.md'));
   expect(files.length).toBe(8);

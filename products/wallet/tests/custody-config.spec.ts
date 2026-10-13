@@ -30,7 +30,7 @@ interface SettingsResult {
   settings?: Settings;
 }
 
-test('CUST-001: custody defaults — node.yeying.pub, custody/write, disabled', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-001 默认配置", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -52,7 +52,7 @@ test('CUST-001: custody defaults — node.yeying.pub, custody/write, disabled', 
   }
 });
 
-test('CUST-002: config modal rejects an illegal URL and normalizes a valid one', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / UI】 CUST-002 地址校验(配置弹窗)", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

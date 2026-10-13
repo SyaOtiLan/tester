@@ -91,7 +91,7 @@ function snapshotRequest(overrides: Record<string, unknown> = {}) {
 }
 
 // RT-API-073 (P0) — snapshot create → list → update → delete round-trip.
-test('admin channel billing snapshot create/list/update/delete round-trip', async () => {
+test("【渠道账务与告警管理 / API】 管理员渠道账务快照创建、列表、更新、删除闭环", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -151,7 +151,7 @@ test('admin channel billing snapshot create/list/update/delete round-trip', asyn
 });
 
 // RT-API-074 (P1) — snapshot request validation + channel-not-found.
-test('snapshot create validates the request and reports a missing channel', async () => {
+test("【渠道账务与告警管理 / API】 创建账务快照时校验请求参数，并对不存在的渠道返回错误", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);

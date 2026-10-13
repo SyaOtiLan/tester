@@ -50,7 +50,7 @@ async function precreateDraft(
   }
 }
 
-test('ND-E2E-002 edit a draft application and persist via application_update', async ({
+test("【开发者应用生命周期 / E2E】 ND-E2E-002 编辑草稿并保存持久化", async ({
   page,
   recorder,
 }) => {
@@ -137,7 +137,7 @@ test('ND-E2E-002 edit a draft application and persist via application_update', a
   }
 });
 
-test('ND-E2E-005 apply-to-use an online application', async ({ page, recorder }) => {
+test("【申请使用应用 / E2E】 ND-E2E-005 申请使用已上线应用", async ({ page, recorder }) => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');

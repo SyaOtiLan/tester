@@ -165,7 +165,7 @@ async function waitForTerminalDelivery(
   }
 }
 
-test('ND-API-034 generic webhook delivery loop signs and delivers to a live callback', async () => {
+test("【通知中心 / API】 ND-API-034 通用 Webhook 投递闭环(签名校验)", async () => {
   skipIfNoService();
   test.setTimeout(90_000);
   const baseURL = baseURLFor('node')!;
@@ -228,7 +228,7 @@ for (const bot of [
   { id: 'ND-API-035', format: 'dingtalk', urlKey: 'NODE_DINGTALK_WEBHOOK_URL', secretKey: 'NODE_DINGTALK_WEBHOOK_SECRET' },
   { id: 'ND-API-036', format: 'feishu', urlKey: 'NODE_FEISHU_WEBHOOK_URL', secretKey: 'NODE_FEISHU_WEBHOOK_SECRET' },
 ] as const) {
-  test(`${bot.id} ${bot.format} bot delivers a real notification`, async () => {
+  test(`【通知中心 / API】 ${bot.id} ${bot.format} 机器人成功投递真实通知`, async () => {
     skipIfNoService();
     const env = envFor('node');
     const botUrl = env[bot.urlKey]?.trim();
@@ -287,7 +287,7 @@ function parseSseFrame(raw: string): SseEvent | null {
   return { event, data: dataLines.join('\n') };
 }
 
-test('ND-API-037 notification stream pushes a live notification.created event', async () => {
+test("【通知中心 / API】 ND-API-037 通知中心 SSE 实时推送闭环", async () => {
   skipIfNoService();
   test.setTimeout(60_000);
   const baseURL = baseURLFor('node')!;

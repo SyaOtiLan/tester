@@ -81,8 +81,8 @@ async function findByName(name: string): Promise<RecycleItem | undefined> {
   }
 }
 
-test.describe('recycle bin', () => {
-  test('WH-API-039 a deleted file appears in the recycle list', async () => {
+test.describe("【回收站】回收站（recycle bin）", () => {
+  test("【回收站 / API】 WH-API-039 删除文件进入回收站列表", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -105,7 +105,7 @@ test.describe('recycle bin', () => {
     }
   });
 
-  test('WH-API-040 recover restores a deleted file to its original path', async () => {
+  test("【回收站 / API】 WH-API-040 从回收站恢复文件", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -152,7 +152,7 @@ test.describe('recycle bin', () => {
     }
   });
 
-  test('WH-API-041 permanent delete removes a recycle entry for good', async () => {
+  test("【回收站 / API】 WH-API-041 永久删除单个回收站条目", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

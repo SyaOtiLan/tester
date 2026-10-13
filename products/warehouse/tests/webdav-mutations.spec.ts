@@ -40,8 +40,8 @@ async function davContext() {
   return apiContext(apiBase()!, applyAuth({}, basicAuth()));
 }
 
-test.describe('WebDAV mutation verbs', () => {
-  test('WH-API-017 DELETE a file, then GET returns 404', async () => {
+test.describe("【WebDAV 文件访问协议】WebDAV 突变动词（WebDAV mutation verbs）", () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-017 DELETE 文件后再 GET 返回 404", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -63,7 +63,7 @@ test.describe('WebDAV mutation verbs', () => {
     }
   });
 
-  test('WH-API-018 MKCOL creates a directory that appears in PROPFIND', async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-018 MKCOL 创建目录", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -92,7 +92,7 @@ test.describe('WebDAV mutation verbs', () => {
     }
   });
 
-  test('WH-API-019 MOVE renames a file; target has the bytes, source is gone', async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-019 MOVE 重命名/移动文件", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -126,7 +126,7 @@ test.describe('WebDAV mutation verbs', () => {
     }
   });
 
-  test("WH-API-023 PUT into another user's /personal space is forbidden (403)", async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-023 PUT 到他人个人空间返回 403", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

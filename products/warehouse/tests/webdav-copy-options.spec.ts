@@ -35,8 +35,8 @@ async function davContext() {
   return apiContext(apiBase()!, applyAuth({}, basicAuth()));
 }
 
-test.describe('WebDAV protocol edges', () => {
-  test('WH-API-020 COPY duplicates a file to a new path', async () => {
+test.describe("【WebDAV 文件访问协议】WebDAV 协议边缘（WebDAV protocol edges）", () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-020 COPY 复制文件", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -74,7 +74,7 @@ test.describe('WebDAV protocol edges', () => {
     }
   });
 
-  test('WH-API-021 OPTIONS advertises supported verbs and DAV capabilities', async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-021 OPTIONS 返回支持的方法与 DAV 头", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -94,7 +94,7 @@ test.describe('WebDAV protocol edges', () => {
     }
   });
 
-  test('WH-API-024 GET of a non-existent file returns 404', async () => {
+  test("【WebDAV 文件访问协议 / API】 WH-API-024 GET 不存在文件返回 404", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

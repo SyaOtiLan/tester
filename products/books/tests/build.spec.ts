@@ -14,7 +14,7 @@ function foundBuildConfigs(): string[] {
 }
 
 // BK-DATA-033
-test('BK-DATA-033 repo is a pure SUMMARY-directory repo (no build tooling)', () => {
+test("【构建配置 / DATA】 BK-DATA-033 检测构建配置并断言\"纯 SUMMARY 目录型仓库\"契约", () => {
   const configs = foundBuildConfigs();
   // Contract: no mdBook/GitBook/MkDocs config present — the repo is organised as a
   // plain SUMMARY.md directory tree, so its absence is expected, not breakage.
@@ -26,7 +26,7 @@ test('BK-DATA-033 repo is a pure SUMMARY-directory repo (no build tooling)', () 
 });
 
 // BK-DATA-034
-test('BK-DATA-034 build config, if present, produces HTML', () => {
+test("【构建配置 / DATA】 BK-DATA-034 存在构建配置时可产出 HTML", () => {
   const configs = foundBuildConfigs();
   test.skip(configs.length === 0, 'no supported build config present; nothing to build');
   // Reached only when a config appears; would run `mdbook build` (or equivalent)

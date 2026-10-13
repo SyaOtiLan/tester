@@ -40,7 +40,7 @@ function hasOwnerCredential(): boolean {
   );
 }
 
-test('WH-API-048 re-share a file from a received resource', async () => {
+test("【公开分享 / API】 WH-API-048 从收到的资源二次分享", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (audience identity) not configured');
 
@@ -88,7 +88,7 @@ test('WH-API-048 re-share a file from a received resource', async () => {
   }
 });
 
-test('WH-API-053 audiences lists the targets of a directed share', async () => {
+test("【定向分享(给指定用户) / API】 WH-API-053 受众列表 audiences", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasOwnerCredential(), 'no warehouse owner credential configured');
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');

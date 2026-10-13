@@ -11,7 +11,7 @@ import { registerUser, apiGet, apiPost, type RegisteredUser } from '../helpers/a
 
 const baseURL = baseURLFor('project');
 
-test.describe('project messages & reports (P1 API)', () => {
+test.describe("【messages reports】项目消息和报告 (P1 API)（project messages & reports (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -21,7 +21,7 @@ test.describe('project messages & reports (P1 API)', () => {
   });
 
   // PJ-103 获取对话列表
-  test('PJ-103 dialog/lists returns the conversation list', async () => {
+  test("【消息与对话 / API】 PJ-103 获取对话列表", async () => {
     const body = await apiGet(baseURL!, '/api/dialog/lists', user.token);
     expect(body.ret).toBe(1);
     expect(body.data).toHaveProperty('data');
@@ -29,7 +29,7 @@ test.describe('project messages & reports (P1 API)', () => {
   });
 
   // PJ-104 发送文本消息
-  test('PJ-104 dialog/msg/sendtext sends a text message', async () => {
+  test("【消息与对话 / API】 PJ-104 发送文本消息", async () => {
     // Open (auto-create) a 1-on-1 dialog to obtain a valid dialog_id.
     const open = await apiGet(baseURL!, `/api/dialog/open/user?userid=${user.userid}`, user.token);
     expect(open.ret).toBe(1);
@@ -48,7 +48,7 @@ test.describe('project messages & reports (P1 API)', () => {
   });
 
   // PJ-108 保存并发送工作汇报
-  test('PJ-108 report/store saves a work report', async () => {
+  test("【工作汇报 / API】 PJ-108 保存并发送工作汇报", async () => {
     const body = await apiPost(
       baseURL!,
       '/api/report/store',
@@ -62,7 +62,7 @@ test.describe('project messages & reports (P1 API)', () => {
   });
 
   // PJ-109 我发送/我接收的汇报列表
-  test('PJ-109 report/my and report/receive return report lists', async () => {
+  test("【工作汇报 / API】 PJ-109 我发送/我接收的汇报列表", async () => {
     // Ensure at least one sent report exists.
     await apiPost(
       baseURL!,

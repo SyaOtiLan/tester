@@ -31,7 +31,7 @@ const NET_RPC = 'https://tx-detail.e2e.invalid/rpc';
 const NET_CHAIN_ID = '0x539'; // 1337
 const BURN_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-test('WL-UI-029: opening a transaction shows its detail page', async ({ recorder }) => {
+test("【转账与交易 / UI】 WL-UI-029 交易详情页展示", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

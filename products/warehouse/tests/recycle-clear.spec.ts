@@ -41,7 +41,7 @@ interface RecycleList {
   total?: number;
 }
 
-test('WH-API-042 clearing the recycle bin empties the list', async () => {
+test("【回收站 / API】 WH-API-042 清空回收站", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

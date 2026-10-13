@@ -11,7 +11,7 @@ function baseURL(): string {
   return (process.env['MARKETPLACE_BASE_URL'] ?? '').replace(/\/$/, '');
 }
 
-test('MP-API-002 static URL GET /packages.json is 2xx and grouped cn/en', async ({ request }) => {
+test("【可选静态 URL 与冒烟 / API】 MP-API-002 静态 URL GET /packages.json 可获取且为合法 JSON", async ({ request }) => {
   test.skip(!hasEnv('MARKETPLACE_BASE_URL'), 'MARKETPLACE_BASE_URL unset — static-URL fetch N/A');
   const res = await request.get(`${baseURL()}/packages.json`);
   expect(res.status()).toBeGreaterThanOrEqual(200);
@@ -21,7 +21,7 @@ test('MP-API-002 static URL GET /packages.json is 2xx and grouped cn/en', async 
   expect(body).toHaveProperty('en');
 });
 
-test('MP-API-003 static URL GET /tools/packages.json is 2xx and an array', async ({ request }) => {
+test("【可选静态 URL 与冒烟 / API】 MP-API-003 静态 URL GET /tools/packages.json 可获取", async ({ request }) => {
   test.skip(!hasEnv('MARKETPLACE_BASE_URL'), 'MARKETPLACE_BASE_URL unset — static-URL fetch N/A');
   const res = await request.get(`${baseURL()}/tools/packages.json`);
   expect(res.status()).toBeGreaterThanOrEqual(200);
@@ -29,7 +29,7 @@ test('MP-API-003 static URL GET /tools/packages.json is 2xx and an array', async
   expect(Array.isArray(await res.json())).toBe(true);
 });
 
-test('MP-API-004 with BASE_URL unset, data cases fall back to disk with no side effects', () => {
+test("【可选静态 URL 与冒烟 / API】 MP-API-004 未设置 BASE_URL 时回退磁盘读取", () => {
   // Precondition of this suite: static URL is not configured.
   expect(hasEnv('MARKETPLACE_BASE_URL')).toBe(false);
   // The disk-fallback path must produce real, usable data.

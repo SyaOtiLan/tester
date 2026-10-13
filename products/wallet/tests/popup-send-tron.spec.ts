@@ -54,7 +54,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 // do, since the stub ignores it.
 const RECIPIENT = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t'; // USDT mainnet contract
 
-test('broadcast Tron native TRX transfer reaches /wallet/broadcasttransaction with a 65-byte ECDSA suffix', async ({ recorder }) => {
+test("【转账与交易 / UI】 广播 Tron 本机 TRX 传输到达 /wallet/broadcasttransaction，带有 65 字节 ECDSA 后缀", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

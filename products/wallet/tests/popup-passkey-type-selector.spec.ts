@@ -29,7 +29,7 @@ interface FormContract {
   nameInputType: string;
 }
 
-test('WL-UI-152: passkey registration offers an authenticator-type selector + device name', async () => {
+test("【安全与备份恢复 / UI】 WL-UI-152：密钥注册提供身份验证器类型选择器+设备名称", async () => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

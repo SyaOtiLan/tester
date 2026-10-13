@@ -21,7 +21,7 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project tasks (P2 API)', () => {
+test.describe("【任务管理】项目任务（P2 API）（project tasks (P2 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -31,7 +31,7 @@ test.describe('project tasks (P2 API)', () => {
   });
 
   // PJ-069 复制任务到目标项目
-  test('PJ-069 task/copy duplicates a task into another project', async () => {
+  test("【任务管理 / API】 PJ-069 复制任务到目标项目", async () => {
     const src = await createProject(baseURL!, user.token, { name: `复制源${Date.now() % 100000}` });
     const srcCol = await firstColumnId(baseURL!, user.token, src.id);
     const { id: tid } = await addTask(baseURL!, user.token, {
@@ -56,7 +56,7 @@ test.describe('project tasks (P2 API)', () => {
   });
 
   // PJ-072 创建/获取任务聊天室
-  test('PJ-072 task/dialog opens (and reuses) the task chat room', async () => {
+  test("【任务管理 / API】 PJ-072 创建/获取任务聊天室", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `任务群${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, {
@@ -79,7 +79,7 @@ test.describe('project tasks (P2 API)', () => {
   });
 
   // PJ-073 任务负责人/协助人超 10 个被拒
-  test('PJ-073 task/update rejects more than 10 owners', async () => {
+  test("【任务管理 / API】 PJ-073 任务负责人/协助人超 10 个被拒", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `负责人上限${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, {

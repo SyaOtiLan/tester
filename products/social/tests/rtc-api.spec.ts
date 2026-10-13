@@ -36,7 +36,7 @@ function rtcURL(): string | undefined {
 
 // SO-API-062 (P2) — the rtc service's system-config probe is reachable and
 // returns the WebRTC config (ICE servers, channel cap).
-test('SO-API-062 RTC system config reachable', async () => {
+test("【音视频通话(RTC 信令) / API】 SO-API-062 RTC 系统配置可达", async () => {
   test.skip(!platformURL() || !identityURL(), 'SOCIAL_BASE_URL / SOCIAL_IDENTITY_URL required');
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
 
@@ -66,7 +66,7 @@ test('SO-API-062 RTC system config reachable', async () => {
 // second, WS-connected peer in an automated API run (the SPA's /ws handshake
 // does not complete here either), so the call returns a generic {code:500} for
 // every variant — success cannot be reached without an online peer.
-test('SO-API-063 initiate 1:1 call signal', async () => {
+test("【音视频通话(RTC 信令) / API】 SO-API-063 发起 1:1 通话信令", async () => {
   test.skip(
     true,
     'A call signal needs a WS-connected callee to succeed; no online peer is ' +

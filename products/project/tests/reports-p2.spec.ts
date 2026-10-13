@@ -12,11 +12,11 @@ import { registerUser, apiGet, apiPost } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project reports (P2 API)', () => {
+test.describe("【工作汇报】项目报告（P2 API）（project reports (P2 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-111 生成汇报模板
-  test('PJ-111 report/template returns a pre-filled weekly template', async () => {
+  test("【工作汇报 / API】 PJ-111 生成汇报模板", async () => {
     const user = await registerUser(baseURL!);
     const body = await apiGet(baseURL!, '/api/report/template?type=weekly', user.token);
     expect(body.ret).toBe(1);
@@ -29,7 +29,7 @@ test.describe('project reports (P2 API)', () => {
   });
 
   // PJ-110 汇报标记已读与未读数
-  test('PJ-110 report/unread counts a received report and report/read clears it', async () => {
+  test("【工作汇报 / API】 PJ-110 汇报标记已读与未读数", async () => {
     const sender = await registerUser(baseURL!);
     const receiver = await registerUser(baseURL!);
 

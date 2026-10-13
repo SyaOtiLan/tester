@@ -38,7 +38,7 @@ function hasPassword(): boolean {
   return Boolean(env['WAREHOUSE_USER'] && env['WAREHOUSE_PASS']);
 }
 
-test('WH-API-010 logout clears the refresh session so a later refresh fails', async () => {
+test("【鉴权与会话 / API】 WH-API-010 auth/logout 注销会话", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasPassword(), 'WAREHOUSE_USER/PASS required for the logout→refresh round-trip');
 
@@ -70,7 +70,7 @@ test('WH-API-010 logout clears the refresh session so a later refresh fails', as
   }
 });
 
-test('WH-API-011 email code endpoint validates the address and is wired', async () => {
+test("【鉴权与会话 / API】 WH-API-011 邮箱验证码发送", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const ctx = await apiContext(apiBase()!);
@@ -97,7 +97,7 @@ test('WH-API-011 email code endpoint validates the address and is wired', async 
   }
 });
 
-test('WH-API-012 email login rejects a wrong/expired code', async () => {
+test("【鉴权与会话 / API】 WH-API-012 邮箱验证码登录", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   // The success path needs a real delivered code; the mail channel is not
@@ -115,7 +115,7 @@ test('WH-API-012 email login rejects a wrong/expired code', async () => {
   }
 });
 
-test('WH-API-013 identity login session returns an issuerEndpoint', async () => {
+test("【鉴权与会话 / API】 WH-API-013 identity/UCAN 登录会话创建", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const ctx = await apiContext(apiBase()!);

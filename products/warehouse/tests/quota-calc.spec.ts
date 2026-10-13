@@ -39,7 +39,7 @@ interface Quota {
   unlimited: boolean;
 }
 
-test('WH-API-058 quota percentage matches used/quota after an upload', async () => {
+test("【配额 / API】 WH-API-058 配额百分比计算正确", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   // A brand-new wallet → empty, finite default quota → exact arithmetic.
@@ -74,7 +74,7 @@ test('WH-API-058 quota percentage matches used/quota after an upload', async () 
   }
 });
 
-test('WH-API-059 an unlimited-quota account is flagged unlimited', async () => {
+test("【配额 / API】 WH-API-059 无限配额标记 unlimited", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasPassword(), 'WAREHOUSE_USER/PASS required (admin has the unlimited quota)');
 

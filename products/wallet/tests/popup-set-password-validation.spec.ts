@@ -22,7 +22,7 @@ import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
 import { stubPublicEndpoints } from '../helpers/network';
 import { byId, openPopup, TEST_WALLET_NAME, TEST_PASSWORD } from '../helpers/popup';
 
-test('WL-UI-005: empty and too-short passwords are rejected and no wallet is created', async ({
+test("【钱包创建与初始化 / UI】 WL-UI-005 设置密码时两次输入不一致 / 空密码被拒绝", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

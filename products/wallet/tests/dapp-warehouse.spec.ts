@@ -61,7 +61,7 @@ async function createAndUnlockWalletInPopup(
   return popup;
 }
 
-test('real wallet drives warehouse SPA: window.ethereum is the YeYing provider', async () => {
+test("【dApp 连接与 Provider / DAPP】 真实钱包驱动仓库SPA：window.ethereum是YeYing提供商", async () => {
   skipIfNoWarehouseSPA();
   const warehouseURL = baseURLFor('warehouse')!;
   await ensureWarehouseReachable(warehouseURL);
@@ -103,7 +103,7 @@ test('real wallet drives warehouse SPA: window.ethereum is the YeYing provider',
   }
 });
 
-test('warehouse can request an account via the approval window', async () => {
+test("【dApp 连接与 Provider / DAPP】 仓库可以通过审批窗口申请账户", async () => {
   skipIfNoWarehouseSPA();
   const warehouseURL = baseURLFor('warehouse')!;
   await ensureWarehouseReachable(warehouseURL);
@@ -152,7 +152,7 @@ test('warehouse can request an account via the approval window', async () => {
   }
 });
 
-test('warehouse discovers the wallet via EIP-6963 announceProvider', async () => {
+test("【dApp 连接与 Provider / DAPP】 仓库通过 EIP-6963 announceProvider 发现钱包", async () => {
   skipIfNoWarehouseSPA();
   const warehouseURL = baseURLFor('warehouse')!;
   await ensureWarehouseReachable(warehouseURL);

@@ -17,7 +17,7 @@ function relOf(file: string): string {
 const IMAGE_EXT = /\.(png|jpe?g|gif|svg|webp|bmp|ico)$/i;
 
 // BK-DATA-022
-test('BK-DATA-022 markdown image references point at existing files', () => {
+test("【资源引用(图片/资产) / DATA】 BK-DATA-022 markdown 图片引用目标文件存在", () => {
   const missing: string[] = [];
   let refCount = 0;
   for (const file of allMarkdown()) {
@@ -37,7 +37,7 @@ test('BK-DATA-022 markdown image references point at existing files', () => {
 });
 
 // BK-DATA-023 — REAL FINDING (orphan asset)
-test('BK-DATA-023 no orphan image assets (every asset is referenced by some markdown)', () => {
+test("【资源引用(图片/资产) / DATA】 BK-DATA-023 仓库图片/资产无孤儿", () => {
   test.fixme(
     true,
     'REAL DEFECT in books repo: orphan image asset yeying/2A068D22-0E72-47EB-AEFC-D598509BBFFB.png ' +
@@ -59,7 +59,7 @@ test('BK-DATA-023 no orphan image assets (every asset is referenced by some mark
 });
 
 // BK-DATA-024 — warning-level: image alt text should be non-empty
-test('BK-DATA-024 image alt text is non-empty (accessibility)', () => {
+test("【资源引用(图片/资产) / DATA】 BK-DATA-024 图片替代文本非空", () => {
   const emptyAlt: string[] = [];
   for (const file of allMarkdown()) {
     for (const img of parseImages(readText(relOf(file)))) {

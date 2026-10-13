@@ -29,20 +29,20 @@ function skipIfNoSPA() {
   test.skip(!envFor('social')['SOCIAL_WEB_URL'], 'SOCIAL_WEB_URL not configured');
 }
 
-test('root redirects to /login via hash routing', async ({ page }) => {
+test("【登录与服务探活 / UI】 root 通过哈希路由重定向到 /login", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   await expect(page).toHaveURL(/#\/login$/);
 });
 
-test('login form shows the wallet button by default', async ({ page }) => {
+test("【登录与服务探活 / UI】 登录表单默认显示钱包按钮", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   // Default mode is wallet — that's the primary entry point.
   await expect(page.locator('.wallet-login-button')).toBeVisible({ timeout: 10_000 });
 });
 
-test('switching to identity mode renders the QR + passport-local link', async ({ page }) => {
+test("【登录与服务探活 / UI】 切换到身份模式会呈现 QR + 护照本地链接", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   // The corner ribbon toggles between wallet and identity modes.
@@ -53,7 +53,7 @@ test('switching to identity mode renders the QR + passport-local link', async ({
   await expect(page.locator('.login-passport-local')).toBeVisible({ timeout: 10_000 });
 });
 
-test('identity mode triggers a passport session (QR or loading state)', async ({ page }) => {
+test("【登录与服务探活 / UI】 身份模式触发护照会话（QR 或加载状态）", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   await page.locator('.login-mode-switch-box').click();
@@ -70,7 +70,7 @@ test('identity mode triggers a passport session (QR or loading state)', async ({
 
 // SO-UI-008 (P2) — clicking wallet login with no injected provider surfaces a
 // clean error and does not crash the page.
-test('SO-UI-008 wallet login without a provider fails gracefully', async ({ page }) => {
+test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-008 点击钱包登录驱动 web3 provider 流程并优雅报错", async ({ page }) => {
   skipIfNoSPA();
   const pageErrors: string[] = [];
   page.on('pageerror', (e) => pageErrors.push(e.message));
@@ -92,7 +92,7 @@ test('SO-UI-008 wallet login without a provider fails gracefully', async ({ page
 });
 
 // SO-UI-009 (P2) — the register page (#/register) renders its full form.
-test('SO-UI-009 register page renders the form', async ({ page }) => {
+test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-009 注册页表单渲染", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/register`);
   await expect(page).toHaveURL(/#\/register$/);

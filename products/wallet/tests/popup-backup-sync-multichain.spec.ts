@@ -35,7 +35,7 @@ interface SyncPayload {
   accounts: Array<{ index: number; address: string; namespace?: string; chainKey?: string }>;
 }
 
-test('SYNC-V2: backup sync pushes a v2 payload carrying the non-EVM (Tron) account', async ({ recorder }) => {
+test("【安全与备份恢复 / UI】 SYNC-V2：备份同步推送携带非 EVM (Tron) 帐户的 v2 有效负载", async ({ recorder }) => {
   const store = createDavStore();
 
   const ctx = await loadWalletContext();

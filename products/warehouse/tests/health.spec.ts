@@ -20,8 +20,8 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 
-test.describe('warehouse health probes', () => {
-  test('WH-API-076 heartbeat returns 200 healthy', async () => {
+test.describe("【健康检查与冒烟】仓库健康探针（warehouse health probes）", () => {
+  test("【健康检查与冒烟 / API】 WH-API-076 心跳检查", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const ctx = await apiContext(apiBase()!);
     try {
@@ -34,7 +34,7 @@ test.describe('warehouse health probes', () => {
     }
   });
 
-  test('WH-API-077 readiness confirms the database dependency', async () => {
+  test("【健康检查与冒烟 / API】 WH-API-077 就绪检查确认数据库", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const ctx = await apiContext(apiBase()!);
     try {

@@ -32,7 +32,7 @@ interface VerifyResponse {
   data: { token: string; address: string; expiresAt: number };
 }
 
-test('SIWE challenge requires a checksum address', async ({ request }) => {
+test("【鉴权与会话 / API】 SIWE 质询需要校验和地址", async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');
@@ -44,7 +44,7 @@ test('SIWE challenge requires a checksum address', async ({ request }) => {
   expect(res.status()).toBe(400);
 });
 
-test('SIWE challenge -> sign -> verify returns a JWT bound to the wallet', async ({ request }) => {
+test("【鉴权与会话 / API】 SIWE 质询 -> 签名 -> 验证返回绑定到钱包的 JWT", async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');
@@ -87,7 +87,7 @@ test('SIWE challenge -> sign -> verify returns a JWT bound to the wallet', async
   expect(quotaRes.status()).toBe(200);
 });
 
-test('SIWE verify rejects a signature from the wrong key', async ({ request }) => {
+test("【鉴权与会话 / DAPP】 SIWE verify 拒绝来自错误密钥的签名", async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');

@@ -32,7 +32,7 @@ function skipIfNoSPA() {
 }
 
 // SO-UI-010 (P1) — the "use local passport" entry opens verifyUrl in a new tab.
-test('SO-UI-010 passport entry opens verifyUrl in a new tab', async ({ page }) => {
+test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-010 本机通行证入口在新标签打开 verifyUrl", async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   // Switch to identity mode; the SPA creates a passport session and renders the QR.
@@ -53,7 +53,7 @@ test('SO-UI-010 passport entry opens verifyUrl in a new tab', async ({ page }) =
 // DEGRADED SKIP: the poll only flips to `approved` after a real passport device
 // approves the request out-of-band; there is no way to complete the approval
 // from an automated e2e run (no credential probing), so success can't be reached.
-test('SO-UI-011 QR-login polling success redirects to chat', async () => {
+test("【SPA 登录界面(钱包 / 通行证) / E2E】 SO-UI-011 二维码登录状态轮询成功后跳转聊天页", async () => {
   test.skip(
     true,
     'QR-login completion needs an external passport device to approve the session; ' +
@@ -62,7 +62,7 @@ test('SO-UI-011 QR-login polling success redirects to chat', async () => {
 });
 
 // SO-UI-013 (P1) — left nav renders chat / friends / groups entries.
-test('SO-UI-013 left nav renders chat/friends/groups entries', async ({ page }) => {
+test("【前端导航与聊天界面 / UI】 SO-UI-013 左侧导航渲染聊天/好友/群组三入口", async ({ page }) => {
   skipIfNoStack();
   const user = await newSiweIdentity(platformURL()!, identityURL()!);
   await seedSession(page, user.login);
@@ -77,7 +77,7 @@ test('SO-UI-013 left nav renders chat/friends/groups entries', async ({ page }) 
 });
 
 // SO-UI-014 (P1) — switch between chat/friends/groups views in place (SPA, hash only).
-test('SO-UI-014 switch between chat/friends/groups views in place', async ({ page }) => {
+test("【前端导航与聊天界面 / UI】 SO-UI-014 在聊天/好友/群组视图间原地切换", async ({ page }) => {
   skipIfNoStack();
   const user = await newSiweIdentity(platformURL()!, identityURL()!);
   await seedSession(page, user.login);
@@ -98,7 +98,7 @@ test('SO-UI-014 switch between chat/friends/groups views in place', async ({ pag
 });
 
 // SO-UI-015 (P1) — open the settings dialog and edit the profile nickName.
-test('SO-UI-015 open settings dialog to edit profile', async ({ page }) => {
+test("【前端导航与聊天界面 / UI】 SO-UI-015 打开设置弹窗编辑资料", async ({ page }) => {
   skipIfNoStack();
   const user = await newSiweIdentity(platformURL()!, identityURL()!);
   await seedSession(page, user.login);
@@ -126,7 +126,7 @@ test('SO-UI-015 open settings dialog to edit profile', async ({ page }) => {
 });
 
 // SO-UI-016 (P1) — logout clears the session and returns to the login page.
-test('SO-UI-016 logout clears session and returns to login', async ({ page }) => {
+test("【前端导航与聊天界面 / E2E】 SO-UI-016 退出登录清除会话回到登录页", async ({ page }) => {
   skipIfNoStack();
   const user = await newSiweIdentity(platformURL()!, identityURL()!);
   await seedSession(page, user.login);
@@ -145,7 +145,7 @@ test('SO-UI-016 logout clears session and returns to login', async ({ page }) =>
 // unavailable in headless e2e; image/file send is a multi-step toolbar +
 // file-chooser UI flow. The underlying upload contract is covered by
 // SO-API-056 / SO-API-057 (both real-green).
-test('SO-UI-018 send image/file/voice message', async () => {
+test("【前端导航与聊天界面 / E2E】 SO-UI-018 发送图片/文件/语音消息", async () => {
   test.skip(
     true,
     'Voice send needs a real microphone (getUserMedia) not available headless; ' +
@@ -159,7 +159,7 @@ test('SO-UI-018 send image/file/voice message', async () => {
 // in this environment, so the `@`-triggered `.chat-at-box` renders empty and
 // stays hidden — the member picker cannot be driven. The @-message contract
 // (GroupMessageDTO.atUserIds) is exercised by the group send API (SO-API-050).
-test('SO-UI-019 group chat @ member', async () => {
+test("【前端导航与聊天界面 / UI】 SO-UI-019 群聊 @ 成员", async () => {
   test.skip(
     true,
     'ChatAtBox needs the group member roster loaded over the IM WebSocket (/ws), ' +
@@ -172,7 +172,7 @@ test('SO-UI-019 group chat @ member', async () => {
 // unavailable headless, and its `/webrtc/private/call` signal only succeeds with
 // a WS-connected callee (see SO-API-063) — neither is available in an automated
 // run, so the call panel cannot complete its flow.
-test('SO-UI-021 start voice/video call from chat window', async () => {
+test("【前端导航与聊天界面 / UI】 SO-UI-021 从聊天窗口发起语音/视频通话弹出通话面板", async () => {
   test.skip(
     true,
     'Call panel needs real getUserMedia (camera/mic) and a WS-connected callee ' +
@@ -181,7 +181,7 @@ test('SO-UI-021 start voice/video call from chat window', async () => {
 });
 
 // SO-UI-020 (P1) — unauthenticated chat access is redirected to login via API 401/400.
-test('SO-UI-020 unauth chat access redirects to login', async ({ page }) => {
+test("【前端导航与聊天界面 / E2E】 SO-UI-020 未登录访问聊天页因 API 401 重定向回登录", async ({ page }) => {
   skipIfNoSPA();
   // No session seeded: Home.vue's GET /user/self returns NO_LOGIN (code 400),
   // and the axios interceptor does location.href = "/" -> hash redirect to /login.

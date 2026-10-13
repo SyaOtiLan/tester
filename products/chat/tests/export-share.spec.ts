@@ -24,7 +24,7 @@ function skipNoService() {
 }
 
 // CH-088 — export a conversation as Markdown.
-test('CH-088 export conversation as Markdown', async () => {
+test("【导出与分享 / E2E】 CH-088 导出会话为 Markdown", async () => {
   skipNoService();
   test.skip(
     !process.env.OPENAI_API_KEY?.trim() && !process.env.ANTHROPIC_API_KEY?.trim(),
@@ -33,7 +33,7 @@ test('CH-088 export conversation as Markdown', async () => {
 });
 
 // CH-089 — export a conversation as a PNG image.
-test('CH-089 export conversation as PNG', async () => {
+test("【导出与分享 / E2E】 CH-089 导出会话为 PNG 图片", async () => {
   skipNoService();
   test.skip(
     !process.env.OPENAI_API_KEY?.trim() && !process.env.ANTHROPIC_API_KEY?.trim(),
@@ -42,7 +42,7 @@ test('CH-089 export conversation as PNG', async () => {
 });
 
 // CH-090 — POST /api/artifacts creates a share (needs Cloudflare KV).
-test('CH-090 artifacts POST does not fabricate a share without KV', async ({ request }) => {
+test("【导出与分享 / API】 CH-090 通过 artifacts 分享生成分享页", async ({ request }) => {
   skipNoService();
   const res = await request.post('/api/artifacts', {
     data: 'e2e-artifact-content',
@@ -63,7 +63,7 @@ test('CH-090 artifacts POST does not fabricate a share without KV', async ({ req
 });
 
 // CH-091 — GET /api/artifacts?id=<id> reads share content (needs a stored id).
-test('CH-091 artifacts GET is wired but yields no content without KV', async ({ request }) => {
+test("【导出与分享 / API】 CH-091 读取 artifacts 分享内容", async ({ request }) => {
   skipNoService();
   const res = await request.get('/api/artifacts?id=nonexistent-e2e-id', {
     failOnStatusCode: false,
@@ -74,7 +74,7 @@ test('CH-091 artifacts GET is wired but yields no content without KV', async ({ 
 });
 
 // CH-092 — ShareGPT export.
-test('CH-092 ShareGPT export', async () => {
+test("【导出与分享 / E2E】 CH-092 ShareGPT 分享导出", async () => {
   skipNoService();
   test.skip(
     true,

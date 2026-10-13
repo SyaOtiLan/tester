@@ -49,7 +49,7 @@ function skipGuards() {
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
 }
 
-test.describe('writable directed share lifecycle', () => {
+test.describe("【文件分享】可写定向共享生命周期（writable directed share lifecycle）", () => {
   test.describe.configure({ mode: 'serial' });
   const stamp = Date.now();
   const dirName = `e2e-dir-share-${stamp}`;
@@ -98,7 +98,7 @@ test.describe('writable directed share lifecycle', () => {
     }
   });
 
-  test('WH-API-056 a writable directed share supports folder/upload/download/rename/delete', async () => {
+  test("【定向分享(给指定用户) / API】 WH-API-056 可写定向分享的下载/上传/新建/重命名/删除", async () => {
     skipGuards();
 
     const target = await authedRequest(apiBase()!, targetToken);

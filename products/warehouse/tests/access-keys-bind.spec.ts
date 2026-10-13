@@ -53,7 +53,7 @@ interface ListAccessKeyResponse {
   items: Array<{ id: string; bindingPaths?: string[] }>;
 }
 
-test('WH-API-031 bind appends a binding path and widens WebDAV access', async () => {
+test("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-031 bind 为 AccessKey 追加绑定路径", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

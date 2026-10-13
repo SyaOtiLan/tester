@@ -64,7 +64,7 @@ async function mintOwnToken(
 }
 
 // RT-UI-022 (P2)
-test('token row supports copy and enable/disable toggle', async ({ page, baseURL, recorder }) => {
+test("【令牌、充值与余额 / API】 令牌行支持复制和启用/禁用切换", async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   skipIfNoKey();
   const existing = await firstToken(baseURL!);
@@ -105,7 +105,7 @@ test('token row supports copy and enable/disable toggle', async ({ page, baseURL
 });
 
 // RT-UI-023 (P2)
-test('the token edit page saves name changes', async ({ page, baseURL, recorder }) => {
+test("【令牌、充值与余额 / UI】 令牌编辑页面保存名称更改", async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   skipIfNoKey();
   // Mint a DEDICATED token to edit: the account is shared across token specs via

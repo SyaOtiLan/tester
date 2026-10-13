@@ -24,7 +24,7 @@ function skipIfNoKey() {
 }
 
 // RT-API-038 (P2)
-test('GET /user/topup/balance/summary returns the three-way balance summary', async () => {
+test("【令牌、充值与余额 / API】 GET /user/topup/balance/summary 返回三向余额汇总", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -53,7 +53,7 @@ test('GET /user/topup/balance/summary returns the three-way balance summary', as
 });
 
 // RT-API-039 (P2)
-test('GET balance lots and transactions return well-formed paginated lists', async () => {
+test("【令牌、充值与余额 / API】 GET 余额手数和交易返回格式正确的分页列表", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -80,7 +80,7 @@ test('GET balance lots and transactions return well-formed paginated lists', asy
 });
 
 // RT-API-040 (P2)
-test('GET /user/topup/redemptions returns the redemption records list', async () => {
+test("【令牌、充值与余额 / API】 GET /user/topup/redemptions 返回兑换记录列表", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -109,7 +109,7 @@ test('GET /user/topup/redemptions returns the redemption records list', async ()
 // is safe to run against the live external-pay deployment. The empty-id
 // validation ("套餐 ID 不能为空") is asserted too. Verified against
 // `PreviewPackagePurchase` + `PreviewPackagePurchaseWithDB`.
-test('POST /user/topup/package/preview previews a package purchase (RT-API-036)', async () => {
+test("【充值与订单生命周期 / API】 RT-API-036 POST /topup/package/preview 套餐购买预览", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;

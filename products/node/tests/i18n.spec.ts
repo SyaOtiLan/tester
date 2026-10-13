@@ -30,7 +30,7 @@ async function storedLocale(page: import('@playwright/test').Page): Promise<stri
   return page.evaluate(() => (globalThis as any).localStorage.getItem('i18nextLng') ?? '');
 }
 
-test('ND-UI-005 language switch updates copy and persists across reload', async ({
+test("【前端首页与导航 / UI】 ND-UI-005 界面语言切换(i18n)", async ({
   page,
   recorder,
 }) => {

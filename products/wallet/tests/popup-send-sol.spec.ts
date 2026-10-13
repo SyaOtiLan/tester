@@ -34,7 +34,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 // 32-byte base58 string is acceptable since the stub ignores the field.
 const RECIPIENT = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 
-test('broadcast Solana native SOL transfer reaches sendTransaction with ed25519 sig', async ({ recorder }) => {
+test("【转账与交易 / UI】 广播 Solana 本机 SOL 传输通过 ed25519 sig 到达 sendTransaction", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

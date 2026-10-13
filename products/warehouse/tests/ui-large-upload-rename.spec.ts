@@ -48,7 +48,7 @@ async function gate() {
   test.skip(!reachable, 'warehouse frontend (5173) not reachable');
 }
 
-test('WH-UI-009 uploading a large file shows chunked-upload progress', async ({
+test("【文件管理 UI / UI】 WH-UI-009 上传大文件显示进度(分片上传)", async ({
   page,
   baseURL,
   recorder,
@@ -110,7 +110,7 @@ test('WH-UI-009 uploading a large file shows chunked-upload progress', async ({
   }
 });
 
-test('WH-UI-012 rename a file via the row menu dialog', async ({ page, baseURL, recorder }) => {
+test("【文件管理 UI / UI】 WH-UI-012 重命名文件/文件夹", async ({ page, baseURL, recorder }) => {
   await gate();
 
   const ts = Date.now();

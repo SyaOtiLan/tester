@@ -19,14 +19,14 @@ function withTempDir(fn: (dir: string) => void): void {
   }
 }
 
-test('MP-DATA-051 missing index.json raises an explicit not-found error', () => {
+test("【空值与异常数据处理 / DATA】 MP-DATA-051 index.json 缺失时给出明确错误", () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'index.json');
     expect(() => readIndexFrom(dir)).toThrow(`marketplace index.json not found at ${file}`);
   });
 });
 
-test('MP-DATA-052 missing packages.json is gracefully skipped (existsSync guard)', () => {
+test("【空值与异常数据处理 / DATA】 MP-DATA-052 packages.json 缺失时优雅跳过", () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'packages.json');
     // The guard the real spec uses: test.skip(!existsSync(file), ...). Assert the
@@ -37,7 +37,7 @@ test('MP-DATA-052 missing packages.json is gracefully skipped (existsSync guard)
   });
 });
 
-test('MP-DATA-053 malformed JSON surfaces a SyntaxError (not swallowed)', () => {
+test("【空值与异常数据处理 / DATA】 MP-DATA-053 非法 JSON 被解析失败捕获", () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'index.json');
     writeFileSync(file, '[{"id":"a",},'); // trailing comma + truncated
@@ -45,7 +45,7 @@ test('MP-DATA-053 malformed JSON surfaces a SyntaxError (not swallowed)', () => 
   });
 });
 
-test('MP-DATA-054 an empty [] index fails the non-empty assertion', () => {
+test("【空值与异常数据处理 / DATA】 MP-DATA-054 空数组 index 触发断言失败", () => {
   withTempDir((dir) => {
     writeFileSync(resolve(dir, 'index.json'), '[]');
     const entries = readIndexFrom(dir);
@@ -55,7 +55,7 @@ test('MP-DATA-054 an empty [] index fails the non-empty assertion', () => {
   });
 });
 
-test('MP-DATA-055 missing OPTIONAL fields do not fail schema validation', () => {
+test("【空值与异常数据处理 / DATA】 MP-DATA-055 可选字段缺省不报错", () => {
   const schema = readSkillSchema();
   const required = schema.required as string[];
   // A minimal but VALID skill: all required present, all optionals (description,

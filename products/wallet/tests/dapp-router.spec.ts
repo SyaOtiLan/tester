@@ -38,7 +38,7 @@ async function ensureRouterReachable(url: string) {
   }
 }
 
-test('real wallet drives router SPA: window.ethereum is the YeYing provider', async () => {
+test("【dApp 连接与 Provider / DAPP】 真实钱包驱动路由器SPA：window.ethereum是YeYing提供商", async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);
@@ -80,7 +80,7 @@ test('real wallet drives router SPA: window.ethereum is the YeYing provider', as
   }
 });
 
-test('router can request an account via the approval window', async () => {
+test("【dApp 连接与 Provider / DAPP】 路由器可以通过批准窗口请求帐户", async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);
@@ -125,7 +125,7 @@ test('router can request an account via the approval window', async () => {
   }
 });
 
-test('router discovers the wallet via EIP-6963 announceProvider', async () => {
+test("【dApp 连接与 Provider / DAPP】 路由器通过 EIP-6963 announceProvider 发现钱包", async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);

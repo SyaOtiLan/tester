@@ -36,7 +36,7 @@ const EXPECTED_SUFFIX = '79c8';
 const TEST_PASSWORD = 'E2E-password-2026';
 const TEST_ACCOUNT_NAME = 'PrivateKey E2E Wallet';
 
-test('import private key lands on #walletPage with the expected account address', async ({ recorder }) => {
+test("【钱包导入 / UI】 导入私钥登陆 #walletPage 以及预期的账户地址", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

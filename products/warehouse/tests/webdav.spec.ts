@@ -16,7 +16,7 @@ function skipIfNoService(product: 'warehouse') {
   test.skip(!baseURLFor(product), `WAREHOUSE_BASE_URL not configured`);
 }
 
-test('WebDAV PROPFIND root returns multi-status', async () => {
+test("【WebDAV 文件访问协议 / API】 WebDAV PROPFIND root 返回多状态", async () => {
   skipIfNoService('warehouse');
   const env = envFor('warehouse');
   const webdavURL = env['WAREHOUSE_WEBDAV_URL'];
@@ -34,7 +34,7 @@ test('WebDAV PROPFIND root returns multi-status', async () => {
   expectStatus(res, [207, 401, 403]);
 });
 
-test('WebDAV round-trip PUT then GET preserves body', async () => {
+test("【WebDAV 文件访问协议 / API】 WebDAV 往返 PUT 然后 GET 保留主体", async () => {
   skipIfNoService('warehouse');
   const env = envFor('warehouse');
   const webdavURL = env['WAREHOUSE_WEBDAV_URL'];

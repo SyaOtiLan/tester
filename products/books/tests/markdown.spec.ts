@@ -10,7 +10,7 @@ function relOf(file: string): string {
 }
 
 // BK-DATA-025
-test('BK-DATA-025 every markdown file is valid UTF-8 (no replacement chars)', () => {
+test("【Markdown 基本合法性 / DATA】 BK-DATA-025 所有 markdown 为合法 UTF-8", () => {
   const bad: string[] = [];
   for (const file of allMarkdown()) {
     const buf = readFileSync(file);
@@ -24,7 +24,7 @@ test('BK-DATA-025 every markdown file is valid UTF-8 (no replacement chars)', ()
 });
 
 // BK-DATA-026
-test('BK-DATA-026 markdown link syntax is closed (no dangling link markers)', () => {
+test("【Markdown 基本合法性 / DATA】 BK-DATA-026 markdown 链接语法闭合", () => {
   const dangling: string[] = [];
   const fullLink = /!?\[[^\]]*\]\([^)]*\)/g;
   for (const file of allMarkdown()) {
@@ -39,7 +39,7 @@ test('BK-DATA-026 markdown link syntax is closed (no dangling link markers)', ()
 });
 
 // BK-DATA-027
-test('BK-DATA-027 code fences are balanced (even count per file)', () => {
+test("【Markdown 基本合法性 / DATA】 BK-DATA-027 代码围栏成对闭合", () => {
   const odd: string[] = [];
   for (const file of allMarkdown()) {
     const fences = (readText(relOf(file)).match(/^\s*```/gm) || []).length;
@@ -49,7 +49,7 @@ test('BK-DATA-027 code fences are balanced (even count per file)', () => {
 });
 
 // BK-DATA-028 — style/warning level: LF-only, no CRLF
-test('BK-DATA-028 no CRLF line endings (consistent LF)', () => {
+test("【Markdown 基本合法性 / DATA】 BK-DATA-028 换行风格一致(无 CRLF 混入)", () => {
   const crlf: string[] = [];
   for (const file of allMarkdown()) {
     if (readFileSync(file).includes(Buffer.from('\r\n'))) crlf.push(relOf(file));

@@ -26,7 +26,7 @@ function skipIfNoStack() {
 }
 
 // SO-API-031 (P1) — read a single friend's info.
-test('SO-API-031 get single friend info', async () => {
+test("【好友与联系人 / API】 SO-API-031 查询单个好友信息", async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);
@@ -46,7 +46,7 @@ test('SO-API-031 get single friend info', async () => {
 
 // SO-API-033 (P2) — toggle the per-friend do-not-disturb flag; it round-trips
 // through /friend/find (FriendVO.isDnd).
-test('SO-API-033 friend do-not-disturb toggle', async () => {
+test("【好友与联系人 / API】 SO-API-033 好友免打扰开关", async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);
@@ -71,7 +71,7 @@ test('SO-API-033 friend do-not-disturb toggle', async () => {
     await ctx.dispose();
   }
 });
-test('SO-API-032 delete friend', async () => {
+test("【好友与联系人 / API】 SO-API-032 删除好友", async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);

@@ -21,7 +21,7 @@ const TEST_MNEMONIC = 'test test test test test test test test test test test ju
 const TEST_PASSWORD = 'E2E-password-2026';
 const TEST_WALLET_NAME = 'Imported E2E Wallet';
 
-test('import mnemonic lands on #walletPage with the expected account address', async ({ recorder }) => {
+test("【钱包导入 / UI】 import 助记词登陆 #walletPage 并带有预期的账户地址", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

@@ -34,7 +34,7 @@ function audienceFor(api: string): string {
   return new URL(api).origin;
 }
 
-test('ND-API-029 identity status reports the enabled capability surface', async () => {
+test("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-029 身份状态查询", async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -80,7 +80,7 @@ test('ND-API-029 identity status reports the enabled capability surface', async 
   }
 });
 
-test('ND-API-030 TOTP setup → confirm → verify → revoke closed loop', async () => {
+test("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-030 TOTP 绑定与校验闭环", async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -160,7 +160,7 @@ test('ND-API-030 TOTP setup → confirm → verify → revoke closed loop', asyn
   }
 });
 
-test('ND-API-032 PKCE authorize request → approve → exchange (single-use code)', async () => {
+test("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-032 应用授权码(PKCE)请求 → 批准 → 兑换", async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');

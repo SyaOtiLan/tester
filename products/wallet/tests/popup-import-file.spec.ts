@@ -39,7 +39,7 @@ interface CurrentAccount {
   account?: { address?: string };
 }
 
-test('WL-UI-008: export an encrypted backup and restore it in a fresh wallet', async ({
+test("【钱包导入 / UI】 WL-UI-008 备份文件 / Keystore 导入", async ({
   recorder,
 }) => {
   const fileDir = mkdtempSync(join(tmpdir(), 'yeying-wallet-backup-'));

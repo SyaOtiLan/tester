@@ -28,7 +28,7 @@ function skipIfNoKey() {
 }
 
 // RT-API-041 (P2)
-test('user aggregate read endpoints return well-formed data (RT-API-041)', async () => {
+test("【个人中心与账户设置 / API】 RT-API-041 用户聚合读接口返回数据", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -76,7 +76,7 @@ test('user aggregate read endpoints return well-formed data (RT-API-041)', async
 
 // RT-UI-026 (P2) — the account settings page (PersonalSetting) renders the
 // "账户信息" block with the (read-only) wallet address and the current username.
-test('the account setting page shows the account info (RT-UI-026)', async ({
+test("【个人中心与账户设置 / UI】 RT-UI-026 账户设置页加载并展示账户信息", async ({
   page,
   baseURL,
   recorder,
@@ -111,7 +111,7 @@ test('the account setting page shows the account info (RT-UI-026)', async ({
 // 保存 fires PUT /user/self and the new value persists across a reload. The
 // original username is restored afterwards (via the same endpoint) so the run is
 // side-effect neutral.
-test('changing the username through the UI persists (RT-E2E-004)', async ({
+test("【个人中心与账户设置 / E2E】 RT-E2E-004 修改用户名并持久化", async ({
   page,
   baseURL,
   recorder,
@@ -169,7 +169,7 @@ test('changing the username through the UI persists (RT-E2E-004)', async ({
 // current password (long enough to pass the client-side length check) so the
 // server rejects it with "当前密码错误" — the request round-trips and is proven
 // without ever changing the real password.
-test('the change-password modal round-trips (wrong current password) (RT-E2E-005)', async ({
+test("【个人中心与账户设置 / E2E】 RT-E2E-005 设置/修改密码", async ({
   page,
   baseURL,
   recorder,

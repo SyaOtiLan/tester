@@ -18,7 +18,7 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 
-test('WH-API-004 a consumed SIWE nonce cannot be replayed', async () => {
+test("【鉴权与会话 / API】 WH-API-004 SIWE nonce 一次性 / 防重放", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   const key = envFor('warehouse')['WAREHOUSE_WALLET_PRIVATE_KEY'];
   test.skip(!key, 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');

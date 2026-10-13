@@ -16,7 +16,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('social'), 'SOCIAL_BASE_URL not configured');
 }
 
-test('actuator/health reports the service is UP', async () => {
+test("【登录与服务探活 / API】 actuator/health 返回服务运行状态 UP", async () => {
   skipIfNoService();
   const baseURL = baseURLFor('social')!;
   const ctx = await apiContext(baseURL);
@@ -30,7 +30,7 @@ test('actuator/health reports the service is UP', async () => {
   }
 });
 
-test('root URL responds (SPA index or backend redirect)', async () => {
+test("【登录与服务探活 / API】 根 URL 返回 SPA 首页或后端重定向", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('social')!);
   try {
@@ -41,7 +41,7 @@ test('root URL responds (SPA index or backend redirect)', async () => {
   }
 });
 
-test('actuator/env is reachable (no auth required in dev)', async () => {
+test("【登录与服务探活 / API】 actuator/env 在开发环境可访问且无需鉴权", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('social')!);
   try {

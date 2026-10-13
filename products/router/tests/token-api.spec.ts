@@ -35,7 +35,7 @@ interface CreateResp {
 }
 
 // RT-API-024 (P0)
-test('POST /token/ creates a token (or reaches the models gate)', async () => {
+test("【令牌、充值与余额 / API】 POST /token/ 创建一个令牌（或到达模型门）", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -75,7 +75,7 @@ test('POST /token/ creates a token (or reaches the models gate)', async () => {
 // over-long name is the real, deterministic validation boundary — it is refused
 // regardless of whether the account has available models, writes nothing, and leaks
 // no key.
-test('POST /token/ with an over-long name is rejected by parameter validation', async () => {
+test("【令牌、充值与余额 / API】 名称过长的 POST /token/ 被参数验证拒绝", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -94,7 +94,7 @@ test('POST /token/ with an over-long name is rejected by parameter validation', 
 });
 
 // RT-API-027 (P1)
-test('GET /token/ returns a well-formed paginated list', async () => {
+test("【令牌、充值与余额 / API】 GET /token/ 返回格式良好的分页列表", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -121,7 +121,7 @@ test('GET /token/ returns a well-formed paginated list', async () => {
 });
 
 // RT-API-025 (P1) — POST /token/ is gated when the account has no available models.
-test('POST /token/ is blocked by the no-available-models gate', async () => {
+test("【令牌、充值与余额 / API】 POST /token/ 被无可用模型门阻止", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -151,7 +151,7 @@ test('POST /token/ is blocked by the no-available-models gate', async () => {
 });
 
 // RT-API-028 (P1) — PUT /token/ updates an existing token (round-trip).
-test('PUT /token/ updates a token and the change is reflected', async () => {
+test("【令牌、充值与余额 / API】 PUT /token/ 更新令牌并反映更改", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -188,7 +188,7 @@ test('PUT /token/ updates a token and the change is reflected', async () => {
 });
 
 // RT-API-029 (P1) — DELETE /token/:id is controlled and idempotent.
-test('DELETE /token/:id is controlled and idempotent (no 5xx on re-delete)', async () => {
+test("【令牌、充值与余额 / API】 DELETE /token/:id 是受控且幂等的（重新删除时没有 5xx）", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -216,7 +216,7 @@ test('DELETE /token/:id is controlled and idempotent (no 5xx on re-delete)', asy
 });
 
 // RT-API-030 (P2)
-test('GET /token/search returns a well-formed result set', async () => {
+test("【令牌、充值与余额 / API】 GET /token/search 返回格式正确的结果集", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -243,7 +243,7 @@ test('GET /token/search returns a well-formed result set', async () => {
 // have available models, which requires a purchase — the external-payment
 // boundary this suite does not cross. Probe available models live; with none,
 // no key can be minted and the API-Key branch is unreachable, so we skip.
-test('token/status returns quota status for an API Key (RT-API-031)', async () => {
+test("【令牌(Token)生命周期 / API】 RT-API-031 token/status 以 API Key 返回额度状态", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;

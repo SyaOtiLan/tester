@@ -47,7 +47,7 @@ function recoveryStub(ciphertext: string): { recoverySecrets: Record<string, Cus
   return { recoverySecrets: { [WALLET_ID]: record }, recoveryRecords: [record] };
 }
 
-test('CUST-054: recovery restores an HD wallet containing a Tron sub-account', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / E2E】 CUST-054：恢复包含 Tron 子账户的 HD 钱包", async ({ recorder }) => {
   // -- Phase A: derive the real Tron sub-account address + craft a v2 snapshot --
   let ciphertext = '';
   let tronAddress = '';

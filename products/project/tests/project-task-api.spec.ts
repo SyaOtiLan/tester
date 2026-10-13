@@ -22,7 +22,7 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project / task / workflow (API)', () => {
+test.describe("【任务管理】项目/任务/工作流程 (API)（project / task / workflow (API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -32,7 +32,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-037 创建项目返回项目与默认列表
-  test('PJ-037 project/add returns the project with the creator as owner', async () => {
+  test("【项目管理 / API】 PJ-037 创建项目返回项目与默认列表", async () => {
     const body = await apiPost(baseURL!, '/api/project/add', { name: `建项目${Date.now() % 100000}` }, user.token);
     expect(body.ret).toBe(1);
     expect(body.msg).toBe('添加成功');
@@ -47,7 +47,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-039 获取项目列表含任务统计
-  test('PJ-039 project/lists is paginated and carries task statistics', async () => {
+  test("【项目管理 / API】 PJ-039 获取项目列表含任务统计", async () => {
     // Ensure at least one project exists beyond the auto-created personal one.
     await createProject(baseURL!, user.token, { name: `列表用${Date.now() % 100000}` });
     const body = await apiGet(baseURL!, '/api/project/lists', user.token);
@@ -61,7 +61,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-052 添加任务列表
-  test('PJ-052 column/add appends a list to the project', async () => {
+  test("【任务列表(看板列) / API】 PJ-052 添加任务列表", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `列项目${Date.now() % 100000}` });
     const body = await apiPost(baseURL!, '/api/project/column/add', { project_id: pid, name: '需求池' }, user.token);
     expect(body.ret).toBe(1);
@@ -74,7 +74,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-059 添加任务返回任务详情
-  test('PJ-059 task/add returns the full task detail', async () => {
+  test("【任务管理 / API】 PJ-059 添加任务返回任务详情", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `任项目${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const body = await apiPost(
@@ -95,7 +95,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-061 获取任务列表(过滤/分页)
-  test('PJ-061 task/lists honors status filter and returns computed fields', async () => {
+  test("【任务管理 / API】 PJ-061 获取任务列表(过滤/分页)", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `过滤${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     await addTask(baseURL!, user.token, { projectId: pid, columnId: cid, name: '未完成任务A' });
@@ -114,7 +114,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-067 完成任务与取消完成
-  test('PJ-067 complete then un-complete a task', async () => {
+  test("【任务管理 / API】 PJ-067 完成任务与取消完成", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `完成${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     // Task must be owned by the actor, otherwise completing returns "请先领取任务".
@@ -138,7 +138,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-076 获取任务工作流可流转状态
-  test('PJ-076 task/flow returns the current state and reachable turns', async () => {
+  test("【工作流与状态流转 / API】 PJ-076 获取任务工作流可流转状态", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `流程${Date.now() % 100000}`, flow: 'open' });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, {
@@ -159,7 +159,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-077 通过 flow_item_id 流转任务状态
-  test('PJ-077 transition a task via flow_item_id; reaching an end state completes it', async () => {
+  test("【工作流与状态流转 / API】 PJ-077 通过 flow_item_id 流转任务状态", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `流转${Date.now() % 100000}`, flow: 'open' });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, {
@@ -199,7 +199,7 @@ test.describe('project / task / workflow (API)', () => {
   });
 
   // PJ-083 修改项目成员列表
-  test('PJ-083 project/user updates the member list', async () => {
+  test("【项目成员与权限 / API】 PJ-083 修改项目成员列表", async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `成员${Date.now() % 100000}` });
     // The member list must include the owner; here we (re)assert the owner as sole member.
     const body = await apiPost(baseURL!, '/api/project/user', { project_id: pid, userid: [user.userid] }, user.token);

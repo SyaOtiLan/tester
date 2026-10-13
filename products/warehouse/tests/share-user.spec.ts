@@ -46,7 +46,7 @@ function hasOwnerCredential(): boolean {
   );
 }
 
-test.describe('directed (user) share', () => {
+test.describe("【文件分享】directed (user) share（directed (user) share）", () => {
   test.describe.configure({ mode: 'serial' });
   let ownerToken = '';
   let targetToken = '';
@@ -58,7 +58,7 @@ test.describe('directed (user) share', () => {
     await revokeDirectedShare(apiBase()!, ownerToken, share.id);
   });
 
-  test('WH-API-049 create a read-only directed share to a specific audience', async () => {
+  test("【定向分享(给指定用户) / API】 WH-API-049 创建定向分享给指定受众", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasOwnerCredential(), 'no warehouse owner credential configured');
     test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
@@ -88,7 +88,7 @@ test.describe('directed (user) share', () => {
     expect(share.audienceCount).toBeGreaterThanOrEqual(1);
   });
 
-  test('WH-API-055 a write on a read-only directed share is denied (403)', async () => {
+  test("【定向分享(给指定用户) / API】 WH-API-055 只读定向分享的写操作被拒", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!share, 'previous test did not create a directed share');
     test.skip(!targetToken, 'target audience JWT unavailable');

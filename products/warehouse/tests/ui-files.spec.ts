@@ -42,7 +42,7 @@ async function rowMenuAction(page: Page, name: string, itemText: string) {
   await page.locator('.el-dropdown-menu__item', { hasText: itemText }).last().click();
 }
 
-test('create folder, upload, download, then delete via the file UI', async ({
+test("【文件管理与导航界面 / E2E】 创建文件夹，上传，下载，然后通过文件 UI 删除", async ({
   page,
   baseURL,
   recorder,

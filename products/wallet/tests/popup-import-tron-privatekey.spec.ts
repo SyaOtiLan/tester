@@ -34,7 +34,7 @@ const EXPECTED_PREFIX = 'TYBNg';
 const EXPECTED_SUFFIX = 'baG';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('import Tron private key lands on #walletPage with the expected Base58Check address', async ({ recorder }) => {
+test("【钱包导入 / UI】 import Tron 私钥登陆 #walletPage 并具有预期的 Base58Check 地址", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

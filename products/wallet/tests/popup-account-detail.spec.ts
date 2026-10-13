@@ -30,7 +30,7 @@ async function openFirstAccountDetail(popup: import('@playwright/test').Page): P
   await byId(popup, 'accountDetailPage').waitFor({ state: 'visible' });
 }
 
-test('WL-UI-014: account detail shows a receive QR and copies the full address', async ({
+test("【账户管理 / UI】 WL-UI-014 账户详情展示收款二维码并复制地址", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -91,7 +91,7 @@ test('WL-UI-014: account detail shows a receive QR and copies the full address',
   }
 });
 
-test('WL-UI-015: exporting accounts requires the password and produces a re-importable backup', async ({
+test("【账户管理 / UI】 WL-UI-015 导出账户", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

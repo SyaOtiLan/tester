@@ -20,7 +20,7 @@ function skipIfNoService() {
 test.describe.configure({ retries: 2 });
 
 // CH-008 — unauthenticated protected routes redirect to /auth?redirect=<path>.
-test('CH-008 unauth protected route redirects to /auth', async ({ page }) => {
+test("【鉴权与登录准入 / E2E】 CH-008 未登录访问受保护路由重定向到 /auth", async ({ page }) => {
   skipIfNoService();
   for (const target of ['/#/chat', '/#/settings']) {
     await page.goto(target);
@@ -31,7 +31,7 @@ test('CH-008 unauth protected route redirects to /auth', async ({ page }) => {
 });
 
 // CH-009 — auth page renders wallet account input, clear affordance, and history.
-test('CH-009 auth page shows wallet account input and history state', async ({ page }) => {
+test("【鉴权与登录准入 / UI】 CH-009 登录页展示钱包账号选择与历史", async ({ page }) => {
   skipIfNoService();
   await page.goto('/#/auth');
   const input = page.locator('input[class*="auth-wallet-select"]');
@@ -48,7 +48,7 @@ test('CH-009 auth page shows wallet account input and history state', async ({ p
 // CH-010 — with no wallet present, detection records hasConnectedWallet=false and
 // the page does not crash. When force-wallet mode is configured, a wallet-missing
 // notice is also expected.
-test('CH-010 missing wallet is handled without a crash', async ({ page, request }) => {
+test("【鉴权与登录准入 / UI】 CH-010 强制钱包模式下未检测到钱包给出提示", async ({ page, request }) => {
   skipIfNoService();
   await page.goto('/');
   await expect
@@ -73,7 +73,7 @@ test('CH-010 missing wallet is handled without a crash', async ({ page, request 
 });
 
 // CH-011 — wallet SIWE login establishes a valid authorization and enters the app.
-test('CH-011 wallet SIWE login enters the app', async ({ page }) => {
+test("【鉴权与登录准入 / E2E】 CH-011 钱包 SIWE 登录成功后进入应用", async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -83,7 +83,7 @@ test('CH-011 wallet SIWE login enters the app', async ({ page }) => {
 });
 
 // CH-012 — central UCAN passport login.
-test('CH-012 central UCAN (passport) login', async () => {
+test("【鉴权与登录准入 / E2E】 CH-012 中心化通行证(central UCAN)登录链路", async () => {
   test.skip(
     true,
     'central UCAN login redirects to an external passport authorize page and requires an interactive session + callback that cannot be automated here (no live central session/credentials).',
@@ -91,7 +91,7 @@ test('CH-012 central UCAN (passport) login', async () => {
 });
 
 // CH-013 — wallet account mismatch surfaces a decision dialog.
-test('CH-013 wallet/app account mismatch prompts a decision', async ({ page }) => {
+test("【鉴权与登录准入 / UI】 CH-013 钱包账户与应用账户不一致时给出选择", async ({ page }) => {
   skipIfNoService();
   test.setTimeout(60_000);
   await injectChatWallet(page, freshWalletKey());
@@ -108,7 +108,7 @@ test('CH-013 wallet/app account mismatch prompts a decision', async ({ page }) =
 });
 
 // CH-014 — an already-logged-in visit to /auth?redirect=<target> jumps to target.
-test('CH-014 logged-in /auth redirects to target', async ({ page }) => {
+test("【鉴权与登录准入 / E2E】 CH-014 已登录访问 /auth 自动跳回目标页", async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -117,7 +117,7 @@ test('CH-014 logged-in /auth redirects to target', async ({ page }) => {
 });
 
 // CH-015 — logout clears the local UCAN session and returns to the auth gate.
-test('CH-015 logout clears the session', async ({ page }) => {
+test("【鉴权与登录准入 / E2E】 CH-015 退出登录清除本地授权会话", async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);

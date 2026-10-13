@@ -56,7 +56,7 @@ async function openSitesPage(popup: Page) {
   await popup.locator('#sitesPage').waitFor({ state: 'visible' });
 }
 
-test('WL-DAPP-015: a connected site is listed and can be revoked', async ({ recorder }) => {
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-015 已连接站点管理:查看与撤销授权", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

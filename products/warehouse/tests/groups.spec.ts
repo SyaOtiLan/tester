@@ -44,7 +44,7 @@ interface GroupMember {
   status?: string;
 }
 
-test('WH-API-069 group create, list, rename and delete', async () => {
+test("【分组管理 / API】 WH-API-069 分组增删改查", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const user = await loginWithWallet(apiBase()!, Wallet.createRandom().privateKey);
@@ -99,7 +99,7 @@ test('WH-API-069 group create, list, rename and delete', async () => {
   }
 });
 
-test('WH-API-070 group member add, list and remove', async () => {
+test("【分组管理 / API】 WH-API-070 分组成员管理与审批", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const user = await loginWithWallet(apiBase()!, Wallet.createRandom().privateKey);

@@ -29,7 +29,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('AccessKey path scope', () => {
+test.describe("【WebDAV 目录访问密钥】AccessKey 路径范围（AccessKey path scope）", () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; keyId: string; keySecret: string } | null = null;
 
@@ -44,7 +44,7 @@ test.describe('AccessKey path scope', () => {
     }
   });
 
-  test('WH-API-030 AccessKey bound to /personal is denied on an unbound path', async () => {
+  test("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-030 AccessKey 访问未绑定路径被拒", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

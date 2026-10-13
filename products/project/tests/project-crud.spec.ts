@@ -23,7 +23,7 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project management CRUD (P1 API)', () => {
+test.describe("【项目管理】项目管理 CRUD (P1 API)（project management CRUD (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let owner: RegisteredUser;
@@ -33,7 +33,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-038 项目名称少于2字/超32字被拒
-  test('PJ-038 project name shorter than 2 / longer than 32 is rejected', async () => {
+  test("【项目管理 / API】 PJ-038 项目名称少于2字/超32字被拒", async () => {
     const tooShort = await apiPost(baseURL!, '/api/project/add', { name: 'x' }, owner.token);
     expect(tooShort.ret).toBe(0);
     expect(tooShort.msg).toBe('项目名称不可以少于2个字');
@@ -44,7 +44,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-040 获取单个项目信息
-  test('PJ-040 project/one returns detail with members; non-member is rejected', async () => {
+  test("【项目管理 / API】 PJ-040 获取单个项目信息", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `单项目${Date.now() % 100000}` });
     const ok = await apiGet(baseURL!, `/api/project/one?project_id=${pid}`, owner.token);
     expect(ok.ret).toBe(1);
@@ -57,7 +57,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-041 修改项目(负责人权限)
-  test('PJ-041 owner can update the project name/desc', async () => {
+  test("【项目管理 / API】 PJ-041 修改项目(负责人权限)", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `改前${Date.now() % 100000}` });
     const newName = `改后${Date.now() % 100000}`;
     const body = await apiPost(
@@ -72,7 +72,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-042 非负责人修改项目被拒
-  test('PJ-042 a non-owner member cannot update the project', async () => {
+  test("【项目管理 / API】 PJ-042 非负责人修改项目被拒", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `权限项目${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     await setProjectMembers(baseURL!, owner.token, pid, [owner.userid, member.userid]);
@@ -83,7 +83,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-043 归档项目与恢复
-  test('PJ-043 archive then recover a project', async () => {
+  test("【项目管理 / API】 PJ-043 归档项目与恢复", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `归档项目${Date.now() % 100000}` });
     const arch = await apiGet(baseURL!, `/api/project/archived?project_id=${pid}&type=add`, owner.token);
     expect(arch.ret).toBe(1);
@@ -95,7 +95,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-044 删除项目(仅负责人)
-  test('PJ-044 only the owner can delete the project', async () => {
+  test("【项目管理 / API】 PJ-044 删除项目(仅负责人)", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `删除项目${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     await setProjectMembers(baseURL!, owner.token, pid, [owner.userid, member.userid]);
@@ -110,7 +110,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-045 退出项目(负责人禁止)
-  test('PJ-045 a member can exit but the owner cannot', async () => {
+  test("【项目管理 / API】 PJ-045 退出项目(负责人禁止)", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `退出项目${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     await setProjectMembers(baseURL!, owner.token, pid, [owner.userid, member.userid]);
@@ -127,7 +127,7 @@ test.describe('project management CRUD (P1 API)', () => {
   });
 
   // PJ-049 生成邀请链接并通过邀请加入
-  test('PJ-049 generate an invite link and let another account join', async () => {
+  test("【项目管理 / API】 PJ-049 生成邀请链接并通过邀请加入", async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `邀请项目${Date.now() % 100000}` });
     const invite = await apiGet(baseURL!, `/api/project/invite?project_id=${pid}`, owner.token);
     expect(invite.ret).toBe(1);

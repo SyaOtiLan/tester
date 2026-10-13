@@ -35,7 +35,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test('create a draft application, see it in 我创建的, then delete it', async ({
+test("【应用市场与应用生命周期 / API】 创建草稿应用程序，在我创建的中查看它，然后将其删除", async ({
   page,
   recorder,
 }) => {

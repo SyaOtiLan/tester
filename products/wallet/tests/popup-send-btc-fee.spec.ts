@@ -22,7 +22,7 @@ const TEST_BITCOIN_PRIVATE_KEY =
   '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80';
 const TEST_PASSWORD = 'E2E-password-2026';
 
-test('Bitcoin-mode fee estimate shows sat/vB units from Esplora fee-estimates', async ({ recorder }) => {
+test("【转账与交易 / UI】 Bitcoin-模式费用估算显示来自 Esplora 费用估算的 sat/vB 单位", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

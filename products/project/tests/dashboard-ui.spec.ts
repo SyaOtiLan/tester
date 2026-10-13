@@ -15,11 +15,11 @@ import { seedUiSession } from '../helpers/session';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project dashboard & navigation (UI)', () => {
+test.describe("【dashboard ui】项目仪表板和导航 (UI)（project dashboard & navigation (UI)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-023 登录后进入仪表盘并显示任务统计
-  test('PJ-023 dashboard shows the title and the task-statistics section', async ({ page }) => {
+  test("【仪表盘 / E2E】 PJ-023 登录后进入仪表盘并显示任务统计", async ({ page }) => {
     await seedUiSession(page, baseURL!);
     // Wait for the SPA to boot into the dashboard view.
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
@@ -28,7 +28,7 @@ test.describe('project dashboard & navigation (UI)', () => {
   });
 
   // PJ-030 侧栏渲染五个主入口
-  test('PJ-030 sidebar renders the five primary entries', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-030 侧栏渲染五个主入口", async ({ page }) => {
     await seedUiSession(page, baseURL!);
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
     for (const label of ['仪表盘', '日历', '消息', '文件', '应用']) {

@@ -45,7 +45,7 @@ async function topUpModeIsExternal(baseURL: string): Promise<boolean> {
 const EXTERNAL_REASON =
   'top_up_mode=api: creating/refreshing/cancelling orders hits the real external payment provider (out of scope)';
 
-test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
+test.describe("【令牌、充值与余额】充值订单生命周期（串行、自清理）（top-up order lifecycle (serial, self-cleaning)）", () => {
   test.describe.configure({ mode: 'serial' });
   let createdOrderId = '';
 
@@ -60,7 +60,7 @@ test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
   });
 
   // RT-API-032 (P1)
-  test('POST /user/topup/orders creates a balance_topup order', async () => {
+  test("【令牌、充值与余额 / API】 POST /user/topup/orders 创建 balance_topup 订单", async () => {
     skipIfNoService();
     skipIfNoKey();
     const baseURL = baseURLFor('router')!;
@@ -94,7 +94,7 @@ test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
   });
 
   // RT-API-033 (P1)
-  test('GET /user/topup/orders lists the order and /orders/:id returns detail', async () => {
+  test("【令牌、充值与余额 / API】 GET /user/topup/orders 列出订单，/orders/:id 返回详细信息", async () => {
     skipIfNoService();
     skipIfNoKey();
     const baseURL = baseURLFor('router')!;
@@ -124,7 +124,7 @@ test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
   });
 
   // RT-API-034 (P1)
-  test('POST /user/topup/orders/:id/refresh returns a normalized status', async () => {
+  test("【令牌、充值与余额 / API】 POST /user/topup/orders/:id/refresh 返回规范化状态", async () => {
     skipIfNoService();
     skipIfNoKey();
     const baseURL = baseURLFor('router')!;
@@ -147,7 +147,7 @@ test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
   });
 
   // RT-API-035 (P1)
-  test('POST /user/topup/orders/:id/cancel cancels a pending order', async () => {
+  test("【令牌、充值与余额 / API】 POST /user/topup/orders/:id/cancel 取消挂单", async () => {
     skipIfNoService();
     skipIfNoKey();
     const baseURL = baseURLFor('router')!;
@@ -182,7 +182,7 @@ test.describe('top-up order lifecycle (serial, self-cleaning)', () => {
 // created|pending (RT-API-032), refresh normalizes to a known status
 // (RT-API-034), and cancel moves a pending order to canceled while rejecting an
 // already-paid one (RT-API-035) — all in the redirect-mode branch above.
-test('order status transitions follow the state machine (RT-API-037)', async () => {
+test("【充值与订单生命周期 / API】 RT-API-037 订单状态流转覆盖(created→pending→paid→fulfilled 及失败/取消分支)", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;

@@ -24,7 +24,7 @@ import { createAndUnlockWallet, waitForApproval } from '../helpers/popup';
 
 const DAPP_ORIGIN = 'https://dapp.e2e.invalid/';
 
-test('WL-DAPP-010: request → get → revoke eth_accounts permission', async ({ recorder }) => {
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-010 EIP-2255 权限:request / get / revoke", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

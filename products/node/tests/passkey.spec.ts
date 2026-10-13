@@ -101,7 +101,7 @@ async function createPasskeyCredential(page: Page, options: Record<string, unkno
   }
 }
 
-test('ND-API-031 passkey register request → confirm → list → revoke', async ({ page }) => {
+test("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-031 Passkey 注册请求与确认", async ({ page }) => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;

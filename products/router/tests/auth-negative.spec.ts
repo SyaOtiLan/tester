@@ -42,7 +42,7 @@ interface ProtoEnvelope {
 }
 
 // RT-API-009 (P0)
-test('verify rejects a signature from the wrong private key (no token issued)', async () => {
+test("【钱包自定义 SIWE 鉴权 / DAPP】 验证拒绝来自错误私钥的签名（未颁发令牌）", async () => {
   skipIfNoService();
   const env = envFor('router');
   test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
@@ -86,7 +86,7 @@ test('verify rejects a signature from the wrong private key (no token issued)', 
 });
 
 // RT-API-007 (P1)
-test('challenge rejects missing / malformed address', async () => {
+test("【钱包自定义 SIWE 鉴权 / API】 挑战拒绝丢失/格式错误的地址", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -110,7 +110,7 @@ test('challenge rejects missing / malformed address', async () => {
 // happens at verify), so this probe is side-effect free. If the deployment has
 // AutoRegisterEnabled=true the reject branch is unreachable and we skip with the
 // live-detected reason; otherwise we assert the controlled rejection.
-test('challenge rejects an unbound address when auto-register is disabled', async () => {
+test("【钱包自定义 SIWE 鉴权 / API】 当自动注册被禁用时，质询会拒绝未绑定的地址", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -135,7 +135,7 @@ test('challenge rejects an unbound address when auto-register is disabled', asyn
 });
 
 // RT-API-010 (P1)
-test('verify rejects a request missing the signature', async () => {
+test("【钱包自定义 SIWE 鉴权 / DAPP】 验证拒绝缺少签名的请求", async () => {
   skipIfNoService();
   const env = envFor('router');
   test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
@@ -165,7 +165,7 @@ test('verify rejects a request missing the signature', async () => {
 // the doc's "code=3" — there is no top-level code; the failure is pinned via
 // message "token 无效或已过期"). Verified live against
 // `internal/admin/controller/auth/*` refreshToken handler.
-test('refreshToken exchanges a valid token and rejects an invalid one (RT-API-013)', async () => {
+test("【钱包自定义 SIWE 鉴权 / API】 RT-API-013 refreshToken 换发新 token 且拒绝非法 token", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -209,7 +209,7 @@ test('refreshToken exchanges a valid token and rejects an invalid one (RT-API-01
 // EIP-55 checksum, and normalized (NormalizeWalletAddress), so an all-uppercase
 // (non-checksum) address completes the whole challenge → sign → verify flow and
 // the issued account's wallet_address comes back canonicalised to lowercase.
-test('login is case-insensitive on the address (non-EIP-55) (RT-API-014)', async () => {
+test("【钱包自定义 SIWE 鉴权 / API】 EIP-55：地址上的登录名不区分大小写（非 ）（RT-API-014）", async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -262,7 +262,7 @@ test('login is case-insensitive on the address (non-EIP-55) (RT-API-014)', async
 // the server starts rejecting (429) we assert the protection; otherwise we skip
 // with the live-detected reason rather than fake a limit this build doesn't
 // enforce.
-test('auth endpoints are protected by CriticalRateLimit (RT-API-015)', async () => {
+test("【钱包自定义 SIWE 鉴权 / API】 RT-API-015 auth 端点受 CriticalRateLimit 限流", async () => {
   skipIfNoService();
   const baseURL = baseURLFor('router')!;
   const ctx = await apiContext(baseURL);
@@ -289,11 +289,11 @@ test('auth endpoints are protected by CriticalRateLimit (RT-API-015)', async () 
   }
 });
 
-test.describe('nonce lifecycle (serial — single-entry per-address store)', () => {
+test.describe("【鉴权与权限边界】nonce 生命周期（串行 — 每个地址存储单条目）（nonce lifecycle (serial — single-entry per-address store)）", () => {
   test.describe.configure({ mode: 'serial' });
 
   // RT-API-011 (P1) — a second challenge overwrites the first address nonce.
-  test('a later challenge overwrites the previous nonce (RT-API-011)', async () => {
+  test("【钱包自定义 SIWE 鉴权 / API】 RT-API-011 同地址重复 challenge 使旧 nonce 失效(覆盖语义)", async () => {
     skipIfNoService();
     const env = envFor('router');
     test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
@@ -322,7 +322,7 @@ test.describe('nonce lifecycle (serial — single-entry per-address store)', () 
   });
 
   // RT-API-012 (P1) — a nonce is single-use; replay after a successful verify fails.
-  test('a consumed nonce cannot be replayed (RT-API-012)', async () => {
+  test("【钱包自定义 SIWE 鉴权 / API】 RT-API-012 verify 使用已过期/已消费 nonce 报错", async () => {
     skipIfNoService();
     const env = envFor('router');
     test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');

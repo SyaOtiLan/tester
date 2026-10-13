@@ -8,7 +8,7 @@ import { test, expect } from '../fixtures';
 import { abs, readText, allMarkdown, walk, parseLinks } from './helpers';
 
 // BK-DATA-002
-test('BK-DATA-002 agent/SUMMARY.md exists, is non-empty and is a markdown list', () => {
+test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-002 agent/SUMMARY.md 存在、非空且以 Markdown 列表组织目录", () => {
   const text = readText('agent/SUMMARY.md');
   expect(text.length).toBeGreaterThan(0);
   const listItems = text.split('\n').filter((l) => /^\s*-\s+\[/.test(l));
@@ -20,7 +20,7 @@ test('BK-DATA-002 agent/SUMMARY.md exists, is non-empty and is a markdown list',
 });
 
 // BK-DATA-004
-test('BK-DATA-004 SUMMARY chapter numbers are monotonically non-decreasing', () => {
+test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-004 SUMMARY 章节编号单调有序", () => {
   const text = readText('agent/SUMMARY.md');
   const nums: number[] = [];
   for (const link of parseLinks(text)) {
@@ -37,7 +37,7 @@ test('BK-DATA-004 SUMMARY chapter numbers are monotonically non-decreasing', () 
 });
 
 // BK-DATA-005
-test('BK-DATA-005 SUMMARY covers the three-part skeleton headings', () => {
+test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-005 SUMMARY 覆盖三部分骨架标题", () => {
   const summary = readText('agent/SUMMARY.md');
   for (const part of ['第一部分', '第二部分', '第三部分']) {
     expect(summary).toContain(part);
@@ -58,7 +58,7 @@ test('BK-DATA-005 SUMMARY covers the three-part skeleton headings', () => {
 });
 
 // BK-DATA-006
-test('BK-DATA-006 the three top-level doc collections exist and are non-empty', () => {
+test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-006 顶层三大文档集合目录均存在且非空", () => {
   const collections = ['agent', 'payment/docs', 'yeying'];
   for (const rel of collections) {
     const dir = abs(rel);

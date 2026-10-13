@@ -33,7 +33,7 @@ import type { APIRequestContext } from '@playwright/test';
 const platformURL = () => baseURLFor('social');
 const identityURL = () => envFor('social')['SOCIAL_IDENTITY_URL'];
 
-test.describe.serial('social messaging flow', () => {
+test.describe.serial("【social flow】社交消息流（social messaging flow）", () => {
   let A: SocialIdentity;
   let B: SocialIdentity;
   let ctxA: APIRequestContext;
@@ -54,7 +54,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-029 — friend list (empty for a brand-new user, but a valid array).
-  test('SO-API-029 friend list', async () => {
+  test("【好友与联系人 / API】 SO-API-029 好友列表", async () => {
     const res = await ctxA.get('/friend/list');
     const body = (await res.json()) as Envelope<Array<{ id: number }>>;
     expect(body.code).toBe(200);
@@ -62,7 +62,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-030 — add friend (mutual), then confirm B appears in A's list.
-  test('SO-API-030 add friend', async () => {
+  test("【好友与联系人 / API】 SO-API-030 添加好友", async () => {
     const addAB = await ctxA.post(`/friend/add?friendId=${B.userId}`);
     expect(((await addAB.json()) as Envelope<null>).code).toBe(200);
     // Bind the reverse direction too so later messaging passes the isFriend gate.
@@ -76,7 +76,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-034 — create a group; caller becomes owner.
-  test('SO-API-034 create group', async () => {
+  test("【群组管理 / API】 SO-API-034 创建群组", async () => {
     const res = await ctxA.post('/group/create', { data: { name: `e2e-grp-${Date.now() % 100000}` } });
     const body = (await res.json()) as Envelope<{ id: number; ownerId: number }>;
     expect(body.code).toBe(200);
@@ -86,7 +86,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-038 — invite friend B into the group; members list updates.
-  test('SO-API-038 invite friend into group', async () => {
+  test("【群组管理 / API】 SO-API-038 邀请好友入群", async () => {
     expect(groupId).toBeGreaterThan(0);
     const inv = await ctxA.post('/group/invite', { data: { groupId, friendIds: [B.userId] } });
     expect(((await inv.json()) as Envelope<null>).code).toBe(200);
@@ -98,7 +98,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-044 — send a private message A -> B.
-  test('SO-API-044 send private message', async () => {
+  test("【私聊消息 / API】 SO-API-044 发送私聊消息", async () => {
     const res = await ctxA.post('/message/private/send', {
       data: { recvId: B.userId, content: 'hello from e2e', type: 0 },
     });
@@ -110,7 +110,7 @@ test.describe.serial('social messaging flow', () => {
   });
 
   // SO-API-050 — send a group message into the shared group.
-  test('SO-API-050 send group message', async () => {
+  test("【群聊消息 / API】 SO-API-050 发送群聊消息", async () => {
     expect(groupId).toBeGreaterThan(0);
     const res = await ctxA.post('/message/group/send', {
       data: { groupId, content: 'group hello from e2e', type: 0 },

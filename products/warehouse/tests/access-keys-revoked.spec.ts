@@ -29,7 +29,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('WebDAV AccessKey revocation', () => {
+test.describe("【WebDAV 目录访问密钥】WebDAV AccessKey 撤销（WebDAV AccessKey revocation）", () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; keyId: string; keySecret: string } | null = null;
 
@@ -44,7 +44,7 @@ test.describe('WebDAV AccessKey revocation', () => {
     }
   });
 
-  test('WH-API-029 revoked AccessKey is rejected on PROPFIND', async () => {
+  test("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-029 撤销后 AccessKey 认证被拒", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

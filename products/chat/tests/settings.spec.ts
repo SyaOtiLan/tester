@@ -23,7 +23,7 @@ async function openSettings(page: any) {
 }
 
 // CH-059 — settings page renders grouped sections.
-test('CH-059 settings page shows grouped sections', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-059 打开设置页展示分组", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   // Appearance + danger groups are always present.
@@ -33,7 +33,7 @@ test('CH-059 settings page shows grouped sections', async ({ page }) => {
 });
 
 // CH-060 — the current wallet (blockchain) address is displayed.
-test('CH-060 settings shows the current blockchain address', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-060 展示区块链地址(当前账户)", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   await expect(page.getByText('Blockchain Address', { exact: true })).toBeVisible();
@@ -47,7 +47,7 @@ test('CH-060 settings shows the current blockchain address', async ({ page }) =>
 });
 
 // CH-061 — switching theme updates the applied theme + persists.
-test('CH-061 switching theme applies and persists', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-061 切换主题(深色/浅色/自动)", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   const themeSelect = page.locator('select[aria-label="Theme"]');
@@ -69,7 +69,7 @@ test('CH-061 switching theme applies and persists', async ({ page }) => {
 });
 
 // CH-062 — access-code / custom-model config.
-test('CH-062 access-code / custom-model config', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-062 配置访问码/自定义模型", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   const accessCode = page.getByText(/Access Code|访问密码/).first();
@@ -80,7 +80,7 @@ test('CH-062 access-code / custom-model config', async ({ page }) => {
 });
 
 // CH-063 — inject system prompts + input pre-processing template.
-test('CH-063 inject system prompt + input template', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-063 注入系统级提示与用户输入预处理模板", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   const inject = page.getByText('Inject System Prompts', { exact: true });
@@ -91,7 +91,7 @@ test('CH-063 inject system prompt + input template', async ({ page }) => {
 });
 
 // CH-064 — reset all settings restores defaults.
-test('CH-064 reset all settings restores defaults', async ({ page }) => {
+test("【设置(Settings) / UI】 CH-064 重置所有设置", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   const themeSelect = page.locator('select[aria-label="Theme"]');
@@ -109,7 +109,7 @@ test('CH-064 reset all settings restores defaults', async ({ page }) => {
 });
 
 // CH-065 — clear all data resets the app to its initial state.
-test('CH-065 clear all data resets the app', async ({ page }) => {
+test("【设置(Settings) / E2E】 CH-065 清除所有数据", async ({ page }) => {
   skipNoService();
   await openSettings(page);
   // Persist a non-default theme so we can prove the reload was triggered.

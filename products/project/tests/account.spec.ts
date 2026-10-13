@@ -14,11 +14,11 @@ import { registerUser, loginPassword, apiGet, apiPost } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project profile & password (P1 API)', () => {
+test.describe("【个人设置与账号安全】项目个人资料与密码（P1 API）（project profile & password (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-113 修改个人资料(昵称校验)
-  test('PJ-113 editdata updates the nickname and validates its length', async () => {
+  test("【个人设置与账号安全 / API】 PJ-113 修改个人资料(昵称校验)", async () => {
     const user = await registerUser(baseURL!);
 
     const ok = await apiPost(baseURL!, '/api/users/editdata', { nickname: '测试昵称' }, user.token);
@@ -36,7 +36,7 @@ test.describe('project profile & password (P1 API)', () => {
   });
 
   // PJ-114 修改密码成功并使旧 token 失效
-  test('PJ-114 editpass succeeds, invalidates the old token and the new password logs in', async () => {
+  test("【个人设置与账号安全 / API】 PJ-114 修改密码成功并使旧 token 失效", async () => {
     const user = await registerUser(baseURL!);
     const newPass = 'NewPass123456';
 
@@ -55,7 +55,7 @@ test.describe('project profile & password (P1 API)', () => {
   });
 
   // PJ-115 旧密码错误/新旧一致被拒
-  test('PJ-115 editpass rejects a wrong old password and an unchanged password', async () => {
+  test("【个人设置与账号安全 / API】 PJ-115 旧密码错误/新旧一致被拒", async () => {
     const user = await registerUser(baseURL!);
 
     const same = await apiPost(baseURL!, '/api/users/editpass', { oldpass: user.password, newpass: user.password }, user.token);

@@ -24,7 +24,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('authenticated browser session renders the AppHeader post-login UI', async ({
+test("【文件管理与导航界面 / E2E】 经过身份验证的浏览器会话呈现 AppHeader 登录后 UI", async ({
   page,
   context,
   baseURL,

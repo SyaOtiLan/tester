@@ -13,11 +13,11 @@ import { seedUiSession } from '../helpers/session';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project groups & messages (P2)', () => {
+test.describe("【消息与对话】项目组和消息 (P2)（project groups & messages (P2)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-106 新建群组与成员管理
-  test('PJ-106 dialog/group create then add/remove members', async () => {
+  test("【消息与对话 / API】 PJ-106 新建群组与成员管理", async () => {
     const owner = await registerUser(baseURL!);
     const m1 = await registerUser(baseURL!);
     const m2 = await registerUser(baseURL!);
@@ -44,7 +44,7 @@ test.describe('project groups & messages (P2)', () => {
   });
 
   // PJ-105 消息已读/未读统计
-  test('PJ-105 dialog/msg/unread reports unread stats and msg/read marks read', async () => {
+  test("【消息与对话 / API】 PJ-105 消息已读/未读统计", async () => {
     const owner = await registerUser(baseURL!);
     const peer = await registerUser(baseURL!);
     const group = await withDeadlockRetry(() =>
@@ -72,7 +72,7 @@ test.describe('project groups & messages (P2)', () => {
   });
 
   // PJ-107 UI 消息页发送消息
-  test('PJ-107 sending a message from the messenger UI posts it into the dialog', async ({ page }) => {
+  test("【消息与对话 / E2E】 PJ-107 UI 消息页发送消息", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     // Open a 1-on-1 dialog (the "file transfer" self dialog) to get a stable id.
     const open = await apiGet(baseURL!, `/api/dialog/open/user?userid=${acc.userid}`, acc.token);

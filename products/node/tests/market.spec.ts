@@ -24,7 +24,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test('market grid renders and a card opens its detail view', async ({ page, recorder }) => {
+test("【应用市场与应用生命周期 / UI】 市场网格呈现并且卡片打开其详细视图", async ({ page, recorder }) => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -58,7 +58,7 @@ test('market grid renders and a card opens its detail view', async ({ page, reco
   }
 });
 
-test('my-apps view shows creator/applicant tabs and the create button', async ({
+test("【应用市场与应用生命周期 / UI】 我的应用程序视图显示创建者/申请人选项卡和创建按钮", async ({
   page,
   recorder,
 }) => {
@@ -79,7 +79,7 @@ test('my-apps view shows creator/applicant tabs and the create button', async ({
   await recorder.step(page, '我的应用（我创建的 / 我申请的）');
 });
 
-test('ND-UI-009 market keyword search drives the grid and shows an empty state', async ({
+test("【应用市场浏览 / UI】 ND-UI-009 应用检索/筛选", async ({
   page,
   recorder,
 }) => {

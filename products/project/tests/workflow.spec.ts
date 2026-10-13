@@ -87,11 +87,11 @@ async function wireLinearFlow(
   return { start: a, progress: b, end: c };
 }
 
-test.describe('project workflow (P1 API)', () => {
+test.describe("【工作流与状态流转】项目工作流程 (P1 API)（project workflow (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-080 保存工作流(至少一开始一结束)
-  test('PJ-080 flow/save enforces at least one start, one end, and <=10 states', async () => {
+  test("【工作流与状态流转 / API】 PJ-080 保存工作流(至少一开始一结束)", async () => {
     const owner = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `保存流程${Date.now() % 100000}` });
 
@@ -125,7 +125,7 @@ test.describe('project workflow (P1 API)', () => {
   });
 
   // PJ-078 非法状态流转被拒
-  test('PJ-078 rejects a same-state and an illegal transition', async () => {
+  test("【工作流与状态流转 / API】 PJ-078 非法状态流转被拒", async () => {
     const owner = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `非法流转${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, owner.token, pid);
@@ -169,7 +169,7 @@ test.describe('project workflow (P1 API)', () => {
   });
 
   // PJ-079 多个结束状态需选择
-  test('PJ-079 completing with two end states requires choosing which one', async () => {
+  test("【工作流与状态流转 / API】 PJ-079 多个结束状态需选择", async () => {
     const owner = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `多结束${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, owner.token, pid);
@@ -201,7 +201,7 @@ test.describe('project workflow (P1 API)', () => {
   });
 
   // PJ-082 状态负责人限制流转
-  test('PJ-082 only a state owner (or project owner) can move a task out of a userlimited state', async () => {
+  test("【工作流与状态流转 / API】 PJ-082 状态负责人限制流转", async () => {
     const owner = await registerUser(baseURL!);
     const member = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `状态负责${Date.now() % 100000}` });

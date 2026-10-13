@@ -24,7 +24,7 @@ async function openRouter(page: any, search = '') {
 }
 
 // CH-072 — Router page lists available (public) tokens or an explicit empty state.
-test('CH-072 router page shows the token selector', async ({ page }) => {
+test("【Router 令牌与充值 / UI】 CH-072 Router 页展示可用令牌", async ({ page }) => {
   skipNoService();
   await openRouter(page);
   const tokenSection = page.locator('[data-router-section="token"]');
@@ -37,7 +37,7 @@ test('CH-072 router page shows the token selector', async ({ page }) => {
 });
 
 // CH-073 — selecting a token persists it into the access store.
-test('CH-073 selecting a token persists selectedRouterToken', async ({ page }) => {
+test("【Router 令牌与充值 / E2E】 CH-073 选择令牌用于会话", async ({ page }) => {
   skipNoService();
   await openRouter(page);
   const select = page.locator('[data-router-section="token"] select');
@@ -58,7 +58,7 @@ test('CH-073 selecting a token persists selectedRouterToken', async ({ page }) =
 });
 
 // CH-074 — bootstrap auto-selects an available public token (ensureRouterToken).
-test('CH-074 bootstrap auto-picks an available public token', async ({ page }) => {
+test("【Router 令牌与充值 / E2E】 CH-074 自动挑选可用公共令牌(引导)", async ({ page }) => {
   skipNoService();
   await openRouter(page);
   // Give bootstrap a moment to resolve a token.
@@ -79,7 +79,7 @@ test('CH-074 bootstrap auto-picks an available public token', async ({ page }) =
 });
 
 // CH-075 — token usage / balance status panel is rendered.
-test('CH-075 router page shows usage/balance status', async ({ page }) => {
+test("【Router 令牌与充值 / UI】 CH-075 令牌用量/余额状态展示", async ({ page }) => {
   skipNoService();
   await openRouter(page);
   // Status panel exposes token name / available-quota / used-quota / expiry.
@@ -89,7 +89,7 @@ test('CH-075 router page shows usage/balance status', async ({ page }) => {
 });
 
 // CH-076 — the top-up action redirects to the Router management portal.
-test('CH-076 top-up action opens the recharge portal', async ({ page, request }) => {
+test("【Router 令牌与充值 / UI】 CH-076 充值/续费跳转管理中心", async ({ page, request }) => {
   skipNoService();
   const cfg = await (await request.get('/api/config')).json();
   const rechargeUrl: string =

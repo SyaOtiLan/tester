@@ -22,7 +22,7 @@ function skipIfNoService() {
 }
 
 // RT-UI-024 (P2)
-test('the pricing page renders subscription package cards', async ({ page, baseURL, recorder }) => {
+test("【pricing ui / UI】 定价页面呈现订阅套餐卡", async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   test.skip(!envFor('router')['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
   await page.goto(baseURL!, { waitUntil: 'domcontentloaded' });
@@ -40,7 +40,7 @@ test('the pricing page renders subscription package cards', async ({ page, baseU
 });
 
 // RT-UI-025 (P2) — DEGRADED SKIP: BalanceStatusPage is unrouted dead code.
-test('the balance status page shows the three balances (RT-UI-025)', async () => {
+test("【余额与兑换码 / UI】 RT-UI-025 余额状态页显示三类余额", async () => {
   test.skip(
     true,
     'BalanceStatusPage (`.router-topup-balance-layout`) is not wired into web/src/App.jsx — ' +

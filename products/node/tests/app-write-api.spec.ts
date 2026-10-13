@@ -62,7 +62,7 @@ async function createApp(s: Session, baseURL: string) {
   return { uid: body.data!.uid! };
 }
 
-test('ND-API-022 publishing an un-approved application is rejected with 403', async () => {
+test("【开发者应用生命周期 / API】 ND-API-022 发布未通过审核的应用返回 403", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -86,7 +86,7 @@ test('ND-API-022 publishing an un-approved application is rejected with 403', as
   }
 });
 
-test('ND-API-025 write operations reject missing / invalid signature envelopes', async () => {
+test("【开发者应用生命周期 / API】 ND-API-025 写操作缺失/无效签名信封被拒", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -124,7 +124,7 @@ test('ND-API-025 write operations reject missing / invalid signature envelopes',
   }
 });
 
-test('ND-API-016 create missing did/version returns 400', async () => {
+test("【开发者应用生命周期 / API】 ND-API-016 建应用缺 did/version 返回 400", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -142,7 +142,7 @@ test('ND-API-016 create missing did/version returns 400', async () => {
   }
 });
 
-test('ND-API-017 create with mismatched owner returns 403', async () => {
+test("【开发者应用生命周期 / API】 ND-API-017 建应用 owner 与登录地址不符返回 403", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -159,7 +159,7 @@ test('ND-API-017 create with mismatched owner returns 403', async () => {
   }
 });
 
-test('ND-API-018 create without a JWT returns 401', async () => {
+test("【开发者应用生命周期 / API】 ND-API-018 建应用未登录返回 401", async () => {
   skipIfNoService();
   const baseURL = baseURLFor('node')!;
   const ctx = await apiContext(baseURL);
@@ -174,7 +174,7 @@ test('ND-API-018 create without a JWT returns 401', async () => {
   }
 });
 
-test('ND-API-026 application config round-trips through PUT then GET', async () => {
+test("【开发者应用生命周期 / API】 ND-API-026 应用授权配置读取与写入", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -205,7 +205,7 @@ test('ND-API-026 application config round-trips through PUT then GET', async () 
   }
 });
 
-test('ND-API-027 duplicate-name pre-check search returns matching own applications', async () => {
+test("【开发者应用生命周期 / API】 ND-API-027 保存草稿前的重名检查", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -242,7 +242,7 @@ test('ND-API-027 duplicate-name pre-check search returns matching own applicatio
   }
 });
 
-test('ND-API-028 non-admin audit search outside own scope returns 403', async () => {
+test("【应用审核 / API】 ND-API-028 非管理员审核检索被限定范围", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -269,7 +269,7 @@ async function listApps(s: Session, query = '') {
   return body.data;
 }
 
-test('ND-API-019 application list returns only the caller-visible scope', async () => {
+test("【开发者应用生命周期 / API】 ND-API-019 应用列表仅返回可见范围", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -307,7 +307,7 @@ test('ND-API-019 application list returns only the caller-visible scope', async 
   }
 });
 
-test('ND-API-020 application detail is 404 to a non-visible viewer, 200 to the owner', async () => {
+test("【开发者应用生命周期 / API】 ND-API-020 应用详情对不可见者返回 404", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -335,7 +335,7 @@ test('ND-API-020 application detail is 404 to a non-visible viewer, 200 to the o
   }
 });
 
-test('ND-API-021 updating an application: non-owner 403, owner 200', async () => {
+test("【开发者应用生命周期 / API】 ND-API-021 更新应用非属主返回 403", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -376,7 +376,7 @@ test('ND-API-021 updating an application: non-owner 403, owner 200', async () =>
   }
 });
 
-test('ND-API-023 unpublish restores an application to offline and removes it from the market', async () => {
+test("【开发者应用生命周期 / API】 ND-API-023 下线应用恢复为离线", async () => {
   skipIfNoService();
   // The behavior under test — an ONLINE application transitioning to
   // BUSINESS_STATUS_OFFLINE and disappearing from the public market grid —
@@ -388,7 +388,7 @@ test('ND-API-023 unpublish restores an application to offline and removes it fro
   test.skip(true, 'requires an online (admin-approved & published) application; publish path is not drivable in this environment');
 });
 
-test('ND-API-024 deleting another owner’s application returns 403 Owner mismatch', async () => {
+test("【开发者应用生命周期 / API】 ND-API-024 删除他人应用返回 403", async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;

@@ -34,11 +34,11 @@ async function retryOnDeadlock<T extends { ret: number; msg: string }>(fn: () =>
   return body;
 }
 
-test.describe('project auth & session (P1 API)', () => {
+test.describe("【鉴权与会话守卫】项目认证与会话（P1 API）（project auth & session (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-007 账号/密码超 32 位被拒
-  test('PJ-007 over-length email/password on login is rejected', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-007 账号/密码超 32 位被拒", async () => {
     const longPass = 'x'.repeat(33);
     const body = await loginPassword(baseURL!, 'someone@e2e.local', longPass);
     expect(body.ret).toBe(0);
@@ -56,7 +56,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-008 login/needcode 反映验证码要求
-  test('PJ-008 login/needcode reflects the captcha requirement per email', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-008 login/needcode 反映验证码要求", async () => {
     const user = await registerUser(baseURL!);
     // A fresh, never-failed email needs no captcha.
     const before = await apiGet(baseURL!, `/api/users/login/needcode?email=${encodeURIComponent(user.email)}`);
@@ -71,7 +71,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-010 注册(type=reg)创建账号
-  test('PJ-010 registration (type=reg) creates an account and issues a token', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-010 注册(type=reg)创建账号", async () => {
     // On this deployment email verification is off, so reg directly signs a token.
     // A deadlock can fire *after* the user row is committed, so each retry must
     // use a fresh email (a reused one would then hit 邮箱地址已存在).
@@ -88,7 +88,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-011 注册关闭/需邀请码校验
-  test('PJ-011 registration close/invite validation', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-011 注册关闭/需邀请码校验", async () => {
     test.skip(
       true,
       'registration mode is a server-side DB setting (system.reg=open here), not a client param — ' +
@@ -97,7 +97,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-014 token/expire 查询过期时间
-  test('PJ-014 token/expire returns the expiry metadata', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-014 token/expire 查询过期时间", async () => {
     const user = await registerUser(baseURL!);
     const body = await apiGet(baseURL!, '/api/users/token/expire', user.token);
     expect(body.ret).toBe(1);
@@ -109,7 +109,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-016 logout 退出登录使会话失效
-  test('PJ-016 logout invalidates the session token', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-016 logout 退出登录使会话失效", async () => {
     const user = await registerUser(baseURL!);
     const out = await apiGet(baseURL!, '/api/users/logout', user.token);
     expect(out.ret).toBe(1);
@@ -120,7 +120,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-018 钱包 SIWE challenge 返回挑战与 nonce
-  test('PJ-018 wallet SIWE challenge returns the challenge, nonce and expiry', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-018 钱包 SIWE challenge 返回挑战与 nonce", async () => {
     const wallet = Wallet.createRandom();
     const ok = await apiPost(baseURL!, '/api/public/auth/challenge', {
       address: wallet.address,
@@ -148,7 +148,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-019 钱包 SIWE verify 签名不匹配被拒
-  test('PJ-019 wallet SIWE verify rejects a signature from the wrong key', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-019 钱包 SIWE verify 签名不匹配被拒", async () => {
     const claimed = Wallet.createRandom();
     const other = Wallet.createRandom();
     const ch = await apiPost(baseURL!, '/api/public/auth/challenge', { address: claimed.address, chain_id: '1' });
@@ -165,7 +165,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-020 首次钱包登录要求补全邮箱
-  test('PJ-020 first wallet login with a valid signature requires email setup', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-020 首次钱包登录要求补全邮箱", async () => {
     const verify = await retryOnDeadlock(async () => {
       const wallet = Wallet.createRandom();
       const ch = await apiPost(baseURL!, '/api/public/auth/challenge', { address: wallet.address, chain_id: '1' });
@@ -185,7 +185,7 @@ test.describe('project auth & session (P1 API)', () => {
   });
 
   // PJ-021 passport 登录会话创建
-  test('PJ-021 passport login/session creates a pending session', async () => {
+  test("【鉴权与会话守卫 / API】 PJ-021 passport 登录会话创建(未配置降级)", async () => {
     const user = await registerUser(baseURL!);
     const body = await apiPost(baseURL!, '/api/passport/login/session', {}, user.token);
     if (body.ret === 0 && body.data?.code === 'passport_not_configured') {
@@ -201,11 +201,11 @@ test.describe('project auth & session (P1 API)', () => {
   });
 });
 
-test.describe('project auth (P1 UI)', () => {
+test.describe("【鉴权与会话守卫】项目认证界面（P1 UI）（project auth (P1 UI)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-017 登录页切换到注册显示确认密码
-  test('PJ-017 switching the login page to register reveals a confirm-password field', async ({ page }) => {
+  test("【鉴权与会话守卫 / UI】 PJ-017 登录页切换到注册显示确认密码/邀请码", async ({ page }) => {
     await page.addInitScript(() => {
       try {
         (globalThis as any).localStorage.setItem('__system:languageName__', 'zh');

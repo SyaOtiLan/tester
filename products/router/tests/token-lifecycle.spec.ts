@@ -34,7 +34,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('create an API token through the workspace, then delete it', async ({
+test("【令牌、充值与余额 / API】 通过工作区创建 API 令牌，然后将其删除", async ({
   page,
   baseURL,
   recorder,

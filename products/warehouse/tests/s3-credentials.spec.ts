@@ -37,7 +37,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test.describe('S3 Credential lifecycle', () => {
+test.describe("【S3 凭证与 S3 协议】S3 凭证生命周期（S3 Credential lifecycle）", () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; accessKeyId: string } | null = null;
 
@@ -54,7 +54,7 @@ test.describe('S3 Credential lifecycle', () => {
     }
   });
 
-  test('S3 service endpoint is reachable on port 6066', async () => {
+  test("【S3 凭证与 S3 协议 / API】 S3 服务端点可通过端口 6066 访问", async () => {
     skipIfNoService();
     const env = envFor('warehouse');
     test.skip(!env['WAREHOUSE_ADMIN_URL'], 'WAREHOUSE_ADMIN_URL (6066) not configured');
@@ -63,7 +63,7 @@ test.describe('S3 Credential lifecycle', () => {
     expect([403, 405]).toContain(res.status);
   });
 
-  test('create S3 Credential under /personal returns AK + Secret', async () => {
+  test("【S3 凭证与 S3 协议 / API】 在 /personal 下创建 S3 凭证返回 AK + Secret", async () => {
     skipIfNoService();
     const tokens = await acquireToken(baseURLFor('warehouse')!);
     const ctx = await authedRequest(baseURLFor('warehouse')!, tokens.token);
@@ -87,7 +87,7 @@ test.describe('S3 Credential lifecycle', () => {
     }
   });
 
-  test('list returns the S3 Credential we created', async () => {
+  test("【S3 凭证与 S3 协议 / API】 列表返回我们创建的 S3 凭证", async () => {
     skipIfNoService();
     test.skip(!created, 'previous test did not create an S3 Credential');
     const tokens = await acquireToken(baseURLFor('warehouse')!);
@@ -102,7 +102,7 @@ test.describe('S3 Credential lifecycle', () => {
     }
   });
 
-  test('revoke + delete the S3 Credential', async () => {
+  test("【S3 凭证与 S3 协议 / API】 撤销+删除 S3 凭证", async () => {
     skipIfNoService();
     test.skip(!created, 'previous test did not create an S3 Credential');
     const tokens = await acquireToken(baseURLFor('warehouse')!);

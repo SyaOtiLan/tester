@@ -39,7 +39,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('public share', () => {
+test.describe("【文件分享】public share（public share）", () => {
   test.describe.configure({ mode: 'serial' });
   let token = '';
   let share: PublicShare | null = null;
@@ -52,7 +52,7 @@ test.describe('public share', () => {
     await revokePublicShare(apiBase()!, token, share.token);
   });
 
-  test('WH-API-043 create public share returns an accessible link', async () => {
+  test("【公开分享 / API】 WH-API-043 创建公开分享返回可访问链接", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -70,7 +70,7 @@ test.describe('public share', () => {
     expect(share.expiresAt, 'a bounded share must report expiresAt').toBeTruthy();
   });
 
-  test('WH-API-045 anonymous access via the share link works', async () => {
+  test("【公开分享 / API】 WH-API-045 通过分享链接匿名访问", async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!share, 'previous test did not create a share');
 

@@ -21,7 +21,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('GET /api/v1/public/status returns router config', async () => {
+test("【服务健康与公共信息 / API】 GET /api/v1/public/status 返回路由器配置", async () => {
   skipIfNoService();
   const baseURL = baseURLFor('router')!;
   const ctx = await apiContext(baseURL);
@@ -37,7 +37,7 @@ test('GET /api/v1/public/status returns router config', async () => {
   }
 });
 
-test('GET /api/v1/public/topup/plans returns a plans list', async () => {
+test("【服务健康与公共信息 / API】 GET /api/v1/public/topup/plans 返回计划列表", async () => {
   skipIfNoService();
   const baseURL = baseURLFor('router')!;
   const ctx = await apiContext(baseURL);
@@ -51,12 +51,12 @@ test('GET /api/v1/public/topup/plans returns a plans list', async () => {
   }
 });
 
-test.describe('SIWE wallet login (serial, shared JWT)', () => {
+test.describe("【钱包自定义 SIWE 鉴权】SIWE钱包登录（串口，共享JWT）（SIWE wallet login (serial, shared JWT)）", () => {
   test.describe.configure({ mode: 'serial' });
   let tokens: RouterTokens | null = null;
   let challengeMsg = '';
 
-  test('challenge returns a custom-format message bound to the wallet', async () => {
+  test("【钱包自定义 SIWE 鉴权 / API】 挑战返回绑定到钱包的自定义格式消息", async () => {
     skipIfNoService();
     const env = envFor('router');
     test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
@@ -83,7 +83,7 @@ test.describe('SIWE wallet login (serial, shared JWT)', () => {
     }
   });
 
-  test('verify returns a JWT bound to the wallet', async () => {
+  test("【钱包自定义 SIWE 鉴权 / API】 verify 返回绑定到钱包的 JWT", async () => {
     skipIfNoService();
     const env = envFor('router');
     test.skip(!env['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
@@ -101,7 +101,7 @@ test.describe('SIWE wallet login (serial, shared JWT)', () => {
     expect(tokens.userId).toBeTruthy();
   });
 
-  test('JWT unlocks the protected /profile endpoint', async () => {
+  test("【钱包自定义 SIWE 鉴权 / API】 JWT 解锁受保护的 /profile 端点", async () => {
     skipIfNoService();
     test.skip(!tokens, 'previous test did not produce a JWT');
     const ctx = await apiContext(baseURLFor('router')!, {
@@ -119,7 +119,7 @@ test.describe('SIWE wallet login (serial, shared JWT)', () => {
   });
 });
 
-test('profile rejects unauthenticated requests', async () => {
+test("【鉴权与权限边界 / API】 配置文件拒绝未经身份验证的请求", async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -130,7 +130,7 @@ test('profile rejects unauthenticated requests', async () => {
   }
 });
 
-test('admin UI HTML page renders', async ({ page }) => {
+test("【管理后台 UI 与登录导航 / UI】 管理 UI HTML 页面呈现", async ({ page }) => {
   skipIfNoService();
   await page.goto(baseURLFor('router')!);
   await expect(page).toHaveTitle(/Router/);

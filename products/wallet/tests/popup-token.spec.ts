@@ -68,7 +68,7 @@ async function addErc20Token(popup: Page) {
   await byId(popup, 'walletPage').waitFor({ state: 'visible', timeout: 15_000 });
 }
 
-test('WL-UI-031: add an ERC-20 token and see its balance in the token list', async ({
+test("【转账与交易 / UI】 WL-UI-031 添加 ERC-20 代币并展示余额", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -98,7 +98,7 @@ test('WL-UI-031: add an ERC-20 token and see its balance in the token list', asy
   }
 });
 
-test('WL-UI-032: transferring an ERC-20 token broadcasts an ERC-20 transfer() call', async ({
+test("【转账与交易 / UI】 WL-UI-032 转账 ERC-20 代币", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

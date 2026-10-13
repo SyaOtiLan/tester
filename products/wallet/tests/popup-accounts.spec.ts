@@ -36,7 +36,7 @@ async function fillPasswordPromptIfShown(popup: import('@playwright/test').Page)
   }
 }
 
-test('add a second HD account, then switch to it from the header switcher', async ({
+test("【账户管理 / UI】 添加第二个 HD 帐户，然后从标题切换器切换到该帐户", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -99,7 +99,7 @@ test('add a second HD account, then switch to it from the header switcher', asyn
   }
 });
 
-test('rename an account from the detail page persists the new name', async ({ recorder }) => {
+test("【账户管理 / UI】 从详细信息页面重命名帐户会保留新名称", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -131,7 +131,7 @@ test('rename an account from the detail page persists the new name', async ({ re
   }
 });
 
-test('WL-UI-013: delete a derived account with the password removes it from the list', async ({
+test("【账户管理 / UI】 WL-UI-013 删除 / 移除账户", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

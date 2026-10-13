@@ -33,7 +33,7 @@ const NET_RPC = 'https://send-insufficient.e2e.invalid/rpc';
 const NET_CHAIN_ID = '0x539'; // 1337
 const BURN_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-test('WL-UI-028: sending more than the balance surfaces an insufficient-funds error', async ({
+test("【转账与交易 / UI】 WL-UI-028 金额超过余额 / 余额不足提示", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

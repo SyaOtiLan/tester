@@ -56,7 +56,7 @@ function recoveryStub(ciphertext: string, address = ''): { recoverySecrets: Reco
   return { recoverySecrets: { [WALLET_ID]: record }, recoveryRecords: [record] };
 }
 
-test('CUST-030: recovery-token list returns the cloud custody records', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-030 读取托管记录(恢复令牌)", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -80,7 +80,7 @@ test('CUST-030: recovery-token list returns the cloud custody records', async ({
   }
 });
 
-test('CUST-050: a wrong custody password is rejected and imports nothing', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-050 密码错误恢复被拒", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -107,7 +107,7 @@ test('CUST-050: a wrong custody password is rejected and imports nothing', async
   }
 });
 
-test('CUST-051: a tampered ciphertext fails integrity and imports nothing', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-051 密文篡改被拒", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -138,7 +138,7 @@ test('CUST-051: a tampered ciphertext fails integrity and imports nothing', asyn
   }
 });
 
-test('CUST-052: unsupported version / missing fields are rejected', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-052 未知版本 / 字段缺失被拒", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -176,7 +176,7 @@ test('CUST-052: unsupported version / missing fields are rejected', async ({ rec
   }
 });
 
-test('CUST-053: an address that does not match the key is rejected', async ({ recorder }) => {
+test("【云端密钥托管与恢复 / API】 CUST-053 地址不匹配被拒", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

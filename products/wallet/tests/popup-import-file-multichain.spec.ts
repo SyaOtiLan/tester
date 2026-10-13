@@ -72,7 +72,7 @@ async function importBackupFromFile(context: import('@playwright/test').BrowserC
   return popup;
 }
 
-test('account backup file restores an IMPORTED Tron private-key wallet as Tron (task188)', async ({ recorder }) => {
+test("【钱包导入 / UI】 帐户备份文件将 IMPORTED Tron 私钥钱包恢复为 Tron (task188)", async ({ recorder }) => {
   const fileDir = mkdtempSync(join(tmpdir(), 'yeying-wallet-backup-mc-'));
   const backupPath = join(fileDir, 'accounts-backup.json');
   let tronAddress = '';
@@ -117,7 +117,7 @@ test('account backup file restores an IMPORTED Tron private-key wallet as Tron (
   }
 });
 
-test('account backup file restores an HD Tron sub-account as Tron (task186)', async ({ recorder }) => {
+test("【钱包导入 / UI】 账户备份文件将 HD Tron 子账户恢复为 Tron (task186)", async ({ recorder }) => {
   const fileDir = mkdtempSync(join(tmpdir(), 'yeying-wallet-backup-hd-'));
   const backupPath = join(fileDir, 'accounts-backup.json');
   let tronAddress = '';

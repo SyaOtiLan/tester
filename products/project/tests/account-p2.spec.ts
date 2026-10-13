@@ -15,11 +15,11 @@ import { registerUser, apiGet, apiPost } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe('project account security (P2 API)', () => {
+test.describe("【个人设置与账号安全】项目账户安全（P2 API）（project account security (P2 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-116 修改邮箱发送验证
-  test('PJ-116 email/send validates input and email/edit changes the address', async () => {
+  test("【个人设置与账号安全 / API】 PJ-116 修改邮箱发送验证", async () => {
     const user = await registerUser(baseURL!);
 
     // email/send validation branches (these return before any mail is dispatched,
@@ -49,7 +49,7 @@ test.describe('project account security (P2 API)', () => {
   });
 
   // PJ-117 设备列表与登出设备
-  test('PJ-117 device/list returns sessions and device/logout validates ids', async () => {
+  test("【个人设置与账号安全 / API】 PJ-117 设备列表与登出设备", async () => {
     const user = await registerUser(baseURL!);
 
     const list = await apiGet(baseURL!, '/api/users/device/list', user.token);
@@ -78,7 +78,7 @@ test.describe('project account security (P2 API)', () => {
   });
 
   // PJ-118 删除账号
-  test('PJ-118 delete/account validates then removes the account', async () => {
+  test("【个人设置与账号安全 / API】 PJ-118 删除账号", async () => {
     const user = await registerUser(baseURL!);
 
     // A submit without type=confirm passes validation but does not delete.

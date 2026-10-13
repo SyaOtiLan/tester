@@ -8,7 +8,7 @@
  */
 import { test, expect, baseURLFor, hasEnv } from '../fixtures';
 
-test('login page renders', async ({ page }) => {
+test("【登录、仪表盘与导航 / UI】 登录页面呈现", async ({ page }) => {
   test.skip(!baseURLFor('project'), 'PROJECT_BASE_URL not configured');
   await page.goto('/');
   // Wait for the login view to mount (the "邮箱密码登录" toggle is a concrete
@@ -20,7 +20,7 @@ test('login page renders', async ({ page }) => {
   expect(body.length).toBeGreaterThan(0);
 });
 
-test('login page exposes a username field', async ({ page }) => {
+test("【登录、仪表盘与导航 / UI】 登录页面公开用户名字段", async ({ page }) => {
   test.skip(!baseURLFor('project'), 'PROJECT_BASE_URL not configured');
   await page.goto('/');
   // DooTask now serves the shared IM SPA: `/` redirects to `/#/login`, which
@@ -35,7 +35,7 @@ test('login page exposes a username field', async ({ page }) => {
   await expect(candidates.first()).toBeVisible();
 });
 
-test('dashboard nav skipped without PROJECT_USER/PASS', () => {
+test("【登录、仪表盘与导航 / UI】 仪表板导航在没有 PROJECT_USER/PASS 的情况下跳过", () => {
   test.skip(
     !hasEnv('PROJECT_USER') || !hasEnv('PROJECT_PASS'),
     'PROJECT_USER and PROJECT_PASS required for dashboard tests',
@@ -43,7 +43,7 @@ test('dashboard nav skipped without PROJECT_USER/PASS', () => {
   expect(true).toBe(true);
 });
 
-test('APP_DEV_PORT env plumbing check', () => {
+test("【登录、仪表盘与导航 / UI】 验证 APP_DEV_PORT 环境变量传递", () => {
   // Sanity: when PROJECT_BASE_URL is set the user should also set APP_DEV_PORT
   // so a developer copy/pasting from .env.example doesn't get surprised.
   if (baseURLFor('project')) {

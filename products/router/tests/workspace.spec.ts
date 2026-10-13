@@ -22,7 +22,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('workspace quota, token and log pages render for an authenticated user', async ({
+test("【管理后台与工作台 / UI】 为经过身份验证的用户呈现工作区配额、令牌和日志页面", async ({
   page,
   baseURL,
   recorder,
@@ -60,7 +60,7 @@ test('workspace quota, token and log pages render for an authenticated user', as
 });
 
 // RT-UI-021 (P1) — service-purchase page renders the package + balance sections.
-test('service-purchase page renders the package and balance sections', async ({
+test("【管理后台与工作台 / UI】 服务购买页面呈现套餐和余额部分", async ({
   page,
   baseURL,
   recorder,

@@ -67,7 +67,7 @@ async function createInertChannel(ctx: Awaited<ReturnType<typeof adminContext>>,
 }
 
 // RT-API-059 (P0) — channel CRUD round-trip; key redacted; delete idempotent.
-test('admin channel CRUD round-trip; key is redacted; delete is idempotent', async () => {
+test("【渠道与供应商管理 / API】 管理员渠道增删改查闭环；密钥脱敏；重复删除保持幂等", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -106,7 +106,7 @@ test('admin channel CRUD round-trip; key is redacted; delete is idempotent', asy
 });
 
 // RT-API-060 (P1) — channel identifier validation.
-test('channel identifier validation (empty name, duplicate name, malformed JSON)', async () => {
+test("【渠道与供应商管理 / API】 渠道标识校验：名称为空、名称重复及 JSON 格式错误", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -140,7 +140,7 @@ test('channel identifier validation (empty name, duplicate name, malformed JSON)
 });
 
 // RT-API-062 (P1) — channels list pagination + compact projection.
-test('channels list supports pagination and a compact projection', async () => {
+test("【渠道与供应商管理 / API】 渠道列表支持分页和精简字段投影", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -177,7 +177,7 @@ test('channels list supports pagination and a compact projection', async () => {
 });
 
 // RT-API-063 (P1) — test + refresh + sub-resource contracts on an inert channel.
-test('channel test/refresh/sub-resource endpoints return controlled contracts', async () => {
+test("【渠道与供应商管理 / API】 渠道测试、刷新及子资源接口返回受控响应", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -226,7 +226,7 @@ test('channel test/refresh/sub-resource endpoints return controlled contracts', 
 });
 
 // RT-API-064 (P2) — get on a missing channel is a controlled not-found.
-test('getting a non-existent channel returns a controlled not-found', async () => {
+test("【渠道与供应商管理 / API】 查询不存在的渠道时返回受控的未找到响应", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -242,7 +242,7 @@ test('getting a non-existent channel returns a controlled not-found', async () =
 });
 
 // RT-API-065 (P1) — providers catalog list + missing provider.
-test('providers catalog lists entries and reports a missing provider', async () => {
+test("【渠道与供应商管理 / API】 供应商目录返回条目，并对不存在的供应商给出错误", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -267,7 +267,7 @@ test('providers catalog lists entries and reports a missing provider', async () 
 });
 
 // RT-API-066 (P0) — admin authz boundary: normal user forbidden, no-auth 401.
-test('channel/provider admin endpoints reject normal users (200 权限不足) and anonymous (401)', async () => {
+test("【渠道与供应商管理 / API】 渠道与供应商管理接口拒绝普通用户（200 权限不足）和未登录请求（401）", async () => {
   skipIfNoService();
   skipIfNoUserKey();
   const userTokens = await acquireRouterToken(baseURLFor('router')!);

@@ -67,7 +67,7 @@ async function cleanup(page: Page, names: string[]) {
     .catch(() => {});
 }
 
-test('WH-UI-010 preview a text file in the preview dialog', async ({ page, baseURL, recorder }) => {
+test("【文件管理 UI / UI】 WH-UI-010 文件预览对话框", async ({ page, baseURL, recorder }) => {
   await gate();
   const ts = Date.now();
   const fileName = `e2e-preview-${ts}.txt`;
@@ -99,7 +99,7 @@ test('WH-UI-010 preview a text file in the preview dialog', async ({ page, baseU
   }
 });
 
-test('WH-UI-011 sorting by name reorders the file table', async ({ page, baseURL, recorder }) => {
+test("【文件管理 UI / UI】 WH-UI-011 文件表视图/排序切换", async ({ page, baseURL, recorder }) => {
   await gate();
   const ts = Date.now();
   const names = [`e2e-sort-a-${ts}.txt`, `e2e-sort-b-${ts}.txt`, `e2e-sort-c-${ts}.txt`];
@@ -144,7 +144,7 @@ test('WH-UI-011 sorting by name reorders the file table', async ({ page, baseURL
   }
 });
 
-test('WH-UI-013 re-uploading a duplicate name overwrites in place', async ({
+test("【文件管理 UI / UI】 WH-UI-013 上传重名文件的冲突处理", async ({
   page,
   baseURL,
   recorder,

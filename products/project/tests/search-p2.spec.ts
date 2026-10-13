@@ -22,11 +22,11 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project counts & search (P2 API)', () => {
+test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & search (P2 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-029 user/counts 返回项目/任务数量
-  test('PJ-029 project/user/counts returns project and task tallies', async () => {
+  test("【仪表盘 / API】 PJ-029 user/counts 返回项目/任务数量", async () => {
     const user = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, user.token, { name: `计数项目${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
@@ -42,7 +42,7 @@ test.describe('project counts & search (P2 API)', () => {
   });
 
   // PJ-131 会员搜索
-  test('PJ-131 users/search finds a member by e-mail', async () => {
+  test("【团队/会员管理(管理员) / API】 PJ-131 会员搜索", async () => {
     const me = await registerUser(baseURL!);
     const other = await registerUser(baseURL!);
 
@@ -58,7 +58,7 @@ test.describe('project counts & search (P2 API)', () => {
   });
 
   // PJ-134 搜索联系人
-  test('PJ-134 search/contact finds a contact by e-mail', async () => {
+  test("【搜索 / API】 PJ-134 搜索联系人", async () => {
     const me = await registerUser(baseURL!);
     const other = await registerUser(baseURL!);
 
@@ -70,7 +70,7 @@ test.describe('project counts & search (P2 API)', () => {
   });
 
   // PJ-135 搜索文件/消息
-  test('PJ-135 search/file and search/message find created content', async () => {
+  test("【搜索 / API】 PJ-135 搜索文件/消息", async () => {
     const user = await registerUser(baseURL!);
 
     // File search: create a document with a distinctive name and find it.
@@ -100,7 +100,7 @@ test.describe('project counts & search (P2 API)', () => {
   });
 
   // PJ-141 获取演示账号(demo)
-  test('PJ-141 system/demo returns a demo account or reports it disabled', async () => {
+  test("【系统、健康与错误异常 / API】 PJ-141 获取演示账号(demo)", async () => {
     const body = await apiGet(baseURL!, '/api/system/demo');
     // Demo accounts are an optional deployment feature: when enabled the endpoint
     // returns {account, password}; when disabled it returns ret=0 'No demo account'.
@@ -115,7 +115,7 @@ test.describe('project counts & search (P2 API)', () => {
   });
 
   // PJ-129 部门列表增删改
-  test('PJ-129 department list add/update/delete', async () => {
+  test("【团队/会员管理(管理员) / API】 PJ-129 部门列表增删改", async () => {
     test.skip(true, 'users/department/* requires auth("admin"); the site admin account is captcha-locked and cannot be driven with a throwaway user.');
   });
 });

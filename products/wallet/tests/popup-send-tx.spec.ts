@@ -113,7 +113,7 @@ async function sepoliaBalanceWei(address: string): Promise<bigint> {
   return BigInt(hex);
 }
 
-test('broadcast a real transaction on Sepolia and see it in the activity list', async ({
+test("【转账与交易 / E2E】 在 Sepolia 上广播真实交易并在活动列表中看到它", async ({
   recorder,
 }) => {
   // Block every YeYing public host — this test specifically targets

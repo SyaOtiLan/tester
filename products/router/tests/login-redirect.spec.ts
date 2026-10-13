@@ -16,7 +16,7 @@ function skipIfNoService() {
 }
 
 // RT-UI-007 (P0)
-test('unauthenticated /workspace/* is redirected to /login?redirect=', async ({ page, baseURL, recorder }) => {
+test("【管理后台与工作台 / UI】 未经身份验证的 /workspace/* 被重定向到 /login?redirect=", async ({ page, baseURL, recorder }) => {
   skipIfNoService();
 
   await page.goto(`${baseURL}/workspace/token`, { waitUntil: 'domcontentloaded' });

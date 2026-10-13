@@ -29,7 +29,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const RECIPIENT = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 
-test('transfer SPL USDC on Solana routes through the SPL token path, not native SOL', async ({ recorder }) => {
+test("【转账与交易 / API】 通过 SPL 令牌路径在 Solana 路由上传输 SPL USDC，而不是本机 SOL", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

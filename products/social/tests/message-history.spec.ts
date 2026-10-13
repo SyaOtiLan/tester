@@ -60,7 +60,7 @@ async function sendGroup(ctx: APIRequestContext, groupId: number, content: strin
   return ((await res.json()) as Envelope<GroupMessageVO>).data;
 }
 
-test.describe.serial('social private message history', () => {
+test.describe.serial("【message history】社交私信历史记录（social private message history）", () => {
   let A: SocialIdentity;
   let B: SocialIdentity;
   let ctxA: APIRequestContext;
@@ -80,7 +80,7 @@ test.describe.serial('social private message history', () => {
   });
 
   // SO-API-045 — private history is a paginated list containing the sent message.
-  test('SO-API-045 private chat history pagination', async () => {
+  test("【私聊消息 / API】 SO-API-045 私聊历史记录分页", async () => {
     const sent = await sendPrivate(ctxA, B.userId, `hist-${Date.now() % 100000}`);
     const res = await ctxA.get(`/message/private/history?friendId=${B.userId}&page=1&size=10`);
     const body = (await res.json()) as Envelope<PrivateMessageVO[]>;
@@ -91,7 +91,7 @@ test.describe.serial('social private message history', () => {
   });
 
   // SO-API-046 — recall a just-sent private message (inside the 5-min window).
-  test('SO-API-046 recall private message', async () => {
+  test("【私聊消息 / API】 SO-API-046 撤回私聊消息", async () => {
     const sent = await sendPrivate(ctxA, B.userId, `recall-${Date.now() % 100000}`);
     expect(sent.id).toBeGreaterThan(0);
     const res = await ctxA.delete(`/message/private/recall/${sent.id}`);
@@ -103,7 +103,7 @@ test.describe.serial('social private message history', () => {
   });
 
   // SO-API-047 — B loads offline private messages since minId=0.
-  test('SO-API-047 load offline private messages', async () => {
+  test("【私聊消息 / API】 SO-API-047 加载离线私聊消息", async () => {
     const sent = await sendPrivate(ctxA, B.userId, `offline-${Date.now() % 100000}`);
     const res = await ctxB.get('/message/private/loadOfflineMessage?minId=0');
     const body = (await res.json()) as Envelope<PrivateMessageVO[]>;
@@ -113,7 +113,7 @@ test.describe.serial('social private message history', () => {
   });
 
   // SO-API-048 — B marks the conversation read; A can query the read pointer.
-  test('SO-API-048 mark conversation read', async () => {
+  test("【私聊消息 / API】 SO-API-048 标记会话已读", async () => {
     await sendPrivate(ctxA, B.userId, `read-${Date.now() % 100000}`);
     const readed = await ctxB.put(`/message/private/readed?friendId=${A.userId}`);
     expect(((await readed.json()) as Envelope<null>).code).toBe(200);
@@ -132,7 +132,7 @@ test.describe.serial('social private message history', () => {
   // Served from Redis (IM_READED_POSITION); WS-driven in this environment, so it
   // reads back the default (-1) over HTTP — we assert the endpoint is reachable
   // and returns a numeric pointer.
-  test('SO-API-049 query max readed message id', async () => {
+  test("【私聊消息 / API】 SO-API-049 查询最大已读消息 id", async () => {
     await sendPrivate(ctxA, B.userId, `maxread-${Date.now() % 100000}`);
     const res = await ctxA.get(`/message/private/maxReadedId?friendId=${B.userId}`);
     const body = (await res.json()) as Envelope<number>;
@@ -141,7 +141,7 @@ test.describe.serial('social private message history', () => {
   });
 });
 
-test.describe.serial('social group message history', () => {
+test.describe.serial("【message history】社交群组消息历史记录（social group message history）", () => {
   let A: SocialIdentity;
   let B: SocialIdentity;
   let ctxA: APIRequestContext;
@@ -165,7 +165,7 @@ test.describe.serial('social group message history', () => {
   });
 
   // SO-API-051 — group history is a paginated list containing the sent message.
-  test('SO-API-051 group chat history pagination', async () => {
+  test("【群聊消息 / API】 SO-API-051 群聊历史记录分页", async () => {
     const sent = await sendGroup(ctxA, groupId, `ghist-${Date.now() % 100000}`);
     const res = await ctxA.get(`/message/group/history?groupId=${groupId}&page=1&size=10`);
     const body = (await res.json()) as Envelope<GroupMessageVO[]>;
@@ -175,7 +175,7 @@ test.describe.serial('social group message history', () => {
   });
 
   // SO-API-052 — recall a just-sent group message (inside the 5-min window).
-  test('SO-API-052 recall group message', async () => {
+  test("【群聊消息 / API】 SO-API-052 撤回群聊消息", async () => {
     const sent = await sendGroup(ctxA, groupId, `grecall-${Date.now() % 100000}`);
     expect(sent.id).toBeGreaterThan(0);
     const res = await ctxA.delete(`/message/group/recall/${sent.id}`);
@@ -186,7 +186,7 @@ test.describe.serial('social group message history', () => {
   });
 
   // SO-API-053 — B loads offline group messages since minId=0.
-  test('SO-API-053 load offline group messages', async () => {
+  test("【群聊消息 / API】 SO-API-053 加载离线群聊消息", async () => {
     const sent = await sendGroup(ctxA, groupId, `goffline-${Date.now() % 100000}`);
     const res = await ctxB.get('/message/group/loadOfflineMessage?minId=0');
     const body = (await res.json()) as Envelope<GroupMessageVO[]>;
@@ -196,7 +196,7 @@ test.describe.serial('social group message history', () => {
   });
 
   // SO-API-054 — B marks the group messages read.
-  test('SO-API-054 mark group messages read', async () => {
+  test("【群聊消息 / API】 SO-API-054 标记群消息已读", async () => {
     await sendGroup(ctxA, groupId, `gread-${Date.now() % 100000}`);
     const readed = await ctxB.put(`/message/group/readed?groupId=${groupId}`);
     expect(((await readed.json()) as Envelope<null>).code).toBe(200);
@@ -205,7 +205,7 @@ test.describe.serial('social group message history', () => {
   // SO-API-055 — query which users have read a specific group message.
   // A sends a message, B marks the group read, then A queries the read list and
   // finds B's id in it. (Receipt lists apply to groups of ≤500 members.)
-  test('SO-API-055 query group message readed users', async () => {
+  test("【群聊消息 / API】 SO-API-055 查询群消息已读用户", async () => {
     const sent = await sendGroup(ctxA, groupId, `greadusers-${Date.now() % 100000}`);
     expect(sent.id).toBeGreaterThan(0);
     const readed = await ctxB.put(`/message/group/readed?groupId=${groupId}`);

@@ -42,7 +42,7 @@ interface GroupVO {
   quit: boolean;
 }
 
-test.describe.serial('social group management', () => {
+test.describe.serial("【群组管理】社会团体管理（social group management）", () => {
   let A: SocialIdentity;
   let B: SocialIdentity;
   let C: SocialIdentity;
@@ -74,7 +74,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-035 — my groups list contains the group I own.
-  test('SO-API-035 my groups list', async () => {
+  test("【群组管理 / API】 SO-API-035 我的群组列表", async () => {
     const res = await ctxA.get('/group/list');
     const body = (await res.json()) as Envelope<GroupVO[]>;
     expect(body.code).toBe(200);
@@ -82,7 +82,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-036 — group detail.
-  test('SO-API-036 group detail', async () => {
+  test("【群组管理 / API】 SO-API-036 查询群组详情", async () => {
     const res = await ctxA.get(`/group/find/${groupId}`);
     const body = (await res.json()) as Envelope<GroupVO>;
     expect(body.code).toBe(200);
@@ -91,7 +91,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-037 — modify group name + notice; the change persists.
-  test('SO-API-037 modify group info', async () => {
+  test("【群组管理 / API】 SO-API-037 修改群组信息", async () => {
     const cur = ((await (await ctxA.get(`/group/find/${groupId}`)).json()) as Envelope<GroupVO>).data;
     const newName = `grp-mod-${Date.now() % 100000}`;
     const newNotice = `notice-${Date.now() % 1000000}`;
@@ -104,7 +104,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-039 — group members list includes owner + both invitees.
-  test('SO-API-039 group members list', async () => {
+  test("【群组管理 / API】 SO-API-039 群成员列表", async () => {
     const res = await ctxA.get(`/group/members/${groupId}`);
     const body = (await res.json()) as Envelope<Array<{ userId: number }>>;
     expect(body.code).toBe(200);
@@ -115,7 +115,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-040 — owner removes member C; C loses active membership (soft remove).
-  test('SO-API-040 remove group member', async () => {
+  test("【群组管理 / API】 SO-API-040 移除群成员", async () => {
     const del = await ctxA.delete('/group/members/remove', {
       data: { groupId, userIds: [C.userId] },
     });
@@ -133,7 +133,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-041 — member B leaves; B no longer holds an active membership.
-  test('SO-API-041 leave group', async () => {
+  test("【群组管理 / API】 SO-API-041 退出群组", async () => {
     const quit = await ctxB.delete(`/group/quit/${groupId}`);
     expect(((await quit.json()) as Envelope<null>).code).toBe(200);
 
@@ -146,7 +146,7 @@ test.describe.serial('social group management', () => {
   });
 
   // SO-API-042 — owner dissolves the group.
-  test('SO-API-042 dissolve group', async () => {
+  test("【群组管理 / API】 SO-API-042 解散群组", async () => {
     const del = await ctxA.delete(`/group/delete/${groupId}`);
     expect(((await del.json()) as Envelope<null>).code).toBe(200);
 
@@ -159,7 +159,7 @@ test.describe.serial('social group management', () => {
 // SO-API-043 (P2) — toggle the per-group do-not-disturb flag; it round-trips
 // through /group/find (GroupVO.isDnd). Standalone (own group) so it doesn't
 // depend on the serial block's destructive ordering.
-test('SO-API-043 group do-not-disturb toggle', async () => {
+test("【群组管理 / API】 SO-API-043 群免打扰开关", async () => {
   test.skip(!platformURL() || !identityURL(), 'SOCIAL_BASE_URL / SOCIAL_IDENTITY_URL required');
   const owner = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, owner.login.accessToken);

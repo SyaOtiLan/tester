@@ -16,7 +16,7 @@ import { createAndUnlockWallet, waitForApproval } from '../helpers/popup';
 
 const DAPP_ORIGIN = 'https://dapp.e2e.invalid/';
 
-test('WL-DAPP-003: eth_signTypedData_v4 is approved and returns a 65-byte signature', async ({ recorder }) => {
+test("【消息签名与授权 / DAPP】 WL-DAPP-003 `eth_signTypedData_v4` 审批通过(EIP-712)", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

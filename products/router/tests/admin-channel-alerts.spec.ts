@@ -78,7 +78,7 @@ async function createInertChannel(ctx: Awaited<ReturnType<typeof adminContext>>,
 }
 
 // RT-API-075 (P0) — alert read feeds return controlled contracts.
-test('admin alert feeds return paged items with a summary and billing alert lists', async () => {
+test("【渠道账务与告警管理 / API】 管理员告警信息流和账务告警列表返回分页数据及汇总信息", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -129,7 +129,7 @@ test('admin alert feeds return paged items with a summary and billing alert list
 });
 
 // RT-API-076 (P0) — acknowledge → resolve state machine (idempotent upsert).
-test('admin acknowledges then resolves an alert, and acknowledge is idempotent', async () => {
+test("【渠道账务与告警管理 / API】 管理员可确认并解决告警，重复确认保持幂等", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -182,7 +182,7 @@ test('admin acknowledges then resolves an alert, and acknowledge is idempotent',
 });
 
 // RT-API-077 (P1) — acknowledge/resolve validate the alert reference.
-test('acknowledge and resolve reject an incomplete alert reference (告警参数无效)', async () => {
+test("【渠道账务与告警管理 / API】 确认并解决拒绝不完整的警报参考（相同参数无效）", async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);

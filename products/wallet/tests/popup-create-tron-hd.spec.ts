@@ -35,7 +35,7 @@ import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
 import { stubPublicEndpoints } from '../helpers/network';
 import { byId, openPopup, sendSw, TEST_PASSWORD } from '../helpers/popup';
 
-test('create Tron HD wallet via wallet-type menu lands on #walletPage with a T... address', async ({ recorder }) => {
+test("【钱包创建与初始化 / UI】 通过钱包类型菜单创建 Tron HD 钱包，登陆 #walletPage，地址为 T...", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -98,7 +98,7 @@ test('create Tron HD wallet via wallet-type menu lands on #walletPage with a T..
   }
 });
 
-test('wallet-type menu exposes the Tron HD entry', async () => {
+test("【钱包创建与初始化 / UI】 钱包类型菜单公开 Tron HD 条目", async () => {
   const ctx = await loadWalletContext({ headless: true });
   try {
     // The wallet-type menu only renders on `#setPasswordPage` when the

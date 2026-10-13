@@ -6,7 +6,7 @@
  */
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
-test('home page renders a recognizable heading', async ({ page }) => {
+test("【文件管理与导航界面 / UI】 主页呈现可识别的标题", async ({ page }) => {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
   const env = envFor('warehouse');
   await page.goto(env.baseURL!);

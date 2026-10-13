@@ -29,7 +29,7 @@ import { byId, createAndUnlockWallet, openPopup } from '../helpers/popup';
 const RECIPIENT = '0x1111111111111111111111111111111111111111';
 const AMOUNT = '1.25';
 
-test('transfer form survives popup close + reopen', async ({ recorder }) => {
+test("【转账与交易 / UI】 转账表单在弹出窗口关闭+重新打开后仍然有效", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

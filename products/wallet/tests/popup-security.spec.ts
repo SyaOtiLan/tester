@@ -39,7 +39,7 @@ async function openAccountsPage(popup: Page) {
   await byId(popup, 'accountsPage').waitFor({ state: 'visible' });
 }
 
-test('reveal mnemonic and private key from the accounts page with the password', async ({
+test("【安全与备份恢复 / UI】 通过密码从账户页面显示助记词和私钥", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -75,7 +75,7 @@ test('reveal mnemonic and private key from the accounts page with the password',
   }
 });
 
-test('change the wallet password, then lock and unlock with the new one', async ({ recorder }) => {
+test("【安全与备份恢复 / UI】 更改钱包密码，然后用新密码锁定和解锁", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   const NEW_PASSWORD = 'E2E-password-2027';
   try {
@@ -124,7 +124,7 @@ test('change the wallet password, then lock and unlock with the new one', async 
   }
 });
 
-test('WL-UI-024: a wrong password when revealing the private key is rejected', async ({
+test("【安全与锁定恢复 / UI】 WL-UI-024 使用错误密码查看私钥/助记词被拒绝", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -152,7 +152,7 @@ test('WL-UI-024: a wrong password when revealing the private key is rejected', a
   }
 });
 
-test('WL-UI-025: changing the password with a wrong old password is rejected', async ({
+test("【安全与锁定恢复 / UI】 WL-UI-025 修改密码时旧密码错误被拒绝", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

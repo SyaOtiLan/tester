@@ -42,7 +42,7 @@ interface AdminUserItem {
   quota?: number;
 }
 
-test('WH-API-074 an admin can update and delete a user', async () => {
+test("【管理员用户管理 / API】 WH-API-074 管理员更新/删除用户", async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasCredential(), 'no warehouse credential configured');
 

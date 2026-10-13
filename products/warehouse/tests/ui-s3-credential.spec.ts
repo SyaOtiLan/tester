@@ -28,7 +28,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('create an S3 credential and reveal its Access Key ID + Secret', async ({
+test("【文件管理与导航界面 / UI】 创建 S3 凭证并公开其访问密钥 ID + Secret", async ({
   page,
   baseURL,
   recorder,

@@ -23,11 +23,11 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe('project dashboard & navigation (P1)', () => {
+test.describe("【dashboard nav】项目仪表板和导航 (P1)（project dashboard & navigation (P1)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-024 仪表盘展示今日到期/超期/待办三类计数
-  test('PJ-024 the dashboard shows the today / overdue / todo statistic blocks', async ({ page }) => {
+  test("【仪表盘 / UI】 PJ-024 仪表盘展示今日到期/超期/待办三类计数", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     // Seed a task due today so the "今日到期" bucket is non-zero.
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `统计项目${Date.now() % 100000}` });
@@ -46,7 +46,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-025 仪表盘欢迎语显示用户昵称
-  test('PJ-025 the dashboard greeting shows the user nickname', async ({ page }) => {
+  test("【仪表盘 / UI】 PJ-025 仪表盘欢迎语显示用户昵称", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
     // The greeting is "欢迎您，<nickname>"; the throwaway nickname is derived
@@ -58,7 +58,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-027 仪表盘任务分组点击滚动定位
-  test('PJ-027 clicking a task-statistic group scrolls to that task group', async ({ page }) => {
+  test("【仪表盘 / UI】 PJ-027 仪表盘任务分组点击滚动定位", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `分组项目${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, acc.token, pid);
@@ -76,7 +76,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-028 project/task/lists 返回我参与的任务(含到期/完成字段)
-  test('PJ-028 the task list returns my tasks with due/completion fields', async () => {
+  test("【仪表盘 / API】 PJ-028 user/tasks 返回我参与的任务", async () => {
     const acc: RegisteredUser = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `我的任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, acc.token, pid);
@@ -98,7 +98,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-031 点击侧栏各入口在 SPA 内原地切换且高亮
-  test('PJ-031 clicking a sidebar entry switches the view in-place and highlights it', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-031 点击侧栏各入口在 SPA 内原地切换且高亮", async ({ page }) => {
     await seedUiSession(page, baseURL!);
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
 
@@ -114,7 +114,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-032 侧栏项目列表渲染并可进入项目
-  test('PJ-032 the sidebar project list renders and opens a project panel', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-032 侧栏项目列表渲染并可进入项目", async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const name = `侧栏项目${Date.now() % 100000}`;
     const { id: pid } = await createProject(baseURL!, acc.token, { name });
@@ -127,7 +127,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-034 主菜单下拉展现设置/工作报告等入口
-  test('PJ-034 the main menu exposes settings / work-report entries', async ({ page }) => {
+  test("【导航与 SPA 布局 / UI】 PJ-034 主菜单下拉展现设置/团队管理/工作报告", async ({ page }) => {
     await seedUiSession(page, baseURL!);
     await expect(page.getByText('以下是你当前的任务统计数据')).toBeVisible({ timeout: 20_000 });
 
@@ -140,7 +140,7 @@ test.describe('project dashboard & navigation (P1)', () => {
   });
 
   // PJ-036 未登录访问 /manage 跳转登录
-  test('PJ-036 visiting /manage while logged out redirects to the login entry', async ({ page }) => {
+  test("【导航与 SPA 布局 / E2E】 PJ-036 未登录访问 /manage 跳转登录", async ({ page }) => {
     await page.addInitScript(() => {
       try {
         (globalThis as any).localStorage.setItem('__system:languageName__', 'zh');

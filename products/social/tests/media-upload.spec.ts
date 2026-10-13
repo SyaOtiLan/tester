@@ -76,7 +76,7 @@ function makePng(w = 16, h = 16): Buffer {
 }
 
 // SO-API-056 (P1) — image upload returns original + thumbnail URLs.
-test('SO-API-056 upload image returns original and thumbnail', async () => {
+test("【文件与媒体上传 / API】 SO-API-056 上传图片返回原图与缩略图", async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -102,7 +102,7 @@ test('SO-API-056 upload image returns original and thumbnail', async () => {
 // SO-API-058 (P2) — an over-limit file upload is rejected (multipart max 50MB).
 // Live: a 55MB body -> HTTP 200 envelope {code:500,"系统繁忙..."} (the multipart
 // size guard trips before the upload succeeds), no URL returned.
-test('SO-API-058 oversized file upload is rejected', async () => {
+test("【文件与媒体上传 / API】 SO-API-058 超大文件上传被拒", async () => {
   skipIfNoPlatform();
   test.slow(); // building + sending a 55MB body takes a while
   const ctx = await apiContext(platformURL()!);
@@ -120,7 +120,7 @@ test('SO-API-058 oversized file upload is rejected', async () => {
     await ctx.dispose();
   }
 });
-test('SO-API-057 upload file returns a URL', async () => {
+test("【文件与媒体上传 / API】 SO-API-057 上传文件返回 URL", async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {

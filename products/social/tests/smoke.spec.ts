@@ -7,12 +7,12 @@
  */
 import { test, expect, baseURLFor, hasEnv } from '../fixtures';
 
-test('social frontend smoke — skipped because 8082 is down', () => {
+test("【登录与服务探活 / UI】 社交前端冒烟 — 由于 8082 已关闭而被跳过", () => {
   test.skip(!baseURLFor('social'), 'SOCIAL_BASE_URL not configured');
   // Intentionally skipped: see actuator.spec.ts for backend-only tests.
 });
 
-test('social post-login nav — skipped without SOCIAL_USER/PASS', () => {
+test("【登录与服务探活 / API】 社交登录后导航 — 在没有 SOCIAL_USER/PASS 的情况下跳过", () => {
   test.skip(
     !hasEnv('SOCIAL_USER') || !hasEnv('SOCIAL_PASS'),
     'SOCIAL_USER and SOCIAL_PASS required for auth-flow tests',

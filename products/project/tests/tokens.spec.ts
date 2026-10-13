@@ -24,7 +24,7 @@ async function createToken(token: string, projectId: number, name: string) {
   );
 }
 
-test.describe('project automation tokens (P1 API)', () => {
+test.describe("【自动化访问令牌】项目自动化代币 (P1 API)（project automation tokens (P1 API)）", () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -36,7 +36,7 @@ test.describe('project automation tokens (P1 API)', () => {
   });
 
   // PJ-119 创建访问令牌返回密钥
-  test('PJ-119 token/create returns the access/secret key pair', async () => {
+  test("【自动化访问令牌 / API】 PJ-119 创建访问令牌返回密钥", async () => {
     const body = await createToken(user.token, projectId, `tok-create-${Date.now() % 100000}`);
     expect(body.ret).toBe(1);
     expect(body.msg).toBe('创建成功');
@@ -47,7 +47,7 @@ test.describe('project automation tokens (P1 API)', () => {
   });
 
   // PJ-120 令牌列表
-  test('PJ-120 token/lists returns the tokens with the secret masked', async () => {
+  test("【自动化访问令牌 / API】 PJ-120 令牌列表", async () => {
     const created = await createToken(user.token, projectId, `tok-list-${Date.now() % 100000}`);
     expect(created.ret).toBe(1);
     const id = Number(created.data.id);
@@ -62,7 +62,7 @@ test.describe('project automation tokens (P1 API)', () => {
   });
 
   // PJ-121 轮换令牌密钥
-  test('PJ-121 token/rotate issues a new secret', async () => {
+  test("【自动化访问令牌 / API】 PJ-121 轮换令牌密钥", async () => {
     const created = await createToken(user.token, projectId, `tok-rotate-${Date.now() % 100000}`);
     expect(created.ret).toBe(1);
     const id = Number(created.data.id);
@@ -76,7 +76,7 @@ test.describe('project automation tokens (P1 API)', () => {
   });
 
   // PJ-122 禁用/删除令牌
-  test('PJ-122 token/disable then token/delete', async () => {
+  test("【自动化访问令牌 / API】 PJ-122 禁用/删除令牌", async () => {
     const created = await createToken(user.token, projectId, `tok-del-${Date.now() % 100000}`);
     expect(created.ret).toBe(1);
     const id = Number(created.data.id);

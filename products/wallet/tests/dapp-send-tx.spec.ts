@@ -70,7 +70,7 @@ async function connect(context: BrowserContext, extensionId: string, dapp: Page)
   return (await p) as string[];
 }
 
-test('WL-DAPP-014: dApp eth_sendTransaction opens the approval window and resolves on approve', async ({
+test("【dApp 连接与 Provider / DAPP】 WL-DAPP-014 `eth_sendTransaction` 从 dApp 触发交易审批窗", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

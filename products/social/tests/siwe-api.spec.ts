@@ -36,7 +36,7 @@ function skipIfNoIdentity() {
 }
 
 // SO-API-015 — SIWE nonce challenge.
-test('SO-API-015 SIWE nonce challenge', async () => {
+test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-015 SIWE 挑战获取 nonce", async () => {
   skipIfNoIdentity();
   const ctx = await request.newContext({ baseURL: identityURL()! });
   try {
@@ -53,7 +53,7 @@ test('SO-API-015 SIWE nonce challenge', async () => {
 });
 
 // SO-API-016 — verify a valid signature, receive a LoginVO (auto-register).
-test('SO-API-016 SIWE verify yields a LoginVO', async () => {
+test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-016 SIWE 验证签名登录换取 token", async () => {
   skipIfNoIdentity();
   const wallet = Wallet.createRandom();
   const { envelope } = await siweLogin(identityURL()!, wallet.privateKey);
@@ -65,7 +65,7 @@ test('SO-API-016 SIWE verify yields a LoginVO', async () => {
 });
 
 // SO-API-017 — a signature from a different key is rejected, no token issued.
-test('SO-API-017 SIWE verify rejects a wrong signature', async () => {
+test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-017 SIWE 验证拒绝错误签名", async () => {
   skipIfNoIdentity();
   const ctx = await request.newContext({ baseURL: identityURL()! });
   try {
@@ -92,7 +92,7 @@ test('SO-API-017 SIWE verify rejects a wrong signature', async () => {
 });
 
 // SO-API-018 (P1) — a nonce is single-use; replaying a consumed one fails.
-test('SO-API-018 SIWE nonce is single-use', async () => {
+test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-018 SIWE nonce 一次性 / 过期", async () => {
   skipIfNoIdentity();
   const wallet = Wallet.createRandom();
   const ctx = await request.newContext({ baseURL: identityURL()! });

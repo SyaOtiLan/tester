@@ -22,7 +22,7 @@ import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
 import { stubPublicEndpoints } from '../helpers/network';
 import { TEST_PASSWORD, byId, createAndUnlockWallet, openPopup } from '../helpers/popup';
 
-test('lock + unlock + SW-kill recovery preserves wallet access', async ({ recorder }) => {
+test("【安全与备份恢复 / UI】 锁定 + 解锁 + SW-kill 恢复保留钱包访问权限", async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -113,7 +113,7 @@ test('lock + unlock + SW-kill recovery preserves wallet access', async ({ record
 // WL-UI-034: repeated wrong unlock attempts each show 「密码错误」, never clear
 // the input, never leak into the wallet page, and a correct password after
 // several failures still unlocks (no lock-out that traps a legit user).
-test('WL-UI-034: repeated wrong unlock passwords are each rejected without leaking or clearing', async ({
+test("【错误、异常与安全边界 / UI】 WL-UI-034 连续多次错误解锁密码的处理", async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

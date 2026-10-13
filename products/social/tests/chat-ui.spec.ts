@@ -28,7 +28,7 @@ function skipIfNoStack() {
 }
 
 // SO-UI-012 — seeded session lands on the chat home and renders the layout.
-test('SO-UI-012 seeded session renders home layout', async ({ page }) => {
+test("【前端导航与聊天界面 / E2E】 SO-UI-012 播种会话进入聊天主界面渲染布局", async ({ page }) => {
   skipIfNoStack();
   const user = await newSiweIdentity(platformURL()!, identityURL()!);
   await seedSession(page, user.login);
@@ -50,7 +50,7 @@ test('SO-UI-012 seeded session renders home layout', async ({ page }) => {
 });
 
 // SO-UI-017 — end-to-end: open a friend conversation, type, send, see the bubble.
-test('SO-UI-017 send a text message end-to-end', async ({ page }) => {
+test("【前端导航与聊天界面 / E2E】 SO-UI-017 端到端发送文本消息", async ({ page }) => {
   skipIfNoStack();
   test.slow(); // two SIWE logins + friend setup + SPA hydration
   // Set up two mutual friends via the API, then drive the UI as user A.
