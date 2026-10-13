@@ -8,18 +8,18 @@ of the E2E cases each product should have (see its `README.md` for progress).
 
 ## What this repo covers
 
-| product      | frontend / dev port | backend port         | what is tested                                              |
-| ------------ | ------------------- | -------------------- | ----------------------------------------------------------- |
-| warehouse    | 5173 (Vite)         | 6065 WebDAV, 6066 admin | admin login, WebDAV PROPFIND/PUT/GET, bucket UI             |
-| node         | 8991                | 8100                 | home, navigation, publish-app view                          |
-| router       | 3011 (bundled)      | 3011 (Go binary)     | admin root page, sidebar items                              |
-| chat         | 3020                | embedded Next.js API | home, new-chat dialog; LLM conversation tests gated on keys |
-| social       | 8082                | 8888 (via /api)      | login, nav after auth                                       |
-| project      | 20833 (APP_DEV_PORT)| same                 | login, dashboard sidebar                                    |
-| knowledge    | 5173                | 8000 FastAPI         | home, search box, /health                                   |
-| marketplace  | none (static)       | none                 | index.json schema and shape                                 |
-| books        | none (docs)         | none                 | SUMMARY.md links                                           |
-| agent hub    | 5174                | 3900 uvicorn         | home, /health, wallet tests gated on key                   |
+| product     | frontend / dev port  | backend port            | what is tested                                              |
+| ----------- | -------------------- | ----------------------- | ----------------------------------------------------------- |
+| warehouse   | 5173 (Vite)          | 6065 WebDAV, 6066 admin | admin login, WebDAV PROPFIND/PUT/GET, bucket UI             |
+| node        | 8991                 | 8100                    | home, navigation, publish-app view                          |
+| router      | 3011 (bundled)       | 3011 (Go binary)        | admin root page, sidebar items                              |
+| chat        | 3020                 | embedded Next.js API    | home, new-chat dialog; LLM conversation tests gated on keys |
+| social      | 8082                 | 8888 (via /api)         | login, nav after auth                                       |
+| project     | 20833 (APP_DEV_PORT) | same                    | login, dashboard sidebar                                    |
+| knowledge   | 5173                 | 8000 FastAPI            | home, search box, /health                                   |
+| marketplace | none (static)        | none                    | index.json schema and shape                                 |
+| books       | none (docs)          | none                    | SUMMARY.md links                                            |
+| agent hub   | 5174                 | 3900 uvicorn            | home, /health, wallet tests gated on key                    |
 
 ## Layout
 
@@ -77,17 +77,17 @@ gitignored.
 
 ## Common commands
 
-| Command                      | What it does                                          |
-| ---------------------------- | ----------------------------------------------------- |
-| `pnpm test`                  | run every project's tests                             |
-| `pnpm test:<product>`        | run a single product (e.g. `pnpm test:warehouse`)     |
-| `pnpm list`                  | enumerate every test without executing                |
-| `pnpm env:check`             | verify each `*_BASE_URL` is reachable                 |
-| `pnpm env:list`              | print per-product env-var matrix                      |
-| `pnpm typecheck`             | `tsc -b` across every project                         |
-| `pnpm lint` / `pnpm format`  | eslint / prettier                                     |
-| `pnpm report`                | open the last HTML report                             |
-| `pnpm clean`                 | remove reports, results, tsbuildinfo                  |
+| Command                     | What it does                                      |
+| --------------------------- | ------------------------------------------------- |
+| `pnpm test`                 | run every project's tests                         |
+| `pnpm test:<product>`       | run a single product (e.g. `pnpm test:warehouse`) |
+| `pnpm list`                 | enumerate every test without executing            |
+| `pnpm env:check`            | verify each `*_BASE_URL` is reachable             |
+| `pnpm env:list`             | print per-product env-var matrix                  |
+| `pnpm typecheck`            | `tsc -b` across every project                     |
+| `pnpm lint` / `pnpm format` | eslint / prettier                                 |
+| `pnpm report`               | open the last HTML report                         |
+| `pnpm clean`                | remove reports, results, tsbuildinfo              |
 
 > Prefix any of the above with `TEST_ENV=local|test|prod` to pick the config
 > file — see [Environment selection](#environment-selection-local--test--prod).
@@ -136,6 +136,11 @@ pass against any HTTP server.
   reason when missing.
 - All auth helpers live in `shared/auth.ts` as signatures; each product
   implements the strategies it needs in its `pages/`.
+
+## Scheduled test-machine reports
+
+Daily execution, public reports grouped by product, and Feishu notifications
+are documented in [docs/test-machine-report.md](docs/test-machine-report.md).
 
 ## License
 

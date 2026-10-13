@@ -1,5 +1,5 @@
 import { defineConfig, devices, type Project } from '@playwright/test';
-import { baseURLFor, loadEnv } from './shared/env';
+import { baseURLFor } from './shared/env';
 import { defaultReporters } from './shared/reporters';
 
 const HEADED = process.env.PWHEADLESS === '0';
@@ -81,9 +81,7 @@ const projects: Project[] = products.map((product: ProductName) => ({
   // Verified: 136 passed / 8 skipped / 0 failed at --workers=2 (0 flaky), vs
   // ~6 failed + ~10 flaky at the 5-worker default. Assertions are identical
   // either way; only the achievable parallelism differs.
-  ...(product === 'project'
-    ? { retries: process.env.CI ? 2 : 1, timeout: 60_000 }
-    : {}),
+  ...(product === 'project' ? { retries: process.env.CI ? 2 : 1, timeout: 60_000 } : {}),
   use: {
     ...devices['Desktop Chrome'],
     baseURL: baseURLFor(product),
@@ -93,9 +91,7 @@ const projects: Project[] = products.map((product: ProductName) => ({
     screenshot: 'only-on-failure',
     video: 'off',
     ...(product === 'chat' ? chatOverrides : {}),
-    ...(product === 'project'
-      ? { actionTimeout: 30_000, navigationTimeout: 45_000 }
-      : {}),
+    ...(product === 'project' ? { actionTimeout: 30_000, navigationTimeout: 45_000 } : {}),
     ...(product === 'wallet' ? walletOverrides : {}),
   },
 }));
@@ -123,7 +119,4 @@ export default defineConfig({
     navigationTimeout: 20_000,
   },
   projects,
-  metadata: {
-    products: loadEnv(),
-  },
 });

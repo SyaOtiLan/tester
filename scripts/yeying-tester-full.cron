@@ -1,0 +1,7 @@
+# On the test machine, whose system timezone is Asia/Shanghai.
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# Review the repository path and private log directory before installing.
+# Default policy: do not start while Chromium has D-state processes.
+TESTER_STUCK_CHROME_LIMIT=0
+0 3 * * * root /root/code/tester/scripts/run-full-on-test-machine.sh >> /data/test-results-private/cron.log 2>&1
