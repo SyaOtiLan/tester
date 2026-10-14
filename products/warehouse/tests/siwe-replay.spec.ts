@@ -10,6 +10,7 @@
  *   - WAREHOUSE_WEBDAV_URL         (backend API origin, e.g. http://localhost:6065)
  *   - WAREHOUSE_WALLET_PRIVATE_KEY (auto-creates the user on first login)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { Wallet, getAddress } from 'ethers';
@@ -18,7 +19,7 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 
-test("【鉴权与会话 / API】 WH-API-004 SIWE nonce 一次性 / 防重放", async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-004 SIWE nonce 一次性 / 防重放", "WH-API-004 a consumed SIWE nonce cannot be replayed"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   const key = envFor('warehouse')['WAREHOUSE_WALLET_PRIVATE_KEY'];
   test.skip(!key, 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');

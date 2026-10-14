@@ -3,12 +3,13 @@
  *
  * Filesystem-only assertions against the on-disk books repo (BOOKS_REPO_PATH).
  */
+import { localizedTitle } from '../../../shared/title';
 import { existsSync } from 'node:fs';
 import { test, expect } from '../fixtures';
 import { abs, readText, allMarkdown, walk, parseLinks } from './helpers';
 
 // BK-DATA-002
-test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-002 agent/SUMMARY.md 存在、非空且以 Markdown 列表组织目录", () => {
+test(localizedTitle("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-002 agent/SUMMARY.md 存在、非空且以 Markdown 列表组织目录", "BK-DATA-002 agent/SUMMARY.md exists, is non-empty and is a markdown list"), () => {
   const text = readText('agent/SUMMARY.md');
   expect(text.length).toBeGreaterThan(0);
   const listItems = text.split('\n').filter((l) => /^\s*-\s+\[/.test(l));
@@ -20,7 +21,7 @@ test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-002 agent/SUMMARY.md �
 });
 
 // BK-DATA-004
-test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-004 SUMMARY 章节编号单调有序", () => {
+test(localizedTitle("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-004 SUMMARY 章节编号单调有序", "BK-DATA-004 SUMMARY chapter numbers are monotonically non-decreasing"), () => {
   const text = readText('agent/SUMMARY.md');
   const nums: number[] = [];
   for (const link of parseLinks(text)) {
@@ -37,7 +38,7 @@ test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-004 SUMMARY 章节编�
 });
 
 // BK-DATA-005
-test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-005 SUMMARY 覆盖三部分骨架标题", () => {
+test(localizedTitle("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-005 SUMMARY 覆盖三部分骨架标题", "BK-DATA-005 SUMMARY covers the three-part skeleton headings"), () => {
   const summary = readText('agent/SUMMARY.md');
   for (const part of ['第一部分', '第二部分', '第三部分']) {
     expect(summary).toContain(part);
@@ -58,7 +59,7 @@ test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-005 SUMMARY 覆盖三�
 });
 
 // BK-DATA-006
-test("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-006 顶层三大文档集合目录均存在且非空", () => {
+test(localizedTitle("【目录结构与 SUMMARY 解析 / DATA】 BK-DATA-006 顶层三大文档集合目录均存在且非空", "BK-DATA-006 the three top-level doc collections exist and are non-empty"), () => {
   const collections = ['agent', 'payment/docs', 'yeying'];
   for (const rel of collections) {
     const dir = abs(rel);

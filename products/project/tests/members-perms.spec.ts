@@ -9,12 +9,13 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, apiGet, apiPost, createProject, setProjectMembers, withDeadlockRetry, type RegisteredUser } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【项目成员与权限】项目成员和权限（P1 API）（project members & permissions (P1 API)）", () => {
+test.describe(localizedTitle("【项目成员与权限】项目成员和权限（P1 API）（project members & permissions (P1 API)）", "project members & permissions (P1 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let owner: RegisteredUser;
@@ -24,7 +25,7 @@ test.describe("【项目成员与权限】项目成员和权限（P1 API）（pr
   });
 
   // PJ-084 成员列表必须含负责人
-  test("【项目成员与权限 / API】 PJ-084 成员列表必须含负责人", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-084 成员列表必须含负责人", "PJ-084 the member list must contain the project owner"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `含负责人${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     const body = await apiPost(baseURL!, '/api/project/user', { project_id: pid, userid: [member.userid] }, owner.token);
@@ -33,7 +34,7 @@ test.describe("【项目成员与权限】项目成员和权限（P1 API）（pr
   });
 
   // PJ-085 任命/罢免项目管理员(仅负责人)
-  test("【项目成员与权限 / API】 PJ-085 任命/罢免项目管理员(仅负责人)", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-085 任命/罢免项目管理员(仅负责人)", "PJ-085 owner appoints then dismisses a deputy; a non-member cannot be appointed"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `任命${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     await setProjectMembers(baseURL!, owner.token, pid, [owner.userid, member.userid]);
@@ -57,7 +58,7 @@ test.describe("【项目成员与权限】项目成员和权限（P1 API）（pr
   });
 
   // PJ-086 成员数超 100 被拒
-  test("【项目成员与权限 / API】 PJ-086 成员数超 100 被拒", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-086 成员数超 100 被拒", "PJ-086 more than 100 members is rejected"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `超员${Date.now() % 100000}` });
     // owner + 100 placeholder ids = 101 entries -> over the limit.
     const ids = [owner.userid, ...Array.from({ length: 100 }, (_, i) => 900000 + i)];
@@ -67,7 +68,7 @@ test.describe("【项目成员与权限】项目成员和权限（P1 API）（pr
   });
 
   // PJ-087 获取项目权限设置
-  test("【项目成员与权限 / API】 PJ-087 获取项目权限设置", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-087 获取项目权限设置", "PJ-087 project/permission returns the role-id arrays"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `权限读取${Date.now() % 100000}` });
     const body = await apiGet(baseURL!, `/api/project/permission?project_id=${pid}`, owner.token);
     expect(body.ret).toBe(1);
@@ -77,7 +78,7 @@ test.describe("【项目成员与权限】项目成员和权限（P1 API）（pr
   });
 
   // PJ-088 更新项目权限设置
-  test("【项目成员与权限 / API】 PJ-088 更新项目权限设置", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-088 更新项目权限设置", "PJ-088 project/permission/update saves the permission map"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `权限更新${Date.now() % 100000}` });
     const body = await apiPost(
       baseURL!,

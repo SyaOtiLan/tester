@@ -16,6 +16,7 @@
  * Selectors verified against node `web/src/views/market/**` and the router
  * table in `web/src/router/index.ts`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
 import { seedWalletSession } from '../helpers/session';
@@ -24,7 +25,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test("【应用市场与应用生命周期 / UI】 市场网格呈现并且卡片打开其详细视图", async ({ page, recorder }) => {
+test(localizedTitle("【应用市场与应用生命周期 / UI】 市场网格呈现并且卡片打开其详细视图", "market grid renders and a card opens its detail view"), async ({ page, recorder }) => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -58,7 +59,7 @@ test("【应用市场与应用生命周期 / UI】 市场网格呈现并且卡�
   }
 });
 
-test("【应用市场与应用生命周期 / UI】 我的应用程序视图显示创建者/申请人选项卡和创建按钮", async ({
+test(localizedTitle("【应用市场与应用生命周期 / UI】 我的应用程序视图显示创建者/申请人选项卡和创建按钮", "my-apps view shows creator/applicant tabs and the create button"), async ({
   page,
   recorder,
 }) => {
@@ -79,7 +80,7 @@ test("【应用市场与应用生命周期 / UI】 我的应用程序视图显�
   await recorder.step(page, '我的应用（我创建的 / 我申请的）');
 });
 
-test("【应用市场浏览 / UI】 ND-UI-009 应用检索/筛选", async ({
+test(localizedTitle("【应用市场浏览 / UI】 ND-UI-009 应用检索/筛选", "ND-UI-009 market keyword search drives the grid and shows an empty state"), async ({
   page,
   recorder,
 }) => {

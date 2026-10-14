@@ -1,6 +1,7 @@
 /**
  * books — 章节文件与孤儿检测 (BK-DATA-014, 015, 016, 017, 018).
  */
+import { localizedTitle } from '../../../shared/title';
 import { readdirSync } from 'node:fs';
 import { basename } from 'node:path';
 import { test, expect } from '../fixtures';
@@ -19,14 +20,14 @@ function diskChapterFiles(): string[] {
 }
 
 // BK-DATA-014
-test("【章节文件与孤儿检测 / DATA】 BK-DATA-014 agent 章节文件无孤儿(均被 SUMMARY 引用)", () => {
+test(localizedTitle("【章节文件与孤儿检测 / DATA】 BK-DATA-014 agent 章节文件无孤儿(均被 SUMMARY 引用)", "BK-DATA-014 no orphan chapter files (every chapter is referenced by SUMMARY)"), () => {
   const referenced = new Set(summaryChapterFiles());
   const orphans = diskChapterFiles().filter((f) => !referenced.has(f));
   expect(orphans).toEqual([]);
 });
 
 // BK-DATA-015
-test("【章节文件与孤儿检测 / DATA】 BK-DATA-015 SUMMARY 引用的章节文件都真实存在(反向校验)", () => {
+test(localizedTitle("【章节文件与孤儿检测 / DATA】 BK-DATA-015 SUMMARY 引用的章节文件都真实存在(反向校验)", "BK-DATA-015 every SUMMARY-referenced chapter exists on disk (reverse check)"), () => {
   const onDisk = new Set(diskChapterFiles());
   const dangling = summaryChapterFiles().filter((f) => !onDisk.has(f));
   expect(dangling).toEqual([]);
@@ -35,7 +36,7 @@ test("【章节文件与孤儿检测 / DATA】 BK-DATA-015 SUMMARY 引用的章�
 });
 
 // BK-DATA-016
-test("【章节文件与孤儿检测 / DATA】 BK-DATA-016 每个章节文件非空且含标题", () => {
+test(localizedTitle("【章节文件与孤儿检测 / DATA】 BK-DATA-016 每个章节文件非空且含标题", "BK-DATA-016 every chapter file is non-empty and has a heading"), () => {
   const emptyOrTitleless: string[] = [];
   for (const f of diskChapterFiles()) {
     const text = readText(`agent/chapters/${f}`);
@@ -46,7 +47,7 @@ test("【章节文件与孤儿检测 / DATA】 BK-DATA-016 每个章节文件非
 });
 
 // BK-DATA-017
-test("【章节文件与孤儿检测 / DATA】 BK-DATA-017 章节文件名编号与 SUMMARY 顺序对应", () => {
+test(localizedTitle("【章节文件与孤儿检测 / DATA】 BK-DATA-017 章节文件名编号与 SUMMARY 顺序对应", "BK-DATA-017 chapter file numbering matches SUMMARY order"), () => {
   const summaryNums = summaryChapterFiles()
     .map((f) => /^(\d+)-/.exec(f))
     .filter((m): m is RegExpExecArray => m != null)
@@ -64,7 +65,7 @@ test("【章节文件与孤儿检测 / DATA】 BK-DATA-017 章节文件名编号
 });
 
 // BK-DATA-018
-test("【章节文件与孤儿检测 / DATA】 BK-DATA-018 yeying 单产品说明文件齐全且被总览引用", () => {
+test(localizedTitle("【章节文件与孤儿检测 / DATA】 BK-DATA-018 yeying 单产品说明文件齐全且被总览引用", "BK-DATA-018 yeying single-product files are complete and referenced by overview"), () => {
   const dir = 'yeying/社区/产品/单产品';
   const files = readdirSync(abs(dir)).filter((f) => f.endsWith('.md'));
   expect(files.length).toBe(8);

@@ -1,6 +1,7 @@
 /**
  * books — Markdown 基本合法性 (BK-DATA-025, 026, 027, 028).
  */
+import { localizedTitle } from '../../../shared/title';
 import { readFileSync } from 'node:fs';
 import { test, expect } from '../fixtures';
 import { abs, readText, allMarkdown, stripFences } from './helpers';
@@ -10,7 +11,7 @@ function relOf(file: string): string {
 }
 
 // BK-DATA-025
-test("【Markdown 基本合法性 / DATA】 BK-DATA-025 所有 markdown 为合法 UTF-8", () => {
+test(localizedTitle("【Markdown 基本合法性 / DATA】 BK-DATA-025 所有 markdown 为合法 UTF-8", "BK-DATA-025 every markdown file is valid UTF-8 (no replacement chars)"), () => {
   const bad: string[] = [];
   for (const file of allMarkdown()) {
     const buf = readFileSync(file);
@@ -24,7 +25,7 @@ test("【Markdown 基本合法性 / DATA】 BK-DATA-025 所有 markdown 为合�
 });
 
 // BK-DATA-026
-test("【Markdown 基本合法性 / DATA】 BK-DATA-026 markdown 链接语法闭合", () => {
+test(localizedTitle("【Markdown 基本合法性 / DATA】 BK-DATA-026 markdown 链接语法闭合", "BK-DATA-026 markdown link syntax is closed (no dangling link markers)"), () => {
   const dangling: string[] = [];
   const fullLink = /!?\[[^\]]*\]\([^)]*\)/g;
   for (const file of allMarkdown()) {
@@ -39,7 +40,7 @@ test("【Markdown 基本合法性 / DATA】 BK-DATA-026 markdown 链接语法闭
 });
 
 // BK-DATA-027
-test("【Markdown 基本合法性 / DATA】 BK-DATA-027 代码围栏成对闭合", () => {
+test(localizedTitle("【Markdown 基本合法性 / DATA】 BK-DATA-027 代码围栏成对闭合", "BK-DATA-027 code fences are balanced (even count per file)"), () => {
   const odd: string[] = [];
   for (const file of allMarkdown()) {
     const fences = (readText(relOf(file)).match(/^\s*```/gm) || []).length;
@@ -49,7 +50,7 @@ test("【Markdown 基本合法性 / DATA】 BK-DATA-027 代码围栏成对闭合
 });
 
 // BK-DATA-028 — style/warning level: LF-only, no CRLF
-test("【Markdown 基本合法性 / DATA】 BK-DATA-028 换行风格一致(无 CRLF 混入)", () => {
+test(localizedTitle("【Markdown 基本合法性 / DATA】 BK-DATA-028 换行风格一致(无 CRLF 混入)", "BK-DATA-028 no CRLF line endings (consistent LF)"), () => {
   const crlf: string[] = [];
   for (const file of allMarkdown()) {
     if (readFileSync(file).includes(Buffer.from('\r\n'))) crlf.push(relOf(file));

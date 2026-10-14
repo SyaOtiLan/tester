@@ -13,6 +13,7 @@
  * `views/components/MarketBlock.vue`, `views/components/ApplyUseModal.vue`,
  * and `views/components/ApplicationListTable.vue`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet, getAddress, type BaseWallet } from 'ethers';
 
@@ -50,7 +51,7 @@ async function precreateDraft(
   }
 }
 
-test("【开发者应用生命周期 / E2E】 ND-E2E-002 编辑草稿并保存持久化", async ({
+test(localizedTitle("【开发者应用生命周期 / E2E】 ND-E2E-002 编辑草稿并保存持久化", "ND-E2E-002 edit a draft application and persist via application_update"), async ({
   page,
   recorder,
 }) => {
@@ -137,7 +138,7 @@ test("【开发者应用生命周期 / E2E】 ND-E2E-002 编辑草稿并保存�
   }
 });
 
-test("【申请使用应用 / E2E】 ND-E2E-005 申请使用已上线应用", async ({ page, recorder }) => {
+test(localizedTitle("【申请使用应用 / E2E】 ND-E2E-005 申请使用已上线应用", "ND-E2E-005 apply-to-use an online application"), async ({ page, recorder }) => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');

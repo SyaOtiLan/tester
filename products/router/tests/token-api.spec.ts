@@ -17,6 +17,7 @@
  *
  * Verified against router `internal/admin/controller/token/*` + api.go routes.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -35,7 +36,7 @@ interface CreateResp {
 }
 
 // RT-API-024 (P0)
-test("【令牌、充值与余额 / API】 POST /token/ 创建一个令牌（或到达模型门）", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 POST /token/ 创建一个令牌（或到达模型门）", "POST /token/ creates a token (or reaches the models gate)"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -75,7 +76,7 @@ test("【令牌、充值与余额 / API】 POST /token/ 创建一个令牌（或
 // over-long name is the real, deterministic validation boundary — it is refused
 // regardless of whether the account has available models, writes nothing, and leaks
 // no key.
-test("【令牌、充值与余额 / API】 名称过长的 POST /token/ 被参数验证拒绝", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 名称过长的 POST /token/ 被参数验证拒绝", "POST /token/ with an over-long name is rejected by parameter validation"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -94,7 +95,7 @@ test("【令牌、充值与余额 / API】 名称过长的 POST /token/ 被参�
 });
 
 // RT-API-027 (P1)
-test("【令牌、充值与余额 / API】 GET /token/ 返回格式良好的分页列表", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 GET /token/ 返回格式良好的分页列表", "GET /token/ returns a well-formed paginated list"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -121,7 +122,7 @@ test("【令牌、充值与余额 / API】 GET /token/ 返回格式良好的分�
 });
 
 // RT-API-025 (P1) — POST /token/ is gated when the account has no available models.
-test("【令牌、充值与余额 / API】 POST /token/ 被无可用模型门阻止", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 POST /token/ 被无可用模型门阻止", "POST /token/ is blocked by the no-available-models gate"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -151,7 +152,7 @@ test("【令牌、充值与余额 / API】 POST /token/ 被无可用模型门阻
 });
 
 // RT-API-028 (P1) — PUT /token/ updates an existing token (round-trip).
-test("【令牌、充值与余额 / API】 PUT /token/ 更新令牌并反映更改", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 PUT /token/ 更新令牌并反映更改", "PUT /token/ updates a token and the change is reflected"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -188,7 +189,7 @@ test("【令牌、充值与余额 / API】 PUT /token/ 更新令牌并反映更�
 });
 
 // RT-API-029 (P1) — DELETE /token/:id is controlled and idempotent.
-test("【令牌、充值与余额 / API】 DELETE /token/:id 是受控且幂等的（重新删除时没有 5xx）", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 DELETE /token/:id 是受控且幂等的（重新删除时没有 5xx）", "DELETE /token/:id is controlled and idempotent (no 5xx on re-delete)"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -216,7 +217,7 @@ test("【令牌、充值与余额 / API】 DELETE /token/:id 是受控且幂等�
 });
 
 // RT-API-030 (P2)
-test("【令牌、充值与余额 / API】 GET /token/search 返回格式正确的结果集", async () => {
+test(localizedTitle("【令牌、充值与余额 / API】 GET /token/search 返回格式正确的结果集", "GET /token/search returns a well-formed result set"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -243,7 +244,7 @@ test("【令牌、充值与余额 / API】 GET /token/search 返回格式正确�
 // have available models, which requires a purchase — the external-payment
 // boundary this suite does not cross. Probe available models live; with none,
 // no key can be minted and the API-Key branch is unreachable, so we skip.
-test("【令牌(Token)生命周期 / API】 RT-API-031 token/status 以 API Key 返回额度状态", async () => {
+test(localizedTitle("【令牌(Token)生命周期 / API】 RT-API-031 token/status 以 API Key 返回额度状态", "token/status returns quota status for an API Key (RT-API-031)"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;

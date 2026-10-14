@@ -19,6 +19,7 @@
  * and components/layout/AppHeader/Index.vue (.task-button popover → .task-panel
  * → UploadTaskListView .task-item / .el-progress).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import type { Page } from '@playwright/test';
 import { Wallet } from 'ethers';
@@ -48,7 +49,7 @@ async function gate() {
   test.skip(!reachable, 'warehouse frontend (5173) not reachable');
 }
 
-test("【文件管理 UI / UI】 WH-UI-009 上传大文件显示进度(分片上传)", async ({
+test(localizedTitle("【文件管理 UI / UI】 WH-UI-009 上传大文件显示进度(分片上传)", "WH-UI-009 uploading a large file shows chunked-upload progress"), async ({
   page,
   baseURL,
   recorder,
@@ -110,7 +111,7 @@ test("【文件管理 UI / UI】 WH-UI-009 上传大文件显示进度(分片上
   }
 });
 
-test("【文件管理 UI / UI】 WH-UI-012 重命名文件/文件夹", async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【文件管理 UI / UI】 WH-UI-012 重命名文件/文件夹", "WH-UI-012 rename a file via the row menu dialog"), async ({ page, baseURL, recorder }) => {
   await gate();
 
   const ts = Date.now();

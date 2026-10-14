@@ -16,6 +16,7 @@
  * Side-panel nav groups are covered separately in `ui-side-panel.spec.ts`
  * to keep each spec focused on one slice of the post-login UI.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 import { seedAuthenticatedSession } from '../helpers/session';
@@ -24,7 +25,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test("【文件管理与导航界面 / E2E】 经过身份验证的浏览器会话呈现 AppHeader 登录后 UI", async ({
+test(localizedTitle("【文件管理与导航界面 / E2E】 经过身份验证的浏览器会话呈现 AppHeader 登录后 UI", "authenticated browser session renders the AppHeader post-login UI"), async ({
   page,
   context,
   baseURL,

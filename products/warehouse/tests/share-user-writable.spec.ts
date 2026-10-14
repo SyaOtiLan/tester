@@ -22,6 +22,7 @@
  * HandleDelete {shareId,path}; router.go maps each path to its handler. The
  * rename handler does OS rename and so moves the file on disk.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, loginWithWallet, authedRequest } from '../helpers/auth';
 import { createDirectedShare, revokeDirectedShare } from '../helpers/share';
@@ -49,7 +50,7 @@ function skipGuards() {
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
 }
 
-test.describe("【文件分享】可写定向共享生命周期（writable directed share lifecycle）", () => {
+test.describe(localizedTitle("【文件分享】可写定向共享生命周期（writable directed share lifecycle）", "writable directed share lifecycle"), () => {
   test.describe.configure({ mode: 'serial' });
   const stamp = Date.now();
   const dirName = `e2e-dir-share-${stamp}`;
@@ -98,7 +99,7 @@ test.describe("【文件分享】可写定向共享生命周期（writable direc
     }
   });
 
-  test("【定向分享(给指定用户) / API】 WH-API-056 可写定向分享的下载/上传/新建/重命名/删除", async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-056 可写定向分享的下载/上传/新建/重命名/删除", "WH-API-056 a writable directed share supports folder/upload/download/rename/delete"), async () => {
     skipGuards();
 
     const target = await authedRequest(apiBase()!, targetToken);

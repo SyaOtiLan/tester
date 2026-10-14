@@ -6,6 +6,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import {
   registerUser,
@@ -20,7 +21,7 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe("【任务标签与日志】项目标签和日志 (P1 API)（project labels & logs (P1 API)）", () => {
+test.describe(localizedTitle("【任务标签与日志】项目标签和日志 (P1 API)（project labels & logs (P1 API)）", "project labels & logs (P1 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let owner: RegisteredUser;
@@ -30,7 +31,7 @@ test.describe("【任务标签与日志】项目标签和日志 (P1 API)（proje
   });
 
   // PJ-090 创建/更新任务标签
-  test("【任务标签与日志 / API】 PJ-090 创建/更新任务标签", async () => {
+  test(localizedTitle("【任务标签与日志 / API】 PJ-090 创建/更新任务标签", "PJ-090 tag/save creates then renames a label"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `标签${Date.now() % 100000}` });
     const create = await apiPost(
       baseURL!,
@@ -54,7 +55,7 @@ test.describe("【任务标签与日志】项目标签和日志 (P1 API)（proje
   });
 
   // PJ-091 标签名/颜色必填校验
-  test("【任务标签与日志 / API】 PJ-091 标签名/颜色必填校验", async () => {
+  test(localizedTitle("【任务标签与日志 / API】 PJ-091 标签名/颜色必填校验", "PJ-091 tag/save validates required name, color and project_id"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `标签校验${Date.now() % 100000}` });
 
     const noName = await apiPost(baseURL!, '/api/project/tag/save', { project_id: pid, color: '#ff0000' }, owner.token);
@@ -71,7 +72,7 @@ test.describe("【任务标签与日志】项目标签和日志 (P1 API)（proje
   });
 
   // PJ-093 删除标签(权限)
-  test("【任务标签与日志 / API】 PJ-093 删除标签(权限)", async () => {
+  test(localizedTitle("【任务标签与日志 / API】 PJ-093 删除标签(权限)", "PJ-093 only the creator/owner can delete a label"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `删标签${Date.now() % 100000}` });
     const member = await registerUser(baseURL!);
     await setProjectMembers(baseURL!, owner.token, pid, [owner.userid, member.userid]);
@@ -95,7 +96,7 @@ test.describe("【任务标签与日志】项目标签和日志 (P1 API)（proje
   });
 
   // PJ-094 获取项目/任务操作日志
-  test("【任务标签与日志 / API】 PJ-094 获取项目/任务操作日志", async () => {
+  test(localizedTitle("【任务标签与日志 / API】 PJ-094 获取项目/任务操作日志", "PJ-094 log/lists returns paginated operation logs"), async () => {
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `日志${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, owner.token, pid);
     await addTask(baseURL!, owner.token, { projectId: pid, columnId: cid, name: '产生日志的任务' });

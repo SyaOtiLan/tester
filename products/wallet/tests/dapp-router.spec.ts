@@ -19,6 +19,7 @@
  *
  * Skips if `ROUTER_BASE_URL` is unset or the SPA doesn't respond.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -38,7 +39,7 @@ async function ensureRouterReachable(url: string) {
   }
 }
 
-test("【dApp 连接与 Provider / DAPP】 真实钱包驱动路由器SPA：window.ethereum是YeYing提供商", async () => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 真实钱包驱动路由器SPA：window.ethereum是YeYing提供商", "real wallet drives router SPA: window.ethereum is the YeYing provider"), async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);
@@ -80,7 +81,7 @@ test("【dApp 连接与 Provider / DAPP】 真实钱包驱动路由器SPA：wind
   }
 });
 
-test("【dApp 连接与 Provider / DAPP】 路由器可以通过批准窗口请求帐户", async () => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 路由器可以通过批准窗口请求帐户", "router can request an account via the approval window"), async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);
@@ -125,7 +126,7 @@ test("【dApp 连接与 Provider / DAPP】 路由器可以通过批准窗口请�
   }
 });
 
-test("【dApp 连接与 Provider / DAPP】 路由器通过 EIP-6963 announceProvider 发现钱包", async () => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 路由器通过 EIP-6963 announceProvider 发现钱包", "router discovers the wallet via EIP-6963 announceProvider"), async () => {
   skipIfNoRouterSPA();
   const routerURL = baseURLFor('router')!;
   await ensureRouterReachable(routerURL);

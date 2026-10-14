@@ -12,6 +12,7 @@
  *
  * Verified against router `internal/admin/controller/user/*` + `web/src/pages`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -28,7 +29,7 @@ function skipIfNoKey() {
 }
 
 // RT-API-041 (P2)
-test("【个人中心与账户设置 / API】 RT-API-041 用户聚合读接口返回数据", async () => {
+test(localizedTitle("【个人中心与账户设置 / API】 RT-API-041 用户聚合读接口返回数据", "user aggregate read endpoints return well-formed data (RT-API-041)"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -76,7 +77,7 @@ test("【个人中心与账户设置 / API】 RT-API-041 用户聚合读接口�
 
 // RT-UI-026 (P2) — the account settings page (PersonalSetting) renders the
 // "账户信息" block with the (read-only) wallet address and the current username.
-test("【个人中心与账户设置 / UI】 RT-UI-026 账户设置页加载并展示账户信息", async ({
+test(localizedTitle("【个人中心与账户设置 / UI】 RT-UI-026 账户设置页加载并展示账户信息", "the account setting page shows the account info (RT-UI-026)"), async ({
   page,
   baseURL,
   recorder,
@@ -111,7 +112,7 @@ test("【个人中心与账户设置 / UI】 RT-UI-026 账户设置页加载并�
 // 保存 fires PUT /user/self and the new value persists across a reload. The
 // original username is restored afterwards (via the same endpoint) so the run is
 // side-effect neutral.
-test("【个人中心与账户设置 / E2E】 RT-E2E-004 修改用户名并持久化", async ({
+test(localizedTitle("【个人中心与账户设置 / E2E】 RT-E2E-004 修改用户名并持久化", "changing the username through the UI persists (RT-E2E-004)"), async ({
   page,
   baseURL,
   recorder,
@@ -169,7 +170,7 @@ test("【个人中心与账户设置 / E2E】 RT-E2E-004 修改用户名并持�
 // current password (long enough to pass the client-side length check) so the
 // server rejects it with "当前密码错误" — the request round-trips and is proven
 // without ever changing the real password.
-test("【个人中心与账户设置 / E2E】 RT-E2E-005 设置/修改密码", async ({
+test(localizedTitle("【个人中心与账户设置 / E2E】 RT-E2E-005 设置/修改密码", "the change-password modal round-trips (wrong current password) (RT-E2E-005)"), async ({
   page,
   baseURL,
   recorder,

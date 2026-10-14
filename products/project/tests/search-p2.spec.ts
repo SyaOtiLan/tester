@@ -8,6 +8,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import {
   registerUser,
@@ -22,11 +23,11 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & search (P2 API)）", () => {
+test.describe(localizedTitle("【search p2】项目计数和搜索 (P2 API)（project counts & search (P2 API)）", "project counts & search (P2 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-029 user/counts 返回项目/任务数量
-  test("【仪表盘 / API】 PJ-029 user/counts 返回项目/任务数量", async () => {
+  test(localizedTitle("【仪表盘 / API】 PJ-029 user/counts 返回项目/任务数量", "PJ-029 project/user/counts returns project and task tallies"), async () => {
     const user = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, user.token, { name: `计数项目${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
@@ -42,7 +43,7 @@ test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & 
   });
 
   // PJ-131 会员搜索
-  test("【团队/会员管理(管理员) / API】 PJ-131 会员搜索", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-131 会员搜索", "PJ-131 users/search finds a member by e-mail"), async () => {
     const me = await registerUser(baseURL!);
     const other = await registerUser(baseURL!);
 
@@ -58,7 +59,7 @@ test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & 
   });
 
   // PJ-134 搜索联系人
-  test("【搜索 / API】 PJ-134 搜索联系人", async () => {
+  test(localizedTitle("【搜索 / API】 PJ-134 搜索联系人", "PJ-134 search/contact finds a contact by e-mail"), async () => {
     const me = await registerUser(baseURL!);
     const other = await registerUser(baseURL!);
 
@@ -70,7 +71,7 @@ test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & 
   });
 
   // PJ-135 搜索文件/消息
-  test("【搜索 / API】 PJ-135 搜索文件/消息", async () => {
+  test(localizedTitle("【搜索 / API】 PJ-135 搜索文件/消息", "PJ-135 search/file and search/message find created content"), async () => {
     const user = await registerUser(baseURL!);
 
     // File search: create a document with a distinctive name and find it.
@@ -100,7 +101,7 @@ test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & 
   });
 
   // PJ-141 获取演示账号(demo)
-  test("【系统、健康与错误异常 / API】 PJ-141 获取演示账号(demo)", async () => {
+  test(localizedTitle("【系统、健康与错误异常 / API】 PJ-141 获取演示账号(demo)", "PJ-141 system/demo returns a demo account or reports it disabled"), async () => {
     const body = await apiGet(baseURL!, '/api/system/demo');
     // Demo accounts are an optional deployment feature: when enabled the endpoint
     // returns {account, password}; when disabled it returns ret=0 'No demo account'.
@@ -115,7 +116,7 @@ test.describe("【search p2】项目计数和搜索 (P2 API)（project counts & 
   });
 
   // PJ-129 部门列表增删改
-  test("【团队/会员管理(管理员) / API】 PJ-129 部门列表增删改", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-129 部门列表增删改", "PJ-129 department list add/update/delete"), async () => {
     test.skip(true, 'users/department/* requires auth("admin"); the site admin account is captcha-locked and cannot be driven with a throwaway user.');
   });
 });

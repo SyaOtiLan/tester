@@ -17,6 +17,7 @@
  *   - a mismatch (switch to an un-added chain) is refused with 4902 and the
  *     wallet does NOT silently move to the wrong chain.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -79,7 +80,7 @@ async function requestChain(dapp: Page, method: string, params: unknown[]) {
   ) as Promise<{ ok: boolean; result?: unknown; code?: number; message?: string }>;
 }
 
-test("【dApp 连接与 Provider / DAPP】 WL-DAPP-011 `wallet_switchEthereumChain`(EIP-3326)审批 + chainChanged", async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-011 `wallet_switchEthereumChain`(EIP-3326)审批 + chainChanged", "WL-DAPP-011: switch to a known chain emits chainChanged; unknown chain returns 4902"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -112,7 +113,7 @@ test("【dApp 连接与 Provider / DAPP】 WL-DAPP-011 `wallet_switchEthereumCha
   }
 });
 
-test("【dApp 连接与 Provider / DAPP】 WL-DAPP-012 `wallet_addEthereumChain`(EIP-3085)审批", async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-012 `wallet_addEthereumChain`(EIP-3085)审批", "WL-DAPP-012: wallet_addEthereumChain registers and activates a new chain"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -159,7 +160,7 @@ test("【dApp 连接与 Provider / DAPP】 WL-DAPP-012 `wallet_addEthereumChain`
   }
 });
 
-test("【错误、异常与安全边界 / DAPP】 WL-DAPP-019 链不匹配的提示与处理", async ({
+test(localizedTitle("【错误、异常与安全边界 / DAPP】 WL-DAPP-019 链不匹配的提示与处理", "WL-DAPP-019: a chain mismatch is refused (4902) without silently switching"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

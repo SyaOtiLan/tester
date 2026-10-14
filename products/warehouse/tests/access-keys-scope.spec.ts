@@ -13,6 +13,7 @@
  * Source: access_key_authenticator.go builds scoped Rules limited to the bound
  * paths; webdav_service.checkPermission → 403 when CanAccess is false.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 import { expectStatus, webdavPropfind, type Auth } from '../../../shared/api';
@@ -29,7 +30,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe("【WebDAV 目录访问密钥】AccessKey 路径范围（AccessKey path scope）", () => {
+test.describe(localizedTitle("【WebDAV 目录访问密钥】AccessKey 路径范围（AccessKey path scope）", "AccessKey path scope"), () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; keyId: string; keySecret: string } | null = null;
 
@@ -44,7 +45,7 @@ test.describe("【WebDAV 目录访问密钥】AccessKey 路径范围（AccessKey
     }
   });
 
-  test("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-030 AccessKey 访问未绑定路径被拒", async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-030 AccessKey 访问未绑定路径被拒", "WH-API-030 AccessKey bound to /personal is denied on an unbound path"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

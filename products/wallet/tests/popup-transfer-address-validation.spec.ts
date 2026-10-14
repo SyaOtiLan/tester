@@ -24,6 +24,7 @@
  * network send, the acceptance case leaves `#amount` empty so validation
  * stops at 「请输入有效金额」 instead of broadcasting.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -45,7 +46,7 @@ async function openTransferPage(context: import('@playwright/test').BrowserConte
   return popup;
 }
 
-test("【转账与交易 / UI】 转账会拒绝格式错误的收件人地址并停留在转账页面", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 转账会拒绝格式错误的收件人地址并停留在转账页面", "transfer rejects malformed recipient addresses and stays on the transfer page"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -73,7 +74,7 @@ test("【转账与交易 / UI】 转账会拒绝格式错误的收件人地址�
   }
 });
 
-test("【转账与交易 / UI】 转账接受格式正确的收件人地址（验证金额）", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 转账接受格式正确的收件人地址（验证金额）", "transfer accepts a well-formed recipient address (validation advances to amount)"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

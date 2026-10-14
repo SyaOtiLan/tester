@@ -27,6 +27,7 @@
  * Verified against router `internal/admin/controller/channel/handler.go`,
  * `provider.go`, `model_task_handlers.go`, `internal/transport/http/router/api.go`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken, acquireAdminToken } from '../helpers/auth';
@@ -67,7 +68,7 @@ async function createInertChannel(ctx: Awaited<ReturnType<typeof adminContext>>,
 }
 
 // RT-API-059 (P0) — channel CRUD round-trip; key redacted; delete idempotent.
-test("【渠道与供应商管理 / API】 管理员渠道增删改查闭环；密钥脱敏；重复删除保持幂等", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 管理员渠道增删改查闭环；密钥脱敏；重复删除保持幂等", "admin channel CRUD round-trip; key is redacted; delete is idempotent"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -106,7 +107,7 @@ test("【渠道与供应商管理 / API】 管理员渠道增删改查闭环；�
 });
 
 // RT-API-060 (P1) — channel identifier validation.
-test("【渠道与供应商管理 / API】 渠道标识校验：名称为空、名称重复及 JSON 格式错误", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 渠道标识校验：名称为空、名称重复及 JSON 格式错误", "channel identifier validation (empty name, duplicate name, malformed JSON)"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -140,7 +141,7 @@ test("【渠道与供应商管理 / API】 渠道标识校验：名称为空、�
 });
 
 // RT-API-062 (P1) — channels list pagination + compact projection.
-test("【渠道与供应商管理 / API】 渠道列表支持分页和精简字段投影", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 渠道列表支持分页和精简字段投影", "channels list supports pagination and a compact projection"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -177,7 +178,7 @@ test("【渠道与供应商管理 / API】 渠道列表支持分页和精简字�
 });
 
 // RT-API-063 (P1) — test + refresh + sub-resource contracts on an inert channel.
-test("【渠道与供应商管理 / API】 渠道测试、刷新及子资源接口返回受控响应", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 渠道测试、刷新及子资源接口返回受控响应", "channel test/refresh/sub-resource endpoints return controlled contracts"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -226,7 +227,7 @@ test("【渠道与供应商管理 / API】 渠道测试、刷新及子资源接�
 });
 
 // RT-API-064 (P2) — get on a missing channel is a controlled not-found.
-test("【渠道与供应商管理 / API】 查询不存在的渠道时返回受控的未找到响应", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 查询不存在的渠道时返回受控的未找到响应", "getting a non-existent channel returns a controlled not-found"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -242,7 +243,7 @@ test("【渠道与供应商管理 / API】 查询不存在的渠道时返回受�
 });
 
 // RT-API-065 (P1) — providers catalog list + missing provider.
-test("【渠道与供应商管理 / API】 供应商目录返回条目，并对不存在的供应商给出错误", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 供应商目录返回条目，并对不存在的供应商给出错误", "providers catalog lists entries and reports a missing provider"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   const ctx = await adminContext(baseURLFor('router')!);
@@ -267,7 +268,7 @@ test("【渠道与供应商管理 / API】 供应商目录返回条目，并对�
 });
 
 // RT-API-066 (P0) — admin authz boundary: normal user forbidden, no-auth 401.
-test("【渠道与供应商管理 / API】 渠道与供应商管理接口拒绝普通用户（200 权限不足）和未登录请求（401）", async () => {
+test(localizedTitle("【渠道与供应商管理 / API】 渠道与供应商管理接口拒绝普通用户（200 权限不足）和未登录请求（401）", "channel/provider admin endpoints reject normal users (200 权限不足) and anonymous (401)"), async () => {
   skipIfNoService();
   skipIfNoUserKey();
   const userTokens = await acquireRouterToken(baseURLFor('router')!);

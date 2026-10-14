@@ -21,6 +21,7 @@
  * Note: uses `SOCIAL_WEB_URL` (the SPA at :8082), NOT `SOCIAL_BASE_URL`
  * (the Spring Boot backend at :8888).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 
 const spaURL = () => envFor('social')['SOCIAL_WEB_URL']!;
@@ -29,20 +30,20 @@ function skipIfNoSPA() {
   test.skip(!envFor('social')['SOCIAL_WEB_URL'], 'SOCIAL_WEB_URL not configured');
 }
 
-test("【登录与服务探活 / UI】 root 通过哈希路由重定向到 /login", async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 root 通过哈希路由重定向到 /login", "root redirects to /login via hash routing"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   await expect(page).toHaveURL(/#\/login$/);
 });
 
-test("【登录与服务探活 / UI】 登录表单默认显示钱包按钮", async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 登录表单默认显示钱包按钮", "login form shows the wallet button by default"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   // Default mode is wallet — that's the primary entry point.
   await expect(page.locator('.wallet-login-button')).toBeVisible({ timeout: 10_000 });
 });
 
-test("【登录与服务探活 / UI】 切换到身份模式会呈现 QR + 护照本地链接", async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 切换到身份模式会呈现 QR + 护照本地链接", "switching to identity mode renders the QR + passport-local link"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   // The corner ribbon toggles between wallet and identity modes.
@@ -53,7 +54,7 @@ test("【登录与服务探活 / UI】 切换到身份模式会呈现 QR + 护�
   await expect(page.locator('.login-passport-local')).toBeVisible({ timeout: 10_000 });
 });
 
-test("【登录与服务探活 / UI】 身份模式触发护照会话（QR 或加载状态）", async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 身份模式触发护照会话（QR 或加载状态）", "identity mode triggers a passport session (QR or loading state)"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/login`);
   await page.locator('.login-mode-switch-box').click();
@@ -70,7 +71,7 @@ test("【登录与服务探活 / UI】 身份模式触发护照会话（QR 或�
 
 // SO-UI-008 (P2) — clicking wallet login with no injected provider surfaces a
 // clean error and does not crash the page.
-test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-008 点击钱包登录驱动 web3 provider 流程并优雅报错", async ({ page }) => {
+test(localizedTitle("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-008 点击钱包登录驱动 web3 provider 流程并优雅报错", "SO-UI-008 wallet login without a provider fails gracefully"), async ({ page }) => {
   skipIfNoSPA();
   const pageErrors: string[] = [];
   page.on('pageerror', (e) => pageErrors.push(e.message));
@@ -92,7 +93,7 @@ test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-008 点击钱包登�
 });
 
 // SO-UI-009 (P2) — the register page (#/register) renders its full form.
-test("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-009 注册页表单渲染", async ({ page }) => {
+test(localizedTitle("【SPA 登录界面(钱包 / 通行证) / UI】 SO-UI-009 注册页表单渲染", "SO-UI-009 register page renders the form"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(`${spaURL()}/#/register`);
   await expect(page).toHaveURL(/#\/register$/);

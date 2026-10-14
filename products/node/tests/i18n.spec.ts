@@ -18,6 +18,7 @@
  *   header_market_search_placeholder: '搜索应用名称/作者地址' /
  *     'Search app name / author address'
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
 import { seedWalletSession } from '../helpers/session';
@@ -30,7 +31,7 @@ async function storedLocale(page: import('@playwright/test').Page): Promise<stri
   return page.evaluate(() => (globalThis as any).localStorage.getItem('i18nextLng') ?? '');
 }
 
-test("【前端首页与导航 / UI】 ND-UI-005 界面语言切换(i18n)", async ({
+test(localizedTitle("【前端首页与导航 / UI】 ND-UI-005 界面语言切换(i18n)", "ND-UI-005 language switch updates copy and persists across reload"), async ({
   page,
   recorder,
 }) => {

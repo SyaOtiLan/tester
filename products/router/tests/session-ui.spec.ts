@@ -13,6 +13,7 @@
  * Verified against router `web/src/App.jsx` (`AdminOnlyRoute`, `isAdmin`) +
  * `web/src/components/Header.jsx`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
 import { seedWalletSession } from '../helpers/session';
@@ -22,7 +23,7 @@ function skipIfNoService() {
 }
 
 // RT-UI-014 (P1)
-test("【管理后台与工作台 / UI】 普通用户点击 /admin/* 会被重定向到工作区", async ({
+test(localizedTitle("【管理后台与工作台 / UI】 普通用户点击 /admin/* 会被重定向到工作区", "a normal user hitting /admin/* is redirected to the workspace"), async ({
   page,
   baseURL,
   recorder,
@@ -45,7 +46,7 @@ test("【管理后台与工作台 / UI】 普通用户点击 /admin/* 会被重�
 });
 
 // RT-UI-013 (P1)
-test("【管理后台与工作台 / UI】 用户下拉注销会清除会话并返回到 /login", async ({
+test(localizedTitle("【管理后台与工作台 / UI】 用户下拉注销会清除会话并返回到 /login", "the user dropdown Logout clears the session and returns to /login"), async ({
   page,
   baseURL,
   recorder,

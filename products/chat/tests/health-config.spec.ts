@@ -4,6 +4,7 @@
  * Pure API-level tests against the Next.js route handlers; no login or model
  * needed. All skip cleanly when CHAT_BASE_URL is not configured.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipIfNoService() {
@@ -11,7 +12,7 @@ function skipIfNoService() {
 }
 
 // CH-004 — liveness probe.
-test("【健康检查与冒烟 / API】 CH-004 存活探针 /health/live 返回 ok", async ({ request }) => {
+test(localizedTitle("【健康检查与冒烟 / API】 CH-004 存活探针 /health/live 返回 ok", "CH-004 /health/live returns ok with no-store"), async ({ request }) => {
   skipIfNoService();
   const res = await request.get('/health/live');
   expect(res.status()).toBe(200);
@@ -21,7 +22,7 @@ test("【健康检查与冒烟 / API】 CH-004 存活探针 /health/live 返回 
 });
 
 // CH-005 — readiness probe reports a version string.
-test("【健康检查与冒烟 / API】 CH-005 就绪探针 /health/ready 返回版本", async ({ request }) => {
+test(localizedTitle("【健康检查与冒烟 / API】 CH-005 就绪探针 /health/ready 返回版本", "CH-005 /health/ready returns version"), async ({ request }) => {
   skipIfNoService();
   const res = await request.get('/health/ready');
   expect(res.status()).toBe(200);
@@ -35,7 +36,7 @@ test("【健康检查与冒烟 / API】 CH-005 就绪探针 /health/ready 返回
 });
 
 // CH-006 — runtime public config, GET and POST, no private key leakage.
-test("【健康检查与冒烟 / API】 CH-006 运行时公开配置下发 /api/config", async ({ request }) => {
+test(localizedTitle("【健康检查与冒烟 / API】 CH-006 运行时公开配置下发 /api/config", "CH-006 /api/config exposes public runtime fields (GET & POST)"), async ({ request }) => {
   skipIfNoService();
   for (const method of ['get', 'post'] as const) {
     const res = method === 'get' ? await request.get('/api/config') : await request.post('/api/config');

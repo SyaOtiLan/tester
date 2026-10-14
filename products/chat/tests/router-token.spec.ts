@@ -7,6 +7,7 @@
  * scope here; we assert the token list, selection persistence, usage/status
  * panel, and the top-up redirect boundary.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { loginOrSkip, openRoute } from '../helpers/auth';
 import { readPersistedState } from '../helpers/storage';
@@ -24,7 +25,7 @@ async function openRouter(page: any, search = '') {
 }
 
 // CH-072 — Router page lists available (public) tokens or an explicit empty state.
-test("【Router 令牌与充值 / UI】 CH-072 Router 页展示可用令牌", async ({ page }) => {
+test(localizedTitle("【Router 令牌与充值 / UI】 CH-072 Router 页展示可用令牌", "CH-072 router page shows the token selector"), async ({ page }) => {
   skipNoService();
   await openRouter(page);
   const tokenSection = page.locator('[data-router-section="token"]');
@@ -37,7 +38,7 @@ test("【Router 令牌与充值 / UI】 CH-072 Router 页展示可用令牌", as
 });
 
 // CH-073 — selecting a token persists it into the access store.
-test("【Router 令牌与充值 / E2E】 CH-073 选择令牌用于会话", async ({ page }) => {
+test(localizedTitle("【Router 令牌与充值 / E2E】 CH-073 选择令牌用于会话", "CH-073 selecting a token persists selectedRouterToken"), async ({ page }) => {
   skipNoService();
   await openRouter(page);
   const select = page.locator('[data-router-section="token"] select');
@@ -58,7 +59,7 @@ test("【Router 令牌与充值 / E2E】 CH-073 选择令牌用于会话", async
 });
 
 // CH-074 — bootstrap auto-selects an available public token (ensureRouterToken).
-test("【Router 令牌与充值 / E2E】 CH-074 自动挑选可用公共令牌(引导)", async ({ page }) => {
+test(localizedTitle("【Router 令牌与充值 / E2E】 CH-074 自动挑选可用公共令牌(引导)", "CH-074 bootstrap auto-picks an available public token"), async ({ page }) => {
   skipNoService();
   await openRouter(page);
   // Give bootstrap a moment to resolve a token.
@@ -79,7 +80,7 @@ test("【Router 令牌与充值 / E2E】 CH-074 自动挑选可用公共令牌(�
 });
 
 // CH-075 — token usage / balance status panel is rendered.
-test("【Router 令牌与充值 / UI】 CH-075 令牌用量/余额状态展示", async ({ page }) => {
+test(localizedTitle("【Router 令牌与充值 / UI】 CH-075 令牌用量/余额状态展示", "CH-075 router page shows usage/balance status"), async ({ page }) => {
   skipNoService();
   await openRouter(page);
   // Status panel exposes token name / available-quota / used-quota / expiry.
@@ -89,7 +90,7 @@ test("【Router 令牌与充值 / UI】 CH-075 令牌用量/余额状态展示",
 });
 
 // CH-076 — the top-up action redirects to the Router management portal.
-test("【Router 令牌与充值 / UI】 CH-076 充值/续费跳转管理中心", async ({ page, request }) => {
+test(localizedTitle("【Router 令牌与充值 / UI】 CH-076 充值/续费跳转管理中心", "CH-076 top-up action opens the recharge portal"), async ({ page, request }) => {
   skipNoService();
   const cfg = await (await request.get('/api/config')).json();
   const rechargeUrl: string =

@@ -21,6 +21,7 @@
  *  - SOCIAL_BASE_URL      platform backend (8888)
  *  - SOCIAL_IDENTITY_URL  web3-identity (8901)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import {
   newSiweIdentity,
@@ -74,7 +75,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-035 — my groups list contains the group I own.
-  test("【群组管理 / API】 SO-API-035 我的群组列表", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-035 我的群组列表", "SO-API-035 my groups list"), async () => {
     const res = await ctxA.get('/group/list');
     const body = (await res.json()) as Envelope<GroupVO[]>;
     expect(body.code).toBe(200);
@@ -82,7 +83,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-036 — group detail.
-  test("【群组管理 / API】 SO-API-036 查询群组详情", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-036 查询群组详情", "SO-API-036 group detail"), async () => {
     const res = await ctxA.get(`/group/find/${groupId}`);
     const body = (await res.json()) as Envelope<GroupVO>;
     expect(body.code).toBe(200);
@@ -91,7 +92,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-037 — modify group name + notice; the change persists.
-  test("【群组管理 / API】 SO-API-037 修改群组信息", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-037 修改群组信息", "SO-API-037 modify group info"), async () => {
     const cur = ((await (await ctxA.get(`/group/find/${groupId}`)).json()) as Envelope<GroupVO>).data;
     const newName = `grp-mod-${Date.now() % 100000}`;
     const newNotice = `notice-${Date.now() % 1000000}`;
@@ -104,7 +105,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-039 — group members list includes owner + both invitees.
-  test("【群组管理 / API】 SO-API-039 群成员列表", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-039 群成员列表", "SO-API-039 group members list"), async () => {
     const res = await ctxA.get(`/group/members/${groupId}`);
     const body = (await res.json()) as Envelope<Array<{ userId: number }>>;
     expect(body.code).toBe(200);
@@ -115,7 +116,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-040 — owner removes member C; C loses active membership (soft remove).
-  test("【群组管理 / API】 SO-API-040 移除群成员", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-040 移除群成员", "SO-API-040 remove group member"), async () => {
     const del = await ctxA.delete('/group/members/remove', {
       data: { groupId, userIds: [C.userId] },
     });
@@ -133,7 +134,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-041 — member B leaves; B no longer holds an active membership.
-  test("【群组管理 / API】 SO-API-041 退出群组", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-041 退出群组", "SO-API-041 leave group"), async () => {
     const quit = await ctxB.delete(`/group/quit/${groupId}`);
     expect(((await quit.json()) as Envelope<null>).code).toBe(200);
 
@@ -146,7 +147,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
   });
 
   // SO-API-042 — owner dissolves the group.
-  test("【群组管理 / API】 SO-API-042 解散群组", async () => {
+  test(localizedTitle("【群组管理 / API】 SO-API-042 解散群组", "SO-API-042 dissolve group"), async () => {
     const del = await ctxA.delete(`/group/delete/${groupId}`);
     expect(((await del.json()) as Envelope<null>).code).toBe(200);
 
@@ -159,7 +160,7 @@ test.describe.serial("【群组管理】社会团体管理（social group manage
 // SO-API-043 (P2) — toggle the per-group do-not-disturb flag; it round-trips
 // through /group/find (GroupVO.isDnd). Standalone (own group) so it doesn't
 // depend on the serial block's destructive ordering.
-test("【群组管理 / API】 SO-API-043 群免打扰开关", async () => {
+test(localizedTitle("【群组管理 / API】 SO-API-043 群免打扰开关", "SO-API-043 group do-not-disturb toggle"), async () => {
   test.skip(!platformURL() || !identityURL(), 'SOCIAL_BASE_URL / SOCIAL_IDENTITY_URL required');
   const owner = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, owner.login.accessToken);

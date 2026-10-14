@@ -1,6 +1,7 @@
 /**
  * books — 锚点与交叉引用 (BK-DATA-019, 020, 021).
  */
+import { localizedTitle } from '../../../shared/title';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { test, expect } from '../fixtures';
@@ -11,7 +12,7 @@ function relOf(file: string): string {
 }
 
 // BK-DATA-019
-test("【锚点与交叉引用 / DATA】 BK-DATA-019 跨文件链接的锚点在目标文件内存在", () => {
+test(localizedTitle("【锚点与交叉引用 / DATA】 BK-DATA-019 跨文件链接的锚点在目标文件内存在", "BK-DATA-019 cross-file #anchors resolve to a real heading in the target file"), () => {
   const broken: string[] = [];
   for (const file of allMarkdown()) {
     const text = readText(relOf(file));
@@ -33,7 +34,7 @@ test("【锚点与交叉引用 / DATA】 BK-DATA-019 跨文件链接的锚点在
 });
 
 // BK-DATA-020
-test("【锚点与交叉引用 / DATA】 BK-DATA-020 同文档内 #锚点 指向存在的标题", () => {
+test(localizedTitle("【锚点与交叉引用 / DATA】 BK-DATA-020 同文档内 #锚点 指向存在的标题", "BK-DATA-020 same-document #anchors point at an existing heading"), () => {
   const broken: string[] = [];
   for (const file of allMarkdown()) {
     const text = readText(relOf(file));
@@ -49,7 +50,7 @@ test("【锚点与交叉引用 / DATA】 BK-DATA-020 同文档内 #锚点 指向
 });
 
 // BK-DATA-021 — warning-level: report duplicate-heading anchor ambiguity, don't fail
-test("【锚点与交叉引用 / DATA】 BK-DATA-021 标题重复导致的锚点歧义检测", () => {
+test(localizedTitle("【锚点与交叉引用 / DATA】 BK-DATA-021 标题重复导致的锚点歧义检测", "BK-DATA-021 duplicate-heading anchor ambiguity is detected and reported"), () => {
   const ambiguous: string[] = [];
   for (const file of allMarkdown()) {
     const counts: Record<string, number> = {};

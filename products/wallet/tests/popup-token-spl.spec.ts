@@ -14,6 +14,7 @@
  *   3. The recorded transaction's value is denominated in USDC (proving the
  *      SPL token path ran, not native SOL).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -29,7 +30,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 const USDC_MINT = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 const RECIPIENT = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 
-test("【转账与交易 / API】 通过 SPL 令牌路径在 Solana 路由上传输 SPL USDC，而不是本机 SOL", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / API】 通过 SPL 令牌路径在 Solana 路由上传输 SPL USDC，而不是本机 SOL", "transfer SPL USDC on Solana routes through the SPL token path, not native SOL"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

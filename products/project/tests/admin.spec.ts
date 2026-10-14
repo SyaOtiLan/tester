@@ -12,12 +12,13 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test } from '../fixtures';
 import { baseURLFor } from '../fixtures';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【团队/会员管理(管理员)】项目管理员成员管理（P1 API）（project admin member management (P1 API)）", () => {
+test.describe(localizedTitle("【团队/会员管理(管理员)】项目管理员成员管理（P1 API）（project admin member management (P1 API)）", "project admin member management (P1 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   const adminReason =
@@ -25,17 +26,17 @@ test.describe("【团队/会员管理(管理员)】项目管理员成员管理�
     'needcode=need). No usable admin session is obtainable in this environment.';
 
   // PJ-126 管理员获取会员列表
-  test("【团队/会员管理(管理员) / API】 PJ-126 管理员获取会员列表", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-126 管理员获取会员列表", "PJ-126 admin lists members"), async () => {
     test.skip(true, adminReason);
   });
 
   // PJ-127 管理员创建用户
-  test("【团队/会员管理(管理员) / API】 PJ-127 管理员创建用户", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-127 管理员创建用户", "PJ-127 admin creates a user"), async () => {
     test.skip(true, adminReason);
   });
 
   // PJ-128 管理员批量导入预览/导入
-  test("【团队/会员管理(管理员) / API】 PJ-128 管理员批量导入预览/导入", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-128 管理员批量导入预览/导入", "PJ-128 admin bulk-import preview/import"), async () => {
     test.skip(true, adminReason);
   });
 });

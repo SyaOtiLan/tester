@@ -14,6 +14,7 @@
  *
  * Selectors verified against router `web/src/pages/**` + `web/src/App.jsx`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
 import { seedWalletSession } from '../helpers/session';
@@ -22,7 +23,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test("【管理后台与工作台 / UI】 为经过身份验证的用户呈现工作区配额、令牌和日志页面", async ({
+test(localizedTitle("【管理后台与工作台 / UI】 为经过身份验证的用户呈现工作区配额、令牌和日志页面", "workspace quota, token and log pages render for an authenticated user"), async ({
   page,
   baseURL,
   recorder,
@@ -60,7 +61,7 @@ test("【管理后台与工作台 / UI】 为经过身份验证的用户呈现�
 });
 
 // RT-UI-021 (P1) — service-purchase page renders the package + balance sections.
-test("【管理后台与工作台 / UI】 服务购买页面呈现套餐和余额部分", async ({
+test(localizedTitle("【管理后台与工作台 / UI】 服务购买页面呈现套餐和余额部分", "service-purchase page renders the package and balance sections"), async ({
   page,
   baseURL,
   recorder,

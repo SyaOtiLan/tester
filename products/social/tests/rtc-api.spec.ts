@@ -18,6 +18,7 @@
  *  - SOCIAL_RTC_URL       optional explicit rtc base (defaults to :8890)
  *  - SOCIAL_IDENTITY_URL  web3-identity (8901) — mints the authenticated caller
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { request } from '@playwright/test';
 import { newSiweIdentity, type Envelope } from '../helpers/auth';
@@ -36,7 +37,7 @@ function rtcURL(): string | undefined {
 
 // SO-API-062 (P2) — the rtc service's system-config probe is reachable and
 // returns the WebRTC config (ICE servers, channel cap).
-test("【音视频通话(RTC 信令) / API】 SO-API-062 RTC 系统配置可达", async () => {
+test(localizedTitle("【音视频通话(RTC 信令) / API】 SO-API-062 RTC 系统配置可达", "SO-API-062 RTC system config reachable"), async () => {
   test.skip(!platformURL() || !identityURL(), 'SOCIAL_BASE_URL / SOCIAL_IDENTITY_URL required');
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
 
@@ -66,7 +67,7 @@ test("【音视频通话(RTC 信令) / API】 SO-API-062 RTC 系统配置可达"
 // second, WS-connected peer in an automated API run (the SPA's /ws handshake
 // does not complete here either), so the call returns a generic {code:500} for
 // every variant — success cannot be reached without an online peer.
-test("【音视频通话(RTC 信令) / API】 SO-API-063 发起 1:1 通话信令", async () => {
+test(localizedTitle("【音视频通话(RTC 信令) / API】 SO-API-063 发起 1:1 通话信令", "SO-API-063 initiate 1:1 call signal"), async () => {
   test.skip(
     true,
     'A call signal needs a WS-connected callee to succeed; no online peer is ' +

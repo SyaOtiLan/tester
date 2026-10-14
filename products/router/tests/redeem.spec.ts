@@ -19,9 +19,10 @@
  * the code → controlled "无效的兑换码" error for a bogus code) was confirmed
  * against the live service but belongs to the redeem API case, not this UI flow.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, baseURLFor } from '../fixtures';
 
-test("【令牌、充值与余额 / E2E】 兑换代码对话框输入并提交（RedeemCodePage）", async () => {
+test(localizedTitle("【令牌、充值与余额 / E2E】 兑换代码对话框输入并提交（RedeemCodePage）", "redeem-code dialog input & submit (RedeemCodePage)"), async () => {
   test.skip(
     !!baseURLFor('router') || true,
     'RedeemCodePage is only mounted by unrouted pages (BalanceStatusPage/TopUpRecordsPage); ' +

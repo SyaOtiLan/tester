@@ -19,6 +19,7 @@
  * (tooltip-labeled), so folder-create is reached via the primary circle
  * button and uploads go straight to the hidden <input type=file>.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import type { Page } from '@playwright/test';
 import { Wallet } from 'ethers';
@@ -42,7 +43,7 @@ async function rowMenuAction(page: Page, name: string, itemText: string) {
   await page.locator('.el-dropdown-menu__item', { hasText: itemText }).last().click();
 }
 
-test("【文件管理与导航界面 / E2E】 创建文件夹，上传，下载，然后通过文件 UI 删除", async ({
+test(localizedTitle("【文件管理与导航界面 / E2E】 创建文件夹，上传，下载，然后通过文件 UI 删除", "create folder, upload, download, then delete via the file UI"), async ({
   page,
   baseURL,
   recorder,

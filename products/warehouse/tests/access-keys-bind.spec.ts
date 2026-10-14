@@ -18,6 +18,7 @@
  * Source: access_key handler HandleBind ({message:"bound successfully"},
  * appends to binding_paths); webdav auth rejects out-of-scope paths with 403.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import {
   apiContext,
@@ -53,7 +54,7 @@ interface ListAccessKeyResponse {
   items: Array<{ id: string; bindingPaths?: string[] }>;
 }
 
-test("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-031 bind 为 AccessKey 追加绑定路径", async () => {
+test(localizedTitle("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-031 bind 为 AccessKey 追加绑定路径", "WH-API-031 bind appends a binding path and widens WebDAV access"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

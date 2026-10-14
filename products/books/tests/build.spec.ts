@@ -1,6 +1,7 @@
 /**
  * books — 构建配置 (BK-DATA-033, 034).
  */
+import { localizedTitle } from '../../../shared/title';
 import { existsSync } from 'node:fs';
 import { test, expect } from '../fixtures';
 import { abs, walk, repoPath } from './helpers';
@@ -14,7 +15,7 @@ function foundBuildConfigs(): string[] {
 }
 
 // BK-DATA-033
-test("【构建配置 / DATA】 BK-DATA-033 检测构建配置并断言\"纯 SUMMARY 目录型仓库\"契约", () => {
+test(localizedTitle("【构建配置 / DATA】 BK-DATA-033 检测构建配置并断言\"纯 SUMMARY 目录型仓库\"契约", "BK-DATA-033 repo is a pure SUMMARY-directory repo (no build tooling)"), () => {
   const configs = foundBuildConfigs();
   // Contract: no mdBook/GitBook/MkDocs config present — the repo is organised as a
   // plain SUMMARY.md directory tree, so its absence is expected, not breakage.
@@ -26,7 +27,7 @@ test("【构建配置 / DATA】 BK-DATA-033 检测构建配置并断言\"纯 SUM
 });
 
 // BK-DATA-034
-test("【构建配置 / DATA】 BK-DATA-034 存在构建配置时可产出 HTML", () => {
+test(localizedTitle("【构建配置 / DATA】 BK-DATA-034 存在构建配置时可产出 HTML", "BK-DATA-034 build config, if present, produces HTML"), () => {
   const configs = foundBuildConfigs();
   test.skip(configs.length === 0, 'no supported build config present; nothing to build');
   // Reached only when a config appears; would run `mdbook build` (or equivalent)

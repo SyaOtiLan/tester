@@ -17,6 +17,7 @@
  * `js/background/operations/wallet.js` (`handleExportAccountsFile` returns
  * `{ file: { format, version, cipher, ciphertext } }`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -39,7 +40,7 @@ interface CurrentAccount {
   account?: { address?: string };
 }
 
-test("【钱包导入 / UI】 WL-UI-008 备份文件 / Keystore 导入", async ({
+test(localizedTitle("【钱包导入 / UI】 WL-UI-008 备份文件 / Keystore 导入", "WL-UI-008: export an encrypted backup and restore it in a fresh wallet"), async ({
   recorder,
 }) => {
   const fileDir = mkdtempSync(join(tmpdir(), 'yeying-wallet-backup-'));

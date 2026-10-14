@@ -14,6 +14,7 @@
  * the auth-gating / forwarding cases that need CODE / HIDE_USER_API_KEY /
  * a system key — none configured here (verified via /api/config).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipNoService() {
@@ -33,7 +34,7 @@ async function publicConfig(request: any): Promise<PublicConfig> {
 }
 
 // CH-053 — unknown provider returns 404 with a precise error body.
-test("【Provider 代理 API / API】 CH-053 未知 provider 返回 404", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-053 未知 provider 返回 404", "CH-053 unknown provider returns 404"), async ({ request }) => {
   skipNoService();
   const res = await request.post('/api/unknownvendor/v1/chat', {
     data: { hello: 'world' },
@@ -46,7 +47,7 @@ test("【Provider 代理 API / API】 CH-053 未知 provider 返回 404", async 
 
 // CH-051 — OpenAI-compatible chat proxy is wired (recognized, not "unknown
 // provider"). Actual upstream forwarding needs OPENAI_API_KEY / a gateway.
-test("【Provider 代理 API / API】 CH-051 OpenAI 兼容对话代理转发", async ({
+test(localizedTitle("【Provider 代理 API / API】 CH-051 OpenAI 兼容对话代理转发", "CH-051 OpenAI chat-completions endpoint is a recognized provider route"), async ({
   request,
 }) => {
   skipNoService();
@@ -65,7 +66,7 @@ test("【Provider 代理 API / API】 CH-051 OpenAI 兼容对话代理转发", a
 });
 
 // CH-052 — Anthropic messages proxy is wired.
-test("【Provider 代理 API / API】 CH-052 Anthropic 对话代理转发", async ({
+test(localizedTitle("【Provider 代理 API / API】 CH-052 Anthropic 对话代理转发", "CH-052 Anthropic messages endpoint is a recognized provider route"), async ({
   request,
 }) => {
   skipNoService();
@@ -82,7 +83,7 @@ test("【Provider 代理 API / API】 CH-052 Anthropic 对话代理转发", asyn
 });
 
 // CH-054 — access-code gating: needs CODE configured (needCode=true).
-test("【Provider 代理 API / API】 CH-054 需要访问码时缺码被拒", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-054 需要访问码时缺码被拒", "CH-054 missing access code is rejected when CODE is configured"), async ({ request }) => {
   skipNoService();
   const cfg = await publicConfig(request);
   test.skip(
@@ -99,7 +100,7 @@ test("【Provider 代理 API / API】 CH-054 需要访问码时缺码被拒", as
 });
 
 // CH-055 — a correct access code (nk-<code>) is accepted. Needs CODE + a known code.
-test("【Provider 代理 API / API】 CH-055 携带正确访问码放行", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-055 携带正确访问码放行", "CH-055 correct access code passes the auth gate"), async ({ request }) => {
   skipNoService();
   const cfg = await publicConfig(request);
   test.skip(
@@ -119,7 +120,7 @@ test("【Provider 代理 API / API】 CH-055 携带正确访问码放行", async
 });
 
 // CH-056 — HIDE_USER_API_KEY rejects a user-supplied key.
-test("【Provider 代理 API / API】 CH-056 HIDE_USER_API_KEY 时拒绝自带 Key", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-056 HIDE_USER_API_KEY 时拒绝自带 Key", "CH-056 user-supplied key rejected when HIDE_USER_API_KEY is on"), async ({ request }) => {
   skipNoService();
   const cfg = await publicConfig(request);
   test.skip(
@@ -138,7 +139,7 @@ test("【Provider 代理 API / API】 CH-056 HIDE_USER_API_KEY 时拒绝自带 K
 // CH-057 — no system key configured: request degrades to an upstream auth error
 // rather than a local success. Without a key we can only assert the route is
 // recognized (not unknown provider) and does not fabricate a success.
-test("【Provider 代理 API / API】 CH-057 未配置系统 Key 时的降级", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-057 未配置系统 Key 时的降级", "CH-057 no system key does not yield a fabricated success"), async ({ request }) => {
   skipNoService();
   const res = await request.post('/api/openai/v1/chat/completions', {
     data: { model: 'gpt-4o-mini', messages: [{ role: 'user', content: 'ping' }] },
@@ -151,7 +152,7 @@ test("【Provider 代理 API / API】 CH-057 未配置系统 Key 时的降级", 
 });
 
 // CH-058 — GET /api/openai/v1/models proxies the upstream model list.
-test("【Provider 代理 API / API】 CH-058 GET /api/openai/v1/models 列出模型", async ({ request }) => {
+test(localizedTitle("【Provider 代理 API / API】 CH-058 GET /api/openai/v1/models 列出模型", "CH-058 GET models endpoint is a recognized provider route"), async ({ request }) => {
   skipNoService();
   const res = await request.get('/api/openai/v1/models', { failOnStatusCode: false });
   expect(res.status()).not.toBe(404);

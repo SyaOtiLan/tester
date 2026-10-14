@@ -22,6 +22,7 @@
  * {username,quota}→AdminUserItem); handler/admin_user.go HandleDelete
  * {username}, HandleList {items}.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest, getUserInfo } from '../helpers/auth';
 
@@ -42,7 +43,7 @@ interface AdminUserItem {
   quota?: number;
 }
 
-test("【管理员用户管理 / API】 WH-API-074 管理员更新/删除用户", async () => {
+test(localizedTitle("【管理员用户管理 / API】 WH-API-074 管理员更新/删除用户", "WH-API-074 an admin can update and delete a user"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasCredential(), 'no warehouse credential configured');
 

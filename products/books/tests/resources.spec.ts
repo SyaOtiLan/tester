@@ -5,6 +5,7 @@
  * no markdown references. It is marked test.fixme so the runner stays green
  * while the finding is honestly recorded — do NOT weaken it to pass.
  */
+import { localizedTitle } from '../../../shared/title';
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { test, expect } from '../fixtures';
@@ -17,7 +18,7 @@ function relOf(file: string): string {
 const IMAGE_EXT = /\.(png|jpe?g|gif|svg|webp|bmp|ico)$/i;
 
 // BK-DATA-022
-test("【资源引用(图片/资产) / DATA】 BK-DATA-022 markdown 图片引用目标文件存在", () => {
+test(localizedTitle("【资源引用(图片/资产) / DATA】 BK-DATA-022 markdown 图片引用目标文件存在", "BK-DATA-022 markdown image references point at existing files"), () => {
   const missing: string[] = [];
   let refCount = 0;
   for (const file of allMarkdown()) {
@@ -37,7 +38,7 @@ test("【资源引用(图片/资产) / DATA】 BK-DATA-022 markdown 图片引用
 });
 
 // BK-DATA-023 — REAL FINDING (orphan asset)
-test("【资源引用(图片/资产) / DATA】 BK-DATA-023 仓库图片/资产无孤儿", () => {
+test(localizedTitle("【资源引用(图片/资产) / DATA】 BK-DATA-023 仓库图片/资产无孤儿", "BK-DATA-023 no orphan image assets (every asset is referenced by some markdown)"), () => {
   test.fixme(
     true,
     'REAL DEFECT in books repo: orphan image asset yeying/2A068D22-0E72-47EB-AEFC-D598509BBFFB.png ' +
@@ -59,7 +60,7 @@ test("【资源引用(图片/资产) / DATA】 BK-DATA-023 仓库图片/资产�
 });
 
 // BK-DATA-024 — warning-level: image alt text should be non-empty
-test("【资源引用(图片/资产) / DATA】 BK-DATA-024 图片替代文本非空", () => {
+test(localizedTitle("【资源引用(图片/资产) / DATA】 BK-DATA-024 图片替代文本非空", "BK-DATA-024 image alt text is non-empty (accessibility)"), () => {
   const emptyAlt: string[] = [];
   for (const file of allMarkdown()) {
     for (const img of parseImages(readText(relOf(file)))) {

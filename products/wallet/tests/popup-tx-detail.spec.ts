@@ -12,6 +12,7 @@
  * `js/controller/transaction/transaction-detail-controller.js`
  * (`#txDetailHash` / `#txDetailTo` carry the full value in their `title`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -31,7 +32,7 @@ const NET_RPC = 'https://tx-detail.e2e.invalid/rpc';
 const NET_CHAIN_ID = '0x539'; // 1337
 const BURN_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-test("【转账与交易 / UI】 WL-UI-029 交易详情页展示", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 WL-UI-029 交易详情页展示", "WL-UI-029: opening a transaction shows its detail page"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

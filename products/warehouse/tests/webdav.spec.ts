@@ -9,6 +9,7 @@
  *   - WAREHOUSE_USER / WAREHOUSE_PASS (for Basic auth)
  *   - WAREHOUSE_AUTH_TOKEN (optional JWT/UCAN)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, hasEnv, envFor } from '../fixtures';
 import { webdavPropfind, webdavPut, webdavGet, expectStatus } from '../../../shared/api';
 
@@ -16,7 +17,7 @@ function skipIfNoService(product: 'warehouse') {
   test.skip(!baseURLFor(product), `WAREHOUSE_BASE_URL not configured`);
 }
 
-test("【WebDAV 文件访问协议 / API】 WebDAV PROPFIND root 返回多状态", async () => {
+test(localizedTitle("【WebDAV 文件访问协议 / API】 WebDAV PROPFIND root 返回多状态", "WebDAV PROPFIND root returns multi-status"), async () => {
   skipIfNoService('warehouse');
   const env = envFor('warehouse');
   const webdavURL = env['WAREHOUSE_WEBDAV_URL'];
@@ -34,7 +35,7 @@ test("【WebDAV 文件访问协议 / API】 WebDAV PROPFIND root 返回多状态
   expectStatus(res, [207, 401, 403]);
 });
 
-test("【WebDAV 文件访问协议 / API】 WebDAV 往返 PUT 然后 GET 保留主体", async () => {
+test(localizedTitle("【WebDAV 文件访问协议 / API】 WebDAV 往返 PUT 然后 GET 保留主体", "WebDAV round-trip PUT then GET preserves body"), async () => {
   skipIfNoService('warehouse');
   const env = envFor('warehouse');
   const webdavURL = env['WAREHOUSE_WEBDAV_URL'];

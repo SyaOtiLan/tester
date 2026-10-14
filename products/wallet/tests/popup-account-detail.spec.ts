@@ -14,6 +14,7 @@
  * `js/controller/account/account-list-controller.js` (`handleExportAccounts`
  * → promptPassword → `exportAccountsFile` → download + `showSuccess('已加密导出 …')`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -30,7 +31,7 @@ async function openFirstAccountDetail(popup: import('@playwright/test').Page): P
   await byId(popup, 'accountDetailPage').waitFor({ state: 'visible' });
 }
 
-test("【账户管理 / UI】 WL-UI-014 账户详情展示收款二维码并复制地址", async ({
+test(localizedTitle("【账户管理 / UI】 WL-UI-014 账户详情展示收款二维码并复制地址", "WL-UI-014: account detail shows a receive QR and copies the full address"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -91,7 +92,7 @@ test("【账户管理 / UI】 WL-UI-014 账户详情展示收款二维码并复�
   }
 });
 
-test("【账户管理 / UI】 WL-UI-015 导出账户", async ({
+test(localizedTitle("【账户管理 / UI】 WL-UI-015 导出账户", "WL-UI-015: exporting accounts requires the password and produces a re-importable backup"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

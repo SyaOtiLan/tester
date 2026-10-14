@@ -15,6 +15,7 @@
  * Selectors verified against `wallet/html/popup.html` and
  * `js/controller/network-controller.js`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -27,7 +28,7 @@ const NET_RPC = 'https://e2e.example.invalid/rpc';
 const NET_CHAIN_ID = '0x539'; // 1337
 const NET_SYMBOL = 'E2E';
 
-test("【网络管理 / UI】 通过 UI 添加自定义网络并切换到它", async ({ recorder }) => {
+test(localizedTitle("【网络管理 / UI】 通过 UI 添加自定义网络并切换到它", "add a custom network via the UI and switch to it"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -106,7 +107,7 @@ const UNREACHABLE_NAME = 'Unreachable E2E';
 const UNREACHABLE_RPC = 'https://unreachable.e2e.invalid/rpc';
 const UNREACHABLE_CHAIN_ID = '0x2694'; // 9876
 
-test("【网络管理 / UI】 WL-UI-020 切换到不可达 RPC 网络时失败并回退", async ({
+test(localizedTitle("【网络管理 / UI】 WL-UI-020 切换到不可达 RPC 网络时失败并回退", "WL-UI-020: switching to an unreachable RPC fails and keeps the current network"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -171,7 +172,7 @@ async function openNetworkManage(popup: import('@playwright/test').Page): Promis
 
 // WL-UI-017: editing an existing custom network updates its fields in the
 // manage list and the selectors, and switching to it shows the new name.
-test("【网络管理 / UI】 WL-UI-017 编辑已有自定义网络", async ({
+test(localizedTitle("【网络管理 / UI】 WL-UI-017 编辑已有自定义网络", "WL-UI-017: editing a custom network updates its name across list + selector"), async ({
   recorder,
 }) => {
   const ORIG_NAME = 'Editable E2E';
@@ -253,7 +254,7 @@ test("【网络管理 / UI】 WL-UI-017 编辑已有自定义网络", async ({
 
 // WL-UI-018: deleting a custom network removes it from the manage list and
 // every selector, without touching the default networks.
-test("【网络管理 / UI】 WL-UI-018 删除自定义网络", async ({
+test(localizedTitle("【网络管理 / UI】 WL-UI-018 删除自定义网络", "WL-UI-018: deleting a custom network removes it from list + selectors"), async ({
   recorder,
 }) => {
   const NAME = 'Deletable E2E';
@@ -306,7 +307,7 @@ test("【网络管理 / UI】 WL-UI-018 删除自定义网络", async ({
 
 // WL-UI-019: a brand-new wallet ships with built-in networks (Ethereum +
 // YeYing) that can be switched between; the label and chainId follow.
-test("【网络管理 / UI】 WL-UI-019 默认网络存在且可切换", async ({
+test(localizedTitle("【网络管理 / UI】 WL-UI-019 默认网络存在且可切换", "WL-UI-019: built-in networks exist and switch (label + chainId change)"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

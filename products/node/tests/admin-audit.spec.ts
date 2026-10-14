@@ -16,16 +16,17 @@
  * boundary — an un-approved application cannot be published (403 "Audit not
  * approved") — IS covered and runnable in `app-write-api.spec.ts` (ND-API-022).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test } from '../fixtures';
 
 const NO_ADMIN_REASON =
   'requires an admin approver (ADMIN_DIDS / USER_ROLE_OWNER); none available in this ' +
   'environment. Inverse boundary covered by ND-API-022 in app-write-api.spec.ts.';
 
-test("【开发者应用生命周期 / E2E】 ND-E2E-003 审核通过后发布并出现在市场", async () => {
+test(localizedTitle("【开发者应用生命周期 / E2E】 ND-E2E-003 审核通过后发布并出现在市场", "ND-E2E-003 approved application publishes and appears in the marketplace"), async () => {
   test.skip(true, NO_ADMIN_REASON);
 });
 
-test("【应用审核 / E2E】 ND-E2E-004 管理员审核:提交 → 审批通过 → 可发布", async () => {
+test(localizedTitle("【应用审核 / E2E】 ND-E2E-004 管理员审核:提交 → 审批通过 → 可发布", "ND-E2E-004 admin audit workflow: submit → approve → publishable"), async () => {
   test.skip(true, NO_ADMIN_REASON);
 });

@@ -10,6 +10,7 @@
  * the stored endpoint unchanged; a valid URL is saved with trailing slashes
  * stripped (SW `normalizeEndpoint`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -30,7 +31,7 @@ interface SettingsResult {
   settings?: Settings;
 }
 
-test("【云端密钥托管与恢复 / API】 CUST-001 默认配置", async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / API】 CUST-001 默认配置", "CUST-001: custody defaults — node.yeying.pub, custody/write, disabled"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -52,7 +53,7 @@ test("【云端密钥托管与恢复 / API】 CUST-001 默认配置", async ({ r
   }
 });
 
-test("【云端密钥托管与恢复 / UI】 CUST-002 地址校验(配置弹窗)", async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / UI】 CUST-002 地址校验(配置弹窗)", "CUST-002: config modal rejects an illegal URL and normalizes a valid one"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

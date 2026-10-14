@@ -13,6 +13,7 @@
  *                → connectInFlight keyed by origin+tab); approving it resolves
  *                BOTH requests with the same account list.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -41,7 +42,7 @@ async function openDapp(context: BrowserContext): Promise<Page> {
   return dapp;
 }
 
-test("【错误、异常与安全边界 / DAPP】 WL-DAPP-020 审批窗关闭/超时视为拒绝", async ({
+test(localizedTitle("【错误、异常与安全边界 / DAPP】 WL-DAPP-020 审批窗关闭/超时视为拒绝", "WL-DAPP-020: closing the approval window rejects the request with 4001"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -83,7 +84,7 @@ test("【错误、异常与安全边界 / DAPP】 WL-DAPP-020 审批窗关闭/�
   }
 });
 
-test("【错误、异常与安全边界 / DAPP】 WL-DAPP-021 同源并发/重复请求复用同一审批窗", async ({
+test(localizedTitle("【错误、异常与安全边界 / DAPP】 WL-DAPP-021 同源并发/重复请求复用同一审批窗", "WL-DAPP-021: concurrent same-origin connect requests reuse one approval window"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

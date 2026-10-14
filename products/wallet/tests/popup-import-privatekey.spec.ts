@@ -22,6 +22,7 @@
  * Asserting on the truncated prefix/suffix matches the resilient approach in
  * popup-import.spec.ts (tolerant of unicode-ellipsis changes across versions).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -36,7 +37,7 @@ const EXPECTED_SUFFIX = '79c8';
 const TEST_PASSWORD = 'E2E-password-2026';
 const TEST_ACCOUNT_NAME = 'PrivateKey E2E Wallet';
 
-test("【钱包导入 / UI】 导入私钥登陆 #walletPage 以及预期的账户地址", async ({ recorder }) => {
+test(localizedTitle("【钱包导入 / UI】 导入私钥登陆 #walletPage 以及预期的账户地址", "import private key lands on #walletPage with the expected account address"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

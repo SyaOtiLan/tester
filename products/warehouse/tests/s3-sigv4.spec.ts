@@ -14,6 +14,7 @@
  * service s3, signed headers host;x-amz-content-sha256;x-amz-date); s3/server.go
  * ListBuckets returns <ListAllMyBucketsResult> for the credential's visible buckets.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 import { signSigV4 } from '../helpers/sigv4';
@@ -33,7 +34,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe("【S3 凭证与 S3 协议】S3 SigV4 ListBuckets（S3 SigV4 ListBuckets）", () => {
+test.describe(localizedTitle("【S3 凭证与 S3 协议】S3 SigV4 ListBuckets（S3 SigV4 ListBuckets）", "S3 SigV4 ListBuckets"), () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; accessKeyId: string; secret: string } | null = null;
 
@@ -48,7 +49,7 @@ test.describe("【S3 凭证与 S3 协议】S3 SigV4 ListBuckets（S3 SigV4 ListB
     }
   });
 
-  test("【S3 凭证与 S3 协议 / API】 WH-API-037 SigV4 ListBuckets 成功", async () => {
+  test(localizedTitle("【S3 凭证与 S3 协议 / API】 WH-API-037 SigV4 ListBuckets 成功", "WH-API-037 SigV4-signed ListBuckets returns 200 with bucket list"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!s3Base(), 'WAREHOUSE_ADMIN_URL (S3 endpoint) not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');

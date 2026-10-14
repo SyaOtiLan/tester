@@ -23,6 +23,7 @@
  * (DELETE {id}); members (GET list), members/create (POST {groupId,target,
  * name,walletAddress}), members/delete (DELETE {id}).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 import { loginWithWallet, authedRequest } from '../helpers/auth';
@@ -44,7 +45,7 @@ interface GroupMember {
   status?: string;
 }
 
-test("【分组管理 / API】 WH-API-069 分组增删改查", async () => {
+test(localizedTitle("【分组管理 / API】 WH-API-069 分组增删改查", "WH-API-069 group create, list, rename and delete"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const user = await loginWithWallet(apiBase()!, Wallet.createRandom().privateKey);
@@ -99,7 +100,7 @@ test("【分组管理 / API】 WH-API-069 分组增删改查", async () => {
   }
 });
 
-test("【分组管理 / API】 WH-API-070 分组成员管理与审批", async () => {
+test(localizedTitle("【分组管理 / API】 WH-API-070 分组成员管理与审批", "WH-API-070 group member add, list and remove"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const user = await loginWithWallet(apiBase()!, Wallet.createRandom().privateKey);

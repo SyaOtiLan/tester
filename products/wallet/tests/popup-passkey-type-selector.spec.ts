@@ -16,6 +16,7 @@
  * (readPasskeyRegisterForm reads #walletIdentityPasskeyTypeSelect /
  * #walletIdentityPasskeyDeviceNameInput).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -29,7 +30,7 @@ interface FormContract {
   nameInputType: string;
 }
 
-test("【安全与备份恢复 / UI】 WL-UI-152：密钥注册提供身份验证器类型选择器+设备名称", async () => {
+test(localizedTitle("【安全与备份恢复 / UI】 WL-UI-152：密钥注册提供身份验证器类型选择器+设备名称", "WL-UI-152: passkey registration offers an authenticator-type selector + device name"), async () => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

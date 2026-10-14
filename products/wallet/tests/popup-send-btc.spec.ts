@@ -17,6 +17,7 @@
  * We stub blockstream.info entirely (no live RPC) but record the raw tx
  * into the capture sink so specs can assert on the segwit wire format.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -31,7 +32,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 // A valid mainnet P2WPKH recipient (BIP-173 example vector).
 const RECIPIENT = 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4';
 
-test("【转账与交易 / API】 广播 Bitcoin 本机 BTC 传输通过 segwit 原始交易到达 POST /tx", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / API】 广播 Bitcoin 本机 BTC 传输通过 segwit 原始交易到达 POST /tx", "broadcast Bitcoin native BTC transfer reaches POST /tx with a segwit raw tx"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

@@ -11,6 +11,7 @@
  * `handleRevokeSite` guards with `confirm()` then `wallet.revokeSite`,
  * toast '授权已撤销') and `openSitesPage` in `js/controller/popup-controller.js`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -56,7 +57,7 @@ async function openSitesPage(popup: Page) {
   await popup.locator('#sitesPage').waitFor({ state: 'visible' });
 }
 
-test("【dApp 连接与 Provider / DAPP】 WL-DAPP-015 已连接站点管理:查看与撤销授权", async ({ recorder }) => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-015 已连接站点管理:查看与撤销授权", "WL-DAPP-015: a connected site is listed and can be revoked"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

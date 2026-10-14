@@ -19,6 +19,7 @@
  * command) and components/FilePreviewDialog.vue (class file-preview-dialog,
  * .preview-textarea for text mode).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import type { Page } from '@playwright/test';
 import { Wallet } from 'ethers';
@@ -67,7 +68,7 @@ async function cleanup(page: Page, names: string[]) {
     .catch(() => {});
 }
 
-test("【文件管理 UI / UI】 WH-UI-010 文件预览对话框", async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【文件管理 UI / UI】 WH-UI-010 文件预览对话框", "WH-UI-010 preview a text file in the preview dialog"), async ({ page, baseURL, recorder }) => {
   await gate();
   const ts = Date.now();
   const fileName = `e2e-preview-${ts}.txt`;
@@ -99,7 +100,7 @@ test("【文件管理 UI / UI】 WH-UI-010 文件预览对话框", async ({ page
   }
 });
 
-test("【文件管理 UI / UI】 WH-UI-011 文件表视图/排序切换", async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【文件管理 UI / UI】 WH-UI-011 文件表视图/排序切换", "WH-UI-011 sorting by name reorders the file table"), async ({ page, baseURL, recorder }) => {
   await gate();
   const ts = Date.now();
   const names = [`e2e-sort-a-${ts}.txt`, `e2e-sort-b-${ts}.txt`, `e2e-sort-c-${ts}.txt`];
@@ -144,7 +145,7 @@ test("【文件管理 UI / UI】 WH-UI-011 文件表视图/排序切换", async 
   }
 });
 
-test("【文件管理 UI / UI】 WH-UI-013 上传重名文件的冲突处理", async ({
+test(localizedTitle("【文件管理 UI / UI】 WH-UI-013 上传重名文件的冲突处理", "WH-UI-013 re-uploading a duplicate name overwrites in place"), async ({
   page,
   baseURL,
   recorder,

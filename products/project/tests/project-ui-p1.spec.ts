@@ -12,6 +12,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { seedUiSession, uiLogin } from '../helpers/session';
 import {
@@ -67,11 +68,11 @@ async function uploadBuffer(token: string, buf: Buffer, name: string): Promise<s
   return String(rec?.name ?? name);
 }
 
-test.describe("【project ui p1】项目板和文件UI (P1 E2E)（project board & file UI (P1 E2E)）", () => {
+test.describe(localizedTitle("【project ui p1】项目板和文件UI (P1 E2E)（project board & file UI (P1 E2E)）", "project board & file UI (P1 E2E)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-051 UI 项目面板加载看板视图
-  test("【项目管理 / E2E】 PJ-051 UI 项目面板加载看板视图", async ({ page }) => {
+  test(localizedTitle("【项目管理 / E2E】 PJ-051 UI 项目面板加载看板视图", "PJ-051 opening a project loads the board view with the add affordances"), async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `面板项目${Date.now() % 100000}` });
     await page.goto(`/#/manage/project/${pid}`, { waitUntil: 'domcontentloaded' });
@@ -86,7 +87,7 @@ test.describe("【project ui p1】项目板和文件UI (P1 E2E)（project board 
   });
 
   // PJ-058 UI 看板"添加列表"创建列
-  test("【任务列表(看板列) / E2E】 PJ-058 UI 看板\"添加列表\"创建列", async ({ page }) => {
+  test(localizedTitle("【任务列表(看板列) / E2E】 PJ-058 UI 看板\"添加列表\"创建列", "PJ-058 creating a column via the \"add list\" affordance appends it to the board"), async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `加列项目${Date.now() % 100000}` });
     await page.goto(`/#/manage/project/${pid}`, { waitUntil: 'domcontentloaded' });
@@ -124,7 +125,7 @@ test.describe("【project ui p1】项目板和文件UI (P1 E2E)（project board 
   });
 
   // PJ-075 UI 勾选完成任务并归档
-  test("【任务管理 / E2E】 PJ-075 UI 勾选完成任务并归档", async ({ page }) => {
+  test(localizedTitle("【任务管理 / E2E】 PJ-075 UI 勾选完成任务并归档", "PJ-075 completing a task from the UI marks it complete and then archives it"), async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     const { id: pid } = await createProject(baseURL!, acc.token, { name: `完成归档${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, acc.token, pid);
@@ -162,7 +163,7 @@ test.describe("【project ui p1】项目板和文件UI (P1 E2E)（project board 
   });
 
   // PJ-102 UI 文件页上传下载文件
-  test("【文件管理(文件柜) / E2E】 PJ-102 UI 文件页上传下载文件", async ({ page }) => {
+  test(localizedTitle("【文件管理(文件柜) / E2E】 PJ-102 UI 文件页上传下载文件", "PJ-102 uploading a file in the file page round-trips its bytes on download"), async ({ page }) => {
     const acc: RegisteredUser = await registerUser(baseURL!);
 
     // Use the documented chunked upload API (the UI file picker is brittle

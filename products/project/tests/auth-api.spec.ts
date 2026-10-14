@@ -11,17 +11,18 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL   live service base URL (e.g. http://localhost:2222)
  */
+import { localizedTitle } from '../../../shared/title';
 import { request } from '@playwright/test';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, loginPassword, apiGet, apiPost } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【鉴权与会话守卫】项目认证与会话守卫（API）（project auth & session guard (API)）", () => {
+test.describe(localizedTitle("【鉴权与会话守卫】项目认证与会话守卫（API）（project auth & session guard (API)）", "project auth & session guard (API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-005 邮箱+密码登录成功签发 token
-  test("【鉴权与会话守卫 / API】 PJ-005 邮箱+密码登录成功签发 token", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-005 邮箱+密码登录成功签发 token", "PJ-005 email+password login succeeds and issues token"), async () => {
     const user = await registerUser(baseURL!);
     const body = await loginPassword(baseURL!, user.email, user.password);
     expect(body.ret).toBe(1);
@@ -34,7 +35,7 @@ test.describe("【鉴权与会话守卫】项目认证与会话守卫（API）�
   });
 
   // PJ-006 错误密码登录被拒且触发验证码
-  test("【鉴权与会话守卫 / API】 PJ-006 错误密码登录被拒且触发验证码", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-006 错误密码登录被拒且触发验证码", "PJ-006 wrong password is rejected and arms the captcha requirement"), async () => {
     const user = await registerUser(baseURL!);
     // Fresh account: needcode is initially "no" (ret=0).
     const before = await apiPost(baseURL!, '/api/users/login/needcode', { email: user.email });
@@ -52,21 +53,21 @@ test.describe("【鉴权与会话守卫】项目认证与会话守卫（API）�
   });
 
   // PJ-012 未带 token 访问受保护接口返回 ret=-1
-  test("【鉴权与会话守卫 / API】 PJ-012 未带 token 访问受保护接口返回 ret=-1", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-012 未带 token 访问受保护接口返回 ret=-1", "PJ-012 protected endpoint without token returns ret=-1"), async () => {
     const res = await apiGet(baseURL!, '/api/users/info');
     expect(res.ret).toBe(-1);
     expect(res.msg).toBe('请登录后继续...');
   });
 
   // PJ-013 非法/过期 token 访问返回身份失效
-  test("【鉴权与会话守卫 / API】 PJ-013 非法/过期 token 访问返回身份失效", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-013 非法/过期 token 访问返回身份失效", "PJ-013 protected endpoint with a bogus token returns identity-invalid"), async () => {
     const res = await apiGet(baseURL!, '/api/users/info', 'forged-token-xxxxx');
     expect(res.ret).toBe(-1);
     expect(res.msg).toBe('身份已失效,请重新登录');
   });
 
   // PJ-112 获取当前用户信息
-  test("【个人设置与账号安全 / API】 PJ-112 获取当前用户信息", async () => {
+  test(localizedTitle("【个人设置与账号安全 / API】 PJ-112 获取当前用户信息", "PJ-112 users/info returns the current user profile"), async () => {
     const user = await registerUser(baseURL!);
     const res = await apiGet(baseURL!, '/api/users/info', user.token);
     expect(res.ret).toBe(1);
@@ -77,7 +78,7 @@ test.describe("【鉴权与会话守卫】项目认证与会话守卫（API）�
   });
 
   // PJ-130 非管理员访问管理员接口被拒
-  test("【团队/会员管理(管理员) / API】 PJ-130 非管理员访问管理员接口被拒", async () => {
+  test(localizedTitle("【团队/会员管理(管理员) / API】 PJ-130 非管理员访问管理员接口被拒", "PJ-130 non-admin is denied on an admin-only endpoint"), async () => {
     const user = await registerUser(baseURL!);
     const res = await apiGet(baseURL!, '/api/users/lists', user.token);
     expect(res.ret).toBe(0);
@@ -86,7 +87,7 @@ test.describe("【鉴权与会话守卫】项目认证与会话守卫（API）�
   });
 
   // PJ-136 获取系统版本号
-  test("【系统、健康与错误异常 / API】 PJ-136 获取系统版本号", async () => {
+  test(localizedTitle("【系统、健康与错误异常 / API】 PJ-136 获取系统版本号", "PJ-136 system/version returns a version (liveness probe)"), async () => {
     // NOTE contract discrepancy: unlike most endpoints, api/system/version does
     // NOT return the {ret,msg,data} envelope — it returns a raw object
     // { device_count, version, publish{...} }. We assert the real behaviour.

@@ -18,6 +18,7 @@
  * Contracts mirror node `src/routes/publicIdentityAuthorization.ts` +
  * `src/domain/service/identityAuthorization.ts`.
  */
+import { localizedTitle } from '../../../shared/title';
 import type { Page } from '@playwright/test';
 
 import { test, expect, baseURLFor, envFor } from '../fixtures';
@@ -101,7 +102,7 @@ async function createPasskeyCredential(page: Page, options: Record<string, unkno
   }
 }
 
-test("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-031 Passkey 注册请求与确认", async ({ page }) => {
+test(localizedTitle("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-031 Passkey 注册请求与确认", "ND-API-031 passkey register request → confirm → list → revoke"), async ({ page }) => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;

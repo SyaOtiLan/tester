@@ -15,6 +15,7 @@
  * Failures come back as the one-api error envelope `{ error: { message, type } }`
  * with HTTP 401 — the request is rejected before any upstream is contacted.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -27,7 +28,7 @@ const CHAT = '/api/v1/public/chat/completions';
 const chatBody = { model: 'gpt-4o', messages: [{ role: 'user', content: 'ping' }] };
 
 // RT-API-045 (P1)
-test("【模型中继与个人供应商 / API】 中继通过 401 拒绝丢失和伪造的令牌（无上游路由）", async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 中继通过 401 拒绝丢失和伪造的令牌（无上游路由）", "relay rejects missing and forged tokens with 401 (no upstream routing)"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -52,7 +53,7 @@ test("【模型中继与个人供应商 / API】 中继通过 401 拒绝丢失�
 
 // RT-API-044 (P0) — boundary only: a user JWT is not an API key, so TokenAuth
 // rejects it before any distribution/upstream relay + quota deduction happens.
-test("【模型中继与个人供应商 / API】 通过用户 JWT 的中继被 TokenAuth 拒绝（中继边界）", async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 通过用户 JWT 的中继被 TokenAuth 拒绝（中继边界）", "relay via a user JWT is rejected by TokenAuth (relay boundary)"), async () => {
   skipIfNoService();
   test.skip(
     !envFor('router')['ROUTER_WALLET_PRIVATE_KEY'],
@@ -86,7 +87,7 @@ test("【模型中继与个人供应商 / API】 通过用户 JWT 的中继被 T
 // the routes ARE registered (a controlled 401 one-api envelope, not a 404
 // "Invalid URL" and never a 5xx), proving they are wired and gated rather than
 // crashing. Contrast: an unregistered path returns 404 invalid_request_error.
-test("【OpenAI 兼容模型与中继 / API】 RT-API-046 未实现的中继端点返回 not implemented", async () => {
+test(localizedTitle("【OpenAI 兼容模型与中继 / API】 RT-API-046 未实现的中继端点返回 not implemented", "RelayNotImplemented endpoints are registered and controlled (RT-API-046)"), async () => {
   skipIfNoService();
   const forged = await apiContext(baseURLFor('router')!, {
     Authorization: 'Bearer sk-forged-000000000000000000000000',
@@ -118,7 +119,7 @@ test("【OpenAI 兼容模型与中继 / API】 RT-API-046 未实现的中继端�
 // a 404 "Invalid URL"), compat is ENABLED here and the disabled branch is
 // unreachable — skip. The canonical `/api/v1/public/*` entry is always asserted
 // to remain the live gated surface.
-test("【OpenAI 兼容模型与中继 / API】 RT-API-047 DISABLE_OPENAI_COMPAT 时旧 /v1/* 路径被禁用", async () => {
+test(localizedTitle("【OpenAI 兼容模型与中继 / API】 RT-API-047 DISABLE_OPENAI_COMPAT 时旧 /v1/* 路径被禁用", "DISABLE_OPENAI_COMPAT turns off the legacy /v1/* routes (RT-API-047)"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -155,7 +156,7 @@ test("【OpenAI 兼容模型与中继 / API】 RT-API-047 DISABLE_OPENAI_COMPAT 
 // boundary), so the "list contains the relay call" branch runs only when the
 // account already has log rows; otherwise it is annotated as boundary-limited.
 // The /log/:id detail contract is pinned via its controlled not-found response.
-test("【OpenAI 兼容模型与中继 / API】 RT-API-048 中继调用写入路由日志可查", async () => {
+test(localizedTitle("【OpenAI 兼容模型与中继 / API】 RT-API-048 中继调用写入路由日志可查", "relay route log is queryable and well-formed (RT-API-048)"), async () => {
   skipIfNoService();
   test.skip(
     !envFor('router')['ROUTER_WALLET_PRIVATE_KEY'],

@@ -12,6 +12,7 @@
  * runtime is enabled; a real MCP tool-call in a session is out of scope) and the
  * "tools disabled" degrade path (CH-083) cannot be reproduced here.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { loginOrSkip, openRoute } from '../helpers/auth';
 import { readPersistedState } from '../helpers/storage';
@@ -21,7 +22,7 @@ function skipNoService() {
 }
 
 // CH-077 — discovery page browses skills / tools.
-test("【技能/面具/插件/工具/发现 / UI】 CH-077 发现页浏览技能/工具", async ({ page }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / UI】 CH-077 发现页浏览技能/工具", "CH-077 discovery page renders skill and tool entries"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/discovery?type=skill');
@@ -34,7 +35,7 @@ test("【技能/面具/插件/工具/发现 / UI】 CH-077 发现页浏览技能
 });
 
 // CH-078 — skill editor creates a local (custom) skill persisted to skill-store.
-test("【技能/面具/插件/工具/发现 / E2E】 CH-078 技能编辑器创建自定义技能", async ({ page }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / E2E】 CH-078 技能编辑器创建自定义技能", "CH-078 skill editor creates a local skill"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/skills');
@@ -59,7 +60,7 @@ test("【技能/面具/插件/工具/发现 / E2E】 CH-078 技能编辑器创�
 });
 
 // CH-079 — /masks reuses the skill editor (compat route).
-test("【技能/面具/插件/工具/发现 / UI】 CH-079 面具路由 /masks 兼容旧入口", async ({ page }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / UI】 CH-079 面具路由 /masks 兼容旧入口", "CH-079 masks route reuses the skill editor"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/masks');
@@ -71,7 +72,7 @@ test("【技能/面具/插件/工具/发现 / UI】 CH-079 面具路由 /masks �
 });
 
 // CH-080 — plugins page manages plugins.
-test("【技能/面具/插件/工具/发现 / UI】 CH-080 插件页 /plugins 管理", async ({ page }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / UI】 CH-080 插件页 /plugins 管理", "CH-080 plugins page renders"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/plugins');
@@ -81,7 +82,7 @@ test("【技能/面具/插件/工具/发现 / UI】 CH-080 插件页 /plugins �
 });
 
 // CH-081 — tools market lists tool servers.
-test("【技能/面具/插件/工具/发现 / UI】 CH-081 工具市场 /tools 浏览", async ({ page }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / UI】 CH-081 工具市场 /tools 浏览", "CH-081 tools market renders"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/tools');
@@ -91,7 +92,7 @@ test("【技能/面具/插件/工具/发现 / UI】 CH-081 工具市场 /tools �
 });
 
 // CH-082 — tools runtime is enabled (ENABLE_TOOLS) and the market is available.
-test("【技能/面具/插件/工具/发现 / E2E】 CH-082 启用工具运行时(ENABLE_TOOLS)", async ({ page, request }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / E2E】 CH-082 启用工具运行时(ENABLE_TOOLS)", "CH-082 tools runtime is enabled"), async ({ page, request }) => {
   skipNoService();
   const cfg = await (await request.get('/api/config')).json();
   test.skip(!cfg.enableTools, 'ENABLE_TOOLS is off — tools runtime not initialized');
@@ -105,7 +106,7 @@ test("【技能/面具/插件/工具/发现 / E2E】 CH-082 启用工具运行�
 });
 
 // CH-083 — tools-disabled degrade path.
-test("【技能/面具/插件/工具/发现 / UI】 CH-083 工具未启用时降级", async ({ request }) => {
+test(localizedTitle("【技能/面具/插件/工具/发现 / UI】 CH-083 工具未启用时降级", "CH-083 tools-disabled degrade path"), async ({ request }) => {
   skipNoService();
   const cfg = await (await request.get('/api/config')).json();
   test.skip(

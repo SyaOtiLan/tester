@@ -13,13 +13,14 @@
  * once a provider key is available — see `smoke.spec.ts` for the key
  * gate.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipIfNoService() {
   test.skip(!baseURLFor('chat'), 'CHAT_BASE_URL not configured');
 }
 
-test("【首页与导航 / UI】 对话首页正常渲染", async ({ page }) => {
+test(localizedTitle("【首页与导航 / UI】 对话首页正常渲染", "landing renders the chat home"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await expect(page.locator('body')).toBeVisible();
@@ -27,7 +28,7 @@ test("【首页与导航 / UI】 对话首页正常渲染", async ({ page }) => 
   expect(text.length).toBeGreaterThan(50);
 });
 
-test("【首页与导航 / UI】 导航中至少显示一个链接或菜单入口", async ({ page }) => {
+test(localizedTitle("【首页与导航 / UI】 导航中至少显示一个链接或菜单入口", "navigation surfaces at least one link or menu entry"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   // SPA mounts may not have rendered every header link to "visible"
@@ -41,7 +42,7 @@ test("【首页与导航 / UI】 导航中至少显示一个链接或菜单入�
   await expect.poll(() => entries.count(), { timeout: 15_000 }).toBeGreaterThan(0);
 });
 
-test("【首页与导航 / UI】 可找到身份验证或钱包连接入口", async ({ page }) => {
+test(localizedTitle("【首页与导航 / UI】 可找到身份验证或钱包连接入口", "auth or wallet-connect affordance is discoverable"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   // Loose: any input field, button, or link. Asserting DOM-attached

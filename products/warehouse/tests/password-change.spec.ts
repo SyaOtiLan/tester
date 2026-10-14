@@ -22,6 +22,7 @@
  * (>=6 else 400), then verifies oldPassword for password accounts (401 on
  * mismatch), then saves and returns 200 {success:true}.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { loginWithPassword, loginWithWallet, authedRequest, getUserInfo } from '../helpers/auth';
 import { apiContext } from '../../../shared/api';
@@ -56,10 +57,10 @@ async function rawLoginStatus(username: string, password: string): Promise<numbe
   }
 }
 
-test.describe("【用户资料与密码】自助修改密码（self-service password change）", () => {
+test.describe(localizedTitle("【用户资料与密码】自助修改密码（self-service password change）", "self-service password change"), () => {
   test.describe.configure({ mode: 'serial' });
 
-  test("【用户资料与密码 / API】 WH-API-062 修改密码成功", async () => {
+  test(localizedTitle("【用户资料与密码 / API】 WH-API-062 修改密码成功", "WH-API-062 a valid password change succeeds"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     // Operate on a FRESH random wallet identity (auto-created via SIWE) rather
     // than the shared admin credential: changing a throwaway account's password
@@ -93,7 +94,7 @@ test.describe("【用户资料与密码】自助修改密码（self-service pass
     }
   });
 
-  test("【用户资料与密码 / API】 WH-API-063 新密码少于 6 位被拒", async () => {
+  test(localizedTitle("【用户资料与密码 / API】 WH-API-063 新密码少于 6 位被拒", "WH-API-063 a too-short new password is rejected with 400"), async () => {
     skipGuards();
     const { pass } = creds();
     const tokens = await loginWithPassword(apiBase()!);
@@ -110,7 +111,7 @@ test.describe("【用户资料与密码】自助修改密码（self-service pass
     }
   });
 
-  test("【用户资料与密码 / API】 WH-API-064 旧密码错误被拒", async () => {
+  test(localizedTitle("【用户资料与密码 / API】 WH-API-064 旧密码错误被拒", "WH-API-064 a wrong old password is rejected with 401"), async () => {
     skipGuards();
     const { user, pass } = creds();
     const tokens = await loginWithPassword(apiBase()!);

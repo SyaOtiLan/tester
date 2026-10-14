@@ -21,6 +21,7 @@
  * public-share item). WH-API-048 skips cleanly if the audience has no received
  * resource containing a browsable file.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, loginWithWallet, authedRequest } from '../helpers/auth';
 import { createDirectedShare, putOwnedFile, revokeDirectedShare } from '../helpers/share';
@@ -40,7 +41,7 @@ function hasOwnerCredential(): boolean {
   );
 }
 
-test("【公开分享 / API】 WH-API-048 从收到的资源二次分享", async () => {
+test(localizedTitle("【公开分享 / API】 WH-API-048 从收到的资源二次分享", "WH-API-048 re-share a file from a received resource"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (audience identity) not configured');
 
@@ -88,7 +89,7 @@ test("【公开分享 / API】 WH-API-048 从收到的资源二次分享", async
   }
 });
 
-test("【定向分享(给指定用户) / API】 WH-API-053 受众列表 audiences", async () => {
+test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-053 受众列表 audiences", "WH-API-053 audiences lists the targets of a directed share"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasOwnerCredential(), 'no warehouse owner credential configured');
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');

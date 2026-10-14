@@ -10,17 +10,18 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { seedUiSession } from '../helpers/session';
 import { createProject, firstColumnId } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【project ui】项目 — 通过 UI 创建（project — create via UI）", () => {
+test.describe(localizedTitle("【project ui】项目 — 通过 UI 创建（project — create via UI）", "project — create via UI"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-050 UI 新建项目走完创建向导
-  test("【项目管理 / E2E】 PJ-050 UI 新建项目走完创建向导", async ({ page }) => {
+  test(localizedTitle("【项目管理 / E2E】 PJ-050 UI 新建项目走完创建向导", "PJ-050 new-project wizard creates a project and opens its panel"), async ({ page }) => {
     await seedUiSession(page, baseURL!);
 
     const name = `向导项目${Date.now() % 100000}`;
@@ -43,7 +44,7 @@ test.describe("【project ui】项目 — 通过 UI 创建（project — create 
   });
 
   // PJ-074 UI 新建任务出现在看板列
-  test("【任务管理 / E2E】 PJ-074 UI 新建任务出现在看板列", async ({ page }) => {
+  test(localizedTitle("【任务管理 / E2E】 PJ-074 UI 新建任务出现在看板列", "PJ-074 adding a task on the board shows the card in its column"), async ({ page }) => {
     const account = await seedUiSession(page, baseURL!);
 
     // Prepare a project with a default column via the API, then open its board.

@@ -7,12 +7,13 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, apiGet, apiPost, type RegisteredUser } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【鉴权与会话守卫】项目授权和会话（P2 API）（project auth & session (P2 API)）", () => {
+test.describe(localizedTitle("【鉴权与会话守卫】项目授权和会话（P2 API）（project auth & session (P2 API)）", "project auth & session (P2 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -22,7 +23,7 @@ test.describe("【鉴权与会话守卫】项目授权和会话（P2 API）（pr
   });
 
   // PJ-009 codejson 返回图形验证码
-  test("【鉴权与会话守卫 / API】 PJ-009 codejson 返回图形验证码", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-009 codejson 返回图形验证码", "PJ-009 login/codejson returns a rendered captcha image + key"), async () => {
     const body = await apiGet(baseURL!, '/api/users/login/codejson', user.token);
     expect(body.ret).toBe(1);
     // The captcha payload carries a base64 <img>, an opaque key echoed back on
@@ -35,7 +36,7 @@ test.describe("【鉴权与会话守卫】项目授权和会话（P2 API）（pr
   });
 
   // PJ-015 token/expire refresh 临近过期时轮换
-  test("【鉴权与会话守卫 / API】 PJ-015 token/expire refresh 临近过期时轮换", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-015 token/expire refresh 临近过期时轮换", "PJ-015 token/expire reports validity and only rotates near expiry"), async () => {
     // A freshly registered token has its full validity window ahead of it, so
     // the endpoint reports it as far-from-expiry and does NOT rotate. (Actual
     // rotation only fires once the token enters the final third of its lifetime,
@@ -55,7 +56,7 @@ test.describe("【鉴权与会话守卫】项目授权和会话（P2 API）（pr
   });
 
   // PJ-022 passport 登录状态轮询
-  test("【鉴权与会话守卫 / API】 PJ-022 passport 登录状态轮询", async () => {
+  test(localizedTitle("【鉴权与会话守卫 / API】 PJ-022 passport 登录状态轮询", "PJ-022 passport login/status validates the session and reports expiry"), async () => {
     // An empty session id is rejected up-front.
     const empty = await apiPost(baseURL!, '/api/passport/login/status', {}, user.token);
     expect(empty.ret).toBe(0);

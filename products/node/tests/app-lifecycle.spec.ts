@@ -25,6 +25,7 @@
  * Selectors verified against node `web/src/views/apply/ApplyEdit.vue`,
  * `ApplyView.vue`, and `views/components/ApplicationListTable.vue`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 
@@ -35,7 +36,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test("【应用市场与应用生命周期 / API】 创建草稿应用程序，在我创建的中查看它，然后将其删除", async ({
+test(localizedTitle("【应用市场与应用生命周期 / API】 创建草稿应用程序，在我创建的中查看它，然后将其删除", "create a draft application, see it in 我创建的, then delete it"), async ({
   page,
   recorder,
 }) => {

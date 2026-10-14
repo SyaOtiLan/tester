@@ -15,6 +15,7 @@
  *   3. The recorded transaction's value is denominated in USDT (proving the
  *      TRC20 token path ran, not native TRX).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -30,7 +31,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 const USDT_CONTRACT = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
 const RECIPIENT = 'TJRabPrwbZy45sbavfcjinPJC18kjpRTv8';
 
-test("【转账与交易 / UI】 通过智能合约路径在 Tron 路由上传输 TRC20 USDT，而不是本机 TRX", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 通过智能合约路径在 Tron 路由上传输 TRC20 USDT，而不是本机 TRX", "transfer TRC20 USDT on Tron routes through the smart-contract path, not native TRX"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

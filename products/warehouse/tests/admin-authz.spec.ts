@@ -16,6 +16,7 @@
  * platform-admin endpoint. Source: middleware/admin.go returns 403 "Forbidden"
  * when the caller's wallet is not allow-listed.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 
@@ -32,7 +33,7 @@ function hasCredential(): boolean {
   );
 }
 
-test("【管理员用户管理 / API】 WH-API-075 非管理员访问 admin 接口返回 403", async () => {
+test(localizedTitle("【管理员用户管理 / API】 WH-API-075 非管理员访问 admin 接口返回 403", "WH-API-075 non-admin JWT is forbidden on admin users/list (403)"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasCredential(), 'no warehouse credential configured');
 

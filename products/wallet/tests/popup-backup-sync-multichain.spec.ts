@@ -15,6 +15,7 @@
  * Verified against `js/background/sync-service.js` (buildSyncPayload v2 + the
  * WebDAV push path) and `js/common/crypto` (hashHex / decryptObject).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -35,7 +36,7 @@ interface SyncPayload {
   accounts: Array<{ index: number; address: string; namespace?: string; chainKey?: string }>;
 }
 
-test("【安全与备份恢复 / UI】 SYNC-V2：备份同步推送携带非 EVM (Tron) 帐户的 v2 有效负载", async ({ recorder }) => {
+test(localizedTitle("【安全与备份恢复 / UI】 SYNC-V2：备份同步推送携带非 EVM (Tron) 帐户的 v2 有效负载", "SYNC-V2: backup sync pushes a v2 payload carrying the non-EVM (Tron) account"), async ({ recorder }) => {
   const store = createDavStore();
 
   const ctx = await loadWalletContext();

@@ -25,6 +25,7 @@
  * is hardcoded (not i18n), so it is asserted verbatim; other labels follow
  * the browser locale and are matched zh|en.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { request } from '@playwright/test';
 
@@ -34,7 +35,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test("【令牌、充值与余额 / API】 通过工作区创建 API 令牌，然后将其删除", async ({
+test(localizedTitle("【令牌、充值与余额 / API】 通过工作区创建 API 令牌，然后将其删除", "create an API token through the workspace, then delete it"), async ({
   page,
   baseURL,
   recorder,

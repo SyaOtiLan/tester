@@ -7,16 +7,17 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, apiGet, apiPost } from '../helpers/api';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【工作汇报】项目报告（P2 API）（project reports (P2 API)）", () => {
+test.describe(localizedTitle("【工作汇报】项目报告（P2 API）（project reports (P2 API)）", "project reports (P2 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-111 生成汇报模板
-  test("【工作汇报 / API】 PJ-111 生成汇报模板", async () => {
+  test(localizedTitle("【工作汇报 / API】 PJ-111 生成汇报模板", "PJ-111 report/template returns a pre-filled weekly template"), async () => {
     const user = await registerUser(baseURL!);
     const body = await apiGet(baseURL!, '/api/report/template?type=weekly', user.token);
     expect(body.ret).toBe(1);
@@ -29,7 +30,7 @@ test.describe("【工作汇报】项目报告（P2 API）（project reports (P2 
   });
 
   // PJ-110 汇报标记已读与未读数
-  test("【工作汇报 / API】 PJ-110 汇报标记已读与未读数", async () => {
+  test(localizedTitle("【工作汇报 / API】 PJ-110 汇报标记已读与未读数", "PJ-110 report/unread counts a received report and report/read clears it"), async () => {
     const sender = await registerUser(baseURL!);
     const receiver = await registerUser(baseURL!);
 

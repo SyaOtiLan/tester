@@ -28,6 +28,7 @@
  *   src/domain/service/delivery/providers/webhookProvider.ts (headers/body),
  *   src/domain/service/delivery/webhookSecret.ts (signature = sha256=HMAC).
  */
+import { localizedTitle } from '../../../shared/title';
 import { createHmac } from 'node:crypto';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
@@ -165,7 +166,7 @@ async function waitForTerminalDelivery(
   }
 }
 
-test("【通知中心 / API】 ND-API-034 通用 Webhook 投递闭环(签名校验)", async () => {
+test(localizedTitle("【通知中心 / API】 ND-API-034 通用 Webhook 投递闭环(签名校验)", "ND-API-034 generic webhook delivery loop signs and delivers to a live callback"), async () => {
   skipIfNoService();
   test.setTimeout(90_000);
   const baseURL = baseURLFor('node')!;
@@ -287,7 +288,7 @@ function parseSseFrame(raw: string): SseEvent | null {
   return { event, data: dataLines.join('\n') };
 }
 
-test("【通知中心 / API】 ND-API-037 通知中心 SSE 实时推送闭环", async () => {
+test(localizedTitle("【通知中心 / API】 ND-API-037 通知中心 SSE 实时推送闭环", "ND-API-037 notification stream pushes a live notification.created event"), async () => {
   skipIfNoService();
   test.setTimeout(60_000);
   const baseURL = baseURLFor('node')!;

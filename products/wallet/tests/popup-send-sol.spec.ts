@@ -19,6 +19,7 @@
  * We stub Solana mainnet RPC entirely (no live RPC) but record the wire
  * tx into the capture sink so specs can assert on it.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -34,7 +35,7 @@ const TEST_PASSWORD = 'E2E-password-2026';
 // 32-byte base58 string is acceptable since the stub ignores the field.
 const RECIPIENT = '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM';
 
-test("【转账与交易 / UI】 广播 Solana 本机 SOL 传输通过 ed25519 sig 到达 sendTransaction", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 广播 Solana 本机 SOL 传输通过 ed25519 sig 到达 sendTransaction", "broadcast Solana native SOL transfer reaches sendTransaction with ed25519 sig"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

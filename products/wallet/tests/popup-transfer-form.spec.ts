@@ -20,6 +20,7 @@
  * closes the popup, and reopens it should not lose their input. The
  * wallet persists the in-progress transfer to chrome.storage.session.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -29,7 +30,7 @@ import { byId, createAndUnlockWallet, openPopup } from '../helpers/popup';
 const RECIPIENT = '0x1111111111111111111111111111111111111111';
 const AMOUNT = '1.25';
 
-test("【转账与交易 / UI】 转账表单在弹出窗口关闭+重新打开后仍然有效", async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 转账表单在弹出窗口关闭+重新打开后仍然有效", "transfer form survives popup close + reopen"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

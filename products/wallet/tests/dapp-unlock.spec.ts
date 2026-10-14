@@ -16,6 +16,7 @@
  * focused tab — so we close the popup and bring the dApp to front before
  * firing the request.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -53,7 +54,7 @@ async function connect(context: BrowserContext, extensionId: string, dapp: Page)
   return (await p) as string[];
 }
 
-test("【dApp 连接与 Provider / DAPP】 WL-DAPP-016 钱包锁定时 dApp 请求触发解锁审批窗", async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-016 钱包锁定时 dApp 请求触发解锁审批窗", "WL-DAPP-016: a request against a locked wallet opens the unlock approval and then completes"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

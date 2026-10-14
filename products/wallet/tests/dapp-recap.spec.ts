@@ -10,6 +10,7 @@
  *
  * The ReCap object follows EIP-5573: `{ att: { <resource>: { <action>: [ …constraints ] } } }`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -22,7 +23,7 @@ const SIWE_URI = 'https://dapp.e2e.invalid';
 const RECAP_RESOURCE = 'https://notify.e2e.invalid';
 const RECAP_ACTIONS = ['notifications/receive', 'messages/send'];
 
-test("【消息签名与授权 / DAPP】 WL-DAPP-005 ReCap(EIP-5573)能力结构化展示", async ({
+test(localizedTitle("【消息签名与授权 / DAPP】 WL-DAPP-005 ReCap(EIP-5573)能力结构化展示", "WL-DAPP-005: a ReCap (EIP-5573) resource is decoded into a structured capability list"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

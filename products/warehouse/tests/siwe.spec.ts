@@ -17,6 +17,7 @@
  * Optional:
  *   - WAREHOUSE_EXPECTED_ADDRESS    (asserts the bound wallet matches)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet, getAddress } from 'ethers';
 
@@ -32,7 +33,7 @@ interface VerifyResponse {
   data: { token: string; address: string; expiresAt: number };
 }
 
-test("【鉴权与会话 / API】 SIWE 质询需要校验和地址", async ({ request }) => {
+test(localizedTitle("【鉴权与会话 / API】 SIWE 质询需要校验和地址", "SIWE challenge requires a checksum address"), async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');
@@ -44,7 +45,7 @@ test("【鉴权与会话 / API】 SIWE 质询需要校验和地址", async ({ re
   expect(res.status()).toBe(400);
 });
 
-test("【鉴权与会话 / API】 SIWE 质询 -> 签名 -> 验证返回绑定到钱包的 JWT", async ({ request }) => {
+test(localizedTitle("【鉴权与会话 / API】 SIWE 质询 -> 签名 -> 验证返回绑定到钱包的 JWT", "SIWE challenge -> sign -> verify returns a JWT bound to the wallet"), async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');
@@ -87,7 +88,7 @@ test("【鉴权与会话 / API】 SIWE 质询 -> 签名 -> 验证返回绑定到
   expect(quotaRes.status()).toBe(200);
 });
 
-test("【鉴权与会话 / DAPP】 SIWE verify 拒绝来自错误密钥的签名", async ({ request }) => {
+test(localizedTitle("【鉴权与会话 / DAPP】 SIWE verify 拒绝来自错误密钥的签名", "SIWE verify rejects a signature from the wrong key"), async ({ request }) => {
   skipIfNoService();
   const env = envFor('warehouse');
   test.skip(!env['WAREHOUSE_WALLET_PRIVATE_KEY'], 'WAREHOUSE_WALLET_PRIVATE_KEY not configured');

@@ -13,6 +13,7 @@
  * Selectors verified against node `web/src/components/layout/Header.vue`,
  * `web/src/router/index.ts`, and `web/src/plugins/auth.ts`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { Wallet } from 'ethers';
 
 import { test, expect, baseURLFor, envFor } from '../fixtures';
@@ -23,7 +24,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test("【会话与鉴权守卫 / E2E】 ND-E2E-006 通过真实钱包完成 SIWE 登录", async ({
+test(localizedTitle("【会话与鉴权守卫 / E2E】 ND-E2E-006 通过真实钱包完成 SIWE 登录", "ND-E2E-006 real wallet completes SIWE login and enters the marketplace"), async ({
   page,
   recorder,
 }) => {
@@ -63,7 +64,7 @@ test("【会话与鉴权守卫 / E2E】 ND-E2E-006 通过真实钱包完成 SIWE
   await recorder.step(page, '登录后可进入受保护的「我的应用」');
 });
 
-test("【会话与鉴权守卫 / E2E】 ND-E2E-007 未登录访问受保护路由被重定向,登出后守卫生效", async ({
+test(localizedTitle("【会话与鉴权守卫 / E2E】 ND-E2E-007 未登录访问受保护路由被重定向,登出后守卫生效", "ND-E2E-007 protected routes redirect without a session and after logout"), async ({
   page,
   recorder,
 }) => {

@@ -16,6 +16,7 @@
  *   - Create with expiresIn (seconds, and NO expiresValue) uses a raw seconds
  *     TTL — Resolve prefers expiresValue>0, so we omit it for a short TTL.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken } from '../helpers/auth';
 import { createPublicShare, putOwnedFile, revokePublicShare } from '../helpers/share';
@@ -40,8 +41,8 @@ interface ShareListItem {
   expiresAt?: string;
 }
 
-test.describe("【文件分享】public share lifecycle（public share lifecycle）", () => {
-  test("【公开分享 / API】 WH-API-044 我的分享列表", async () => {
+test.describe(localizedTitle("【文件分享】public share lifecycle（public share lifecycle）", "public share lifecycle"), () => {
+  test(localizedTitle("【公开分享 / API】 WH-API-044 我的分享列表", "WH-API-044 my shares list contains a newly-created share"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -69,7 +70,7 @@ test.describe("【文件分享】public share lifecycle（public share lifecycle
     await revokePublicShare(apiBase()!, token, share.token);
   });
 
-  test("【公开分享 / API】 WH-API-046 过期分享访问返回 410 Gone", async () => {
+  test(localizedTitle("【公开分享 / API】 WH-API-046 过期分享访问返回 410 Gone", "WH-API-046 an expired share returns 410 Gone"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -120,7 +121,7 @@ test.describe("【文件分享】public share lifecycle（public share lifecycle
     await revokePublicShare(apiBase()!, token, shareToken).catch(() => undefined);
   });
 
-  test("【公开分享 / API】 WH-API-047 撤销分享后访问被拒", async () => {
+  test(localizedTitle("【公开分享 / API】 WH-API-047 撤销分享后访问被拒", "WH-API-047 a revoked share is no longer accessible (404)"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

@@ -17,6 +17,7 @@
  * ShareGPT (CH-092) posts to the external https://sharegpt.com service from an
  * active session — skipped (external dependency + session required).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipNoService() {
@@ -24,7 +25,7 @@ function skipNoService() {
 }
 
 // CH-088 — export a conversation as Markdown.
-test("【导出与分享 / E2E】 CH-088 导出会话为 Markdown", async () => {
+test(localizedTitle("【导出与分享 / E2E】 CH-088 导出会话为 Markdown", "CH-088 export conversation as Markdown"), async () => {
   skipNoService();
   test.skip(
     !process.env.OPENAI_API_KEY?.trim() && !process.env.ANTHROPIC_API_KEY?.trim(),
@@ -33,7 +34,7 @@ test("【导出与分享 / E2E】 CH-088 导出会话为 Markdown", async () => 
 });
 
 // CH-089 — export a conversation as a PNG image.
-test("【导出与分享 / E2E】 CH-089 导出会话为 PNG 图片", async () => {
+test(localizedTitle("【导出与分享 / E2E】 CH-089 导出会话为 PNG 图片", "CH-089 export conversation as PNG"), async () => {
   skipNoService();
   test.skip(
     !process.env.OPENAI_API_KEY?.trim() && !process.env.ANTHROPIC_API_KEY?.trim(),
@@ -42,7 +43,7 @@ test("【导出与分享 / E2E】 CH-089 导出会话为 PNG 图片", async () =
 });
 
 // CH-090 — POST /api/artifacts creates a share (needs Cloudflare KV).
-test("【导出与分享 / API】 CH-090 通过 artifacts 分享生成分享页", async ({ request }) => {
+test(localizedTitle("【导出与分享 / API】 CH-090 通过 artifacts 分享生成分享页", "CH-090 artifacts POST does not fabricate a share without KV"), async ({ request }) => {
   skipNoService();
   const res = await request.post('/api/artifacts', {
     data: 'e2e-artifact-content',
@@ -63,7 +64,7 @@ test("【导出与分享 / API】 CH-090 通过 artifacts 分享生成分享页"
 });
 
 // CH-091 — GET /api/artifacts?id=<id> reads share content (needs a stored id).
-test("【导出与分享 / API】 CH-091 读取 artifacts 分享内容", async ({ request }) => {
+test(localizedTitle("【导出与分享 / API】 CH-091 读取 artifacts 分享内容", "CH-091 artifacts GET is wired but yields no content without KV"), async ({ request }) => {
   skipNoService();
   const res = await request.get('/api/artifacts?id=nonexistent-e2e-id', {
     failOnStatusCode: false,
@@ -74,7 +75,7 @@ test("【导出与分享 / API】 CH-091 读取 artifacts 分享内容", async (
 });
 
 // CH-092 — ShareGPT export.
-test("【导出与分享 / E2E】 CH-092 ShareGPT 分享导出", async () => {
+test(localizedTitle("【导出与分享 / E2E】 CH-092 ShareGPT 分享导出", "CH-092 ShareGPT export"), async () => {
   skipNoService();
   test.skip(
     true,

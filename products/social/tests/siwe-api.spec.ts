@@ -17,6 +17,7 @@
  *      · a consumed nonce cannot be reused -> {code:500,"SIWE nonce无效或已过期"}
  *  - Errors surface as HTTP 200 with a non-200 envelope code (GlobalExceptionHandler).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { request } from '@playwright/test';
 import { Wallet } from 'ethers';
@@ -36,7 +37,7 @@ function skipIfNoIdentity() {
 }
 
 // SO-API-015 — SIWE nonce challenge.
-test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-015 SIWE 挑战获取 nonce", async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-015 SIWE 挑战获取 nonce", "SO-API-015 SIWE nonce challenge"), async () => {
   skipIfNoIdentity();
   const ctx = await request.newContext({ baseURL: identityURL()! });
   try {
@@ -53,7 +54,7 @@ test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-015 SIWE 挑战
 });
 
 // SO-API-016 — verify a valid signature, receive a LoginVO (auto-register).
-test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-016 SIWE 验证签名登录换取 token", async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-016 SIWE 验证签名登录换取 token", "SO-API-016 SIWE verify yields a LoginVO"), async () => {
   skipIfNoIdentity();
   const wallet = Wallet.createRandom();
   const { envelope } = await siweLogin(identityURL()!, wallet.privateKey);
@@ -65,7 +66,7 @@ test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-016 SIWE 验证
 });
 
 // SO-API-017 — a signature from a different key is rejected, no token issued.
-test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-017 SIWE 验证拒绝错误签名", async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-017 SIWE 验证拒绝错误签名", "SO-API-017 SIWE verify rejects a wrong signature"), async () => {
   skipIfNoIdentity();
   const ctx = await request.newContext({ baseURL: identityURL()! });
   try {
@@ -92,7 +93,7 @@ test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-017 SIWE 验证
 });
 
 // SO-API-018 (P1) — a nonce is single-use; replaying a consumed one fails.
-test("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-018 SIWE nonce 一次性 / 过期", async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-018 SIWE nonce 一次性 / 过期", "SO-API-018 SIWE nonce is single-use"), async () => {
   skipIfNoIdentity();
   const wallet = Wallet.createRandom();
   const ctx = await request.newContext({ baseURL: identityURL()! });

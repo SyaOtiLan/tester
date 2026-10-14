@@ -17,6 +17,7 @@
  *   - GET /api/v1/public/share/<token>            → 302 Location: <url-with-filename>
  *   - GET /api/v1/public/share/<token>/<filename> → 200 file bytes
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken } from '../helpers/auth';
 import {
@@ -39,7 +40,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe("【文件分享】public share（public share）", () => {
+test.describe(localizedTitle("【文件分享】public share（public share）", "public share"), () => {
   test.describe.configure({ mode: 'serial' });
   let token = '';
   let share: PublicShare | null = null;
@@ -52,7 +53,7 @@ test.describe("【文件分享】public share（public share）", () => {
     await revokePublicShare(apiBase()!, token, share.token);
   });
 
-  test("【公开分享 / API】 WH-API-043 创建公开分享返回可访问链接", async () => {
+  test(localizedTitle("【公开分享 / API】 WH-API-043 创建公开分享返回可访问链接", "WH-API-043 create public share returns an accessible link"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 
@@ -70,7 +71,7 @@ test.describe("【文件分享】public share（public share）", () => {
     expect(share.expiresAt, 'a bounded share must report expiresAt').toBeTruthy();
   });
 
-  test("【公开分享 / API】 WH-API-045 通过分享链接匿名访问", async () => {
+  test(localizedTitle("【公开分享 / API】 WH-API-045 通过分享链接匿名访问", "WH-API-045 anonymous access via the share link works"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!share, 'previous test did not create a share');
 

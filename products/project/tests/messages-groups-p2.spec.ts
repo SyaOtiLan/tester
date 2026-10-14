@@ -7,17 +7,18 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, apiGet, apiPost, withDeadlockRetry, type RegisteredUser } from '../helpers/api';
 import { seedUiSession } from '../helpers/session';
 
 const baseURL = baseURLFor('project');
 
-test.describe("【消息与对话】项目组和消息 (P2)（project groups & messages (P2)）", () => {
+test.describe(localizedTitle("【消息与对话】项目组和消息 (P2)（project groups & messages (P2)）", "project groups & messages (P2)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-106 新建群组与成员管理
-  test("【消息与对话 / API】 PJ-106 新建群组与成员管理", async () => {
+  test(localizedTitle("【消息与对话 / API】 PJ-106 新建群组与成员管理", "PJ-106 dialog/group create then add/remove members"), async () => {
     const owner = await registerUser(baseURL!);
     const m1 = await registerUser(baseURL!);
     const m2 = await registerUser(baseURL!);
@@ -44,7 +45,7 @@ test.describe("【消息与对话】项目组和消息 (P2)（project groups & m
   });
 
   // PJ-105 消息已读/未读统计
-  test("【消息与对话 / API】 PJ-105 消息已读/未读统计", async () => {
+  test(localizedTitle("【消息与对话 / API】 PJ-105 消息已读/未读统计", "PJ-105 dialog/msg/unread reports unread stats and msg/read marks read"), async () => {
     const owner = await registerUser(baseURL!);
     const peer = await registerUser(baseURL!);
     const group = await withDeadlockRetry(() =>
@@ -72,7 +73,7 @@ test.describe("【消息与对话】项目组和消息 (P2)（project groups & m
   });
 
   // PJ-107 UI 消息页发送消息
-  test("【消息与对话 / E2E】 PJ-107 UI 消息页发送消息", async ({ page }) => {
+  test(localizedTitle("【消息与对话 / E2E】 PJ-107 UI 消息页发送消息", "PJ-107 sending a message from the messenger UI posts it into the dialog"), async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     // Open a 1-on-1 dialog (the "file transfer" self dialog) to get a stable id.
     const open = await apiGet(baseURL!, `/api/dialog/open/user?userid=${acc.userid}`, acc.token);

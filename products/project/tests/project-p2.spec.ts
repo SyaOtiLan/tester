@@ -9,6 +9,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import {
   registerUser,
@@ -23,11 +24,11 @@ import {
 
 const baseURL = baseURLFor('project');
 
-test.describe("【项目管理】项目管理（P2 API）（project management (P2 API)）", () => {
+test.describe(localizedTitle("【项目管理】项目管理（P2 API）（project management (P2 API)）", "project management (P2 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-046 移交项目负责人
-  test("【项目管理 / API】 PJ-046 移交项目负责人", async () => {
+  test(localizedTitle("【项目管理 / API】 PJ-046 移交项目负责人", "PJ-046 project/transfer hands ownership to another member"), async () => {
     const owner = await registerUser(baseURL!);
     const heir = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, owner.token, { name: `移交项目${Date.now() % 100000}` });
@@ -47,7 +48,7 @@ test.describe("【项目管理】项目管理（P2 API）（project management (
   });
 
   // PJ-047 项目置顶/取消置顶
-  test("【项目管理 / API】 PJ-047 项目置顶/取消置顶", async () => {
+  test(localizedTitle("【项目管理 / API】 PJ-047 项目置顶/取消置顶", "PJ-047 project/top pins and then un-pins a project"), async () => {
     const user = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, user.token, { name: `置顶项目${Date.now() % 100000}` });
 
@@ -64,7 +65,7 @@ test.describe("【项目管理】项目管理（P2 API）（project management (
   });
 
   // PJ-048 项目列表排序
-  test("【项目管理 / API】 PJ-048 项目列表排序", async () => {
+  test(localizedTitle("【项目管理 / API】 PJ-048 项目列表排序", "PJ-048 project/user/sort persists a personal project ordering"), async () => {
     const user = await registerUser(baseURL!);
     const a = await createProject(baseURL!, user.token, { name: `排序A${Date.now() % 100000}` });
     const b = await createProject(baseURL!, user.token, { name: `排序B${Date.now() % 100000}` });
@@ -75,7 +76,7 @@ test.describe("【项目管理】项目管理（P2 API）（project management (
   });
 
   // PJ-057 列表排序(sort only_column)
-  test("【任务列表(看板列) / API】 PJ-057 列表排序(sort only_column)", async () => {
+  test(localizedTitle("【任务列表(看板列) / API】 PJ-057 列表排序(sort only_column)", "PJ-057 project/sort with only_column reorders the board columns"), async () => {
     const user = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, user.token, { name: `列排序${Date.now() % 100000}` });
     // Ensure at least two columns.
@@ -95,7 +96,7 @@ test.describe("【项目管理】项目管理（P2 API）（project management (
   });
 
   // PJ-081 删除工作流
-  test("【工作流与状态流转 / API】 PJ-081 删除工作流", async () => {
+  test(localizedTitle("【工作流与状态流转 / API】 PJ-081 删除工作流", "PJ-081 project/flow/delete removes the project workflow"), async () => {
     const user = await registerUser(baseURL!);
     // flow:'open' seeds a Default workflow with 5 flow items.
     const { id: pid } = await createProject(baseURL!, user.token, { name: `删流程${Date.now() % 100000}`, flow: 'open' });
@@ -114,12 +115,12 @@ test.describe("【项目管理】项目管理（P2 API）（project management (
   });
 
   // PJ-089 部门只读视角查看项目
-  test("【项目成员与权限 / API】 PJ-089 部门只读视角查看项目", async () => {
+  test(localizedTitle("【项目成员与权限 / API】 PJ-089 部门只读视角查看项目", "PJ-089 department read-only project view"), async () => {
     test.skip(true, 'Requires an admin-configured department + department-scoped read role; the site admin account is captcha-locked so this cannot be provisioned with a throwaway user.');
   });
 
   // PJ-092 标签数超 100 被拒
-  test("【任务标签与日志 / API】 PJ-092 标签数超 100 被拒", async () => {
+  test(localizedTitle("【任务标签与日志 / API】 PJ-092 标签数超 100 被拒", "PJ-092 tag/save rejects the 101st tag on a project"), async () => {
     // Seeding 100 tags is 100 individual writes. Reuse ONE keep-alive request
     // context (instead of the per-call context the apiPost helper builds and
     // tears down) so the burst drains quickly and minimises its contention

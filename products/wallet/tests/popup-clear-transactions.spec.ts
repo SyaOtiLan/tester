@@ -11,6 +11,7 @@
  * (`#clearTransactionsBtn` → `handleClearTransactions` → native `confirm()` →
  * `clearTransactions` → renders empty + `showSuccess('交易记录已清除')`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -30,7 +31,7 @@ const NET_RPC = 'https://tx-clear.e2e.invalid/rpc';
 const NET_CHAIN_ID = '0x539'; // 1337
 const BURN_ADDRESS = '0x0000000000000000000000000000000000000001';
 
-test("【转账与交易 / UI】 WL-UI-030 清空交易历史", async ({
+test(localizedTitle("【转账与交易 / UI】 WL-UI-030 清空交易历史", "WL-UI-030: clearing the activity list empties it behind a confirm guard"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
