@@ -13,6 +13,7 @@
  *  - SOCIAL_BASE_URL      platform backend (8888)
  *  - SOCIAL_IDENTITY_URL  web3-identity (8901) — mints the wallet users
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { newSiweIdentity, platformCtx, type Envelope } from '../helpers/auth';
 
@@ -33,7 +34,7 @@ function skipIfNoStack() {
 
 // SO-API-025 (P1) — fetch a user by id.
 // (SO-API-028 lives at the bottom of this file.)
-test('SO-API-025 get user by id', async () => {
+test(localizedTitle("【用户资料与搜索 / API】 SO-API-025 按 id 查询用户", "SO-API-025 get user by id"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);
@@ -50,7 +51,7 @@ test('SO-API-025 get user by id', async () => {
 });
 
 // SO-API-026 (P1) — search users by (nick)name.
-test('SO-API-026 search users by name', async () => {
+test(localizedTitle("【用户资料与搜索 / API】 SO-API-026 按名称搜索用户", "SO-API-026 search users by name"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, A.login.accessToken);
@@ -71,7 +72,7 @@ test('SO-API-026 search users by name', async () => {
 });
 
 // SO-API-027 (P1) — update own profile; the change round-trips via /user/self.
-test('SO-API-027 update profile', async () => {
+test(localizedTitle("【用户资料与搜索 / API】 SO-API-027 更新个人资料", "SO-API-027 update profile"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, A.login.accessToken);
@@ -98,7 +99,7 @@ test('SO-API-027 update profile', async () => {
 // Live: GET /user/terminal/online?userIds=a,b -> Result<List<OnlineTerminalVO>>.
 // Over pure HTTP (no live IM WebSocket) the users read back as offline, so the
 // list is empty — we assert the endpoint is reachable and returns an array.
-test('SO-API-028 query terminal online status', async () => {
+test(localizedTitle("【用户资料与搜索 / API】 SO-API-028 查询终端在线状态", "SO-API-028 query terminal online status"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);

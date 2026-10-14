@@ -11,6 +11,7 @@
  * layout renders AdminSidebar), Header language dropdown, UserWorkspaceEntryRedirect,
  * WorkspaceModels, and TopUp/QuotaPage.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { seedWalletSession } from '../helpers/session';
 
@@ -24,7 +25,7 @@ async function seed(page: import('@playwright/test').Page, baseURL: string) {
 }
 
 // RT-UI-011 (P2)
-test('the authenticated sidebar nav renders the grouped menu items', async ({
+test(localizedTitle("【管理后台与工作台 / UI】 经过身份验证的侧边栏导航呈现分组的菜单项", "the authenticated sidebar nav renders the grouped menu items"), async ({
   page,
   baseURL,
   recorder,
@@ -46,7 +47,7 @@ test('the authenticated sidebar nav renders the grouped menu items', async ({
 });
 
 // RT-UI-012 (P2)
-test('the header language dropdown switches the UI language', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 标题语言下拉菜单切换 UI 语言", "the header language dropdown switches the UI language"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   test.skip(!envFor('router')['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
   await seed(page, baseURL!);
@@ -79,7 +80,7 @@ test('the header language dropdown switches the UI language', async ({ page, bas
 });
 
 // RT-UI-015 (P2)
-test('/workspace/entry redirects by balance/package', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 /workspace/条目按余额/包重定向", "/workspace/entry redirects by balance/package"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   test.skip(!envFor('router')['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
   await seed(page, baseURL!);
@@ -97,7 +98,7 @@ test('/workspace/entry redirects by balance/package', async ({ page, baseURL, re
 });
 
 // RT-UI-019 (P2)
-test('the models page renders available-model tags (or an empty state)', async ({
+test(localizedTitle("【管理后台与工作台 / UI】 模型页面呈现可用模型标签（或空状态）", "the models page renders available-model tags (or an empty state)"), async ({
   page,
   baseURL,
   recorder,
@@ -121,7 +122,7 @@ test('the models page renders available-model tags (or an empty state)', async (
 });
 
 // RT-UI-020 (P2)
-test('the quota page shows the spending calendar', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 配额页面显示支出日历", "the quota page shows the spending calendar"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   test.skip(!envFor('router')['ROUTER_WALLET_PRIVATE_KEY'], 'ROUTER_WALLET_PRIVATE_KEY not configured');
   await seed(page, baseURL!);

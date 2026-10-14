@@ -22,6 +22,7 @@
  *   - POST /share/user/folder checks the stored permission set and returns
  *     403 "permission denied" when "create" is not granted.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, loginWithWallet, authedRequest } from '../helpers/auth';
 import {
@@ -46,7 +47,7 @@ function hasOwnerCredential(): boolean {
   );
 }
 
-test.describe('directed (user) share', () => {
+test.describe(localizedTitle("【文件分享】directed (user) share（directed (user) share）", "directed (user) share"), () => {
   test.describe.configure({ mode: 'serial' });
   let ownerToken = '';
   let targetToken = '';
@@ -58,7 +59,7 @@ test.describe('directed (user) share', () => {
     await revokeDirectedShare(apiBase()!, ownerToken, share.id);
   });
 
-  test('WH-API-049 create a read-only directed share to a specific audience', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-049 创建定向分享给指定受众", "WH-API-049 create a read-only directed share to a specific audience"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasOwnerCredential(), 'no warehouse owner credential configured');
     test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
@@ -88,7 +89,7 @@ test.describe('directed (user) share', () => {
     expect(share.audienceCount).toBeGreaterThanOrEqual(1);
   });
 
-  test('WH-API-055 a write on a read-only directed share is denied (403)', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-055 只读定向分享的写操作被拒", "WH-API-055 a write on a read-only directed share is denied (403)"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!share, 'previous test did not create a directed share');
     test.skip(!targetToken, 'target audience JWT unavailable');

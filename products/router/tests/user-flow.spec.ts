@@ -10,13 +10,14 @@
  * All three skip when `ROUTER_BASE_URL` is unset. Deeper router coverage
  * (sidebar shell, /login redirect, admin navigation) lives in `admin-ui.spec.ts`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('landing renders the router admin shell', async ({ page }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 路由管理后台框架正常渲染", "landing renders the router admin shell"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   // React SPA: wait for networkidle so the rendered UI is in the DOM
@@ -27,7 +28,7 @@ test('landing renders the router admin shell', async ({ page }) => {
   expect(text.length).toBeGreaterThan(50);
 });
 
-test('navigation surfaces at least one link, button, or menu entry', async ({ page }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 导航表面至少有一个链接、按钮或菜单项", "navigation surfaces at least one link, button, or menu entry"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await page.waitForLoadState('networkidle');
@@ -40,7 +41,7 @@ test('navigation surfaces at least one link, button, or menu entry', async ({ pa
   expect(await entries.count()).toBeGreaterThan(0);
 });
 
-test('auth or wallet-connect affordance is discoverable', async ({ page }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 可找到身份验证或钱包连接入口", "auth or wallet-connect affordance is discoverable"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await page.waitForLoadState('networkidle');

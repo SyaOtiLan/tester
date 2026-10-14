@@ -14,6 +14,7 @@
  *
  * Selectors verified against router `web/src/components/LoginForm.jsx`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipIfNoService() {
@@ -21,7 +22,7 @@ function skipIfNoService() {
 }
 
 // RT-UI-008 (P1)
-test('login page defaults to wallet-login mode', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 登录页面默认为钱包登录模式", "login page defaults to wallet-login mode"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   await page.goto(`${baseURL}/login`, { waitUntil: 'domcontentloaded' });
 
@@ -35,7 +36,7 @@ test('login page defaults to wallet-login mode', async ({ page, baseURL, recorde
 });
 
 // RT-UI-010 (P1)
-test('login page warns when no wallet extension is detected', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 未检测到钱包扩展时登录页面会发出警告", "login page warns when no wallet extension is detected"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   // Headless context has no injected wallet provider (`window.ethereum`).
   await page.goto(`${baseURL}/login`, { waitUntil: 'domcontentloaded' });
@@ -48,7 +49,7 @@ test('login page warns when no wallet extension is detected', async ({ page, bas
 });
 
 // RT-UI-009 (P1)
-test('switching to passkey mode renders the QR login panel', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【管理后台与工作台 / UI】 切换到密钥模式会呈现 QR 登录面板", "switching to passkey mode renders the QR login panel"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   await page.goto(`${baseURL}/login`, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.router-login-mode-corner')).toBeVisible({ timeout: 15_000 });

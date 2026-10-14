@@ -21,6 +21,7 @@
  * (?shareId=&path=) {items:[...]}, HandleRevoke {id}; a revoked share resolves
  * to ErrShareNotFound → 404.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, loginWithWallet, authedRequest } from '../helpers/auth';
 import { createDirectedShare, putOwnedFile, revokeDirectedShare } from '../helpers/share';
@@ -45,7 +46,7 @@ function skipGuards() {
   test.skip(!targetKey(), 'WAREHOUSE_WALLET_PRIVATE_KEY (target audience) not configured');
 }
 
-test.describe('directed share lifecycle', () => {
+test.describe(localizedTitle("【文件分享】directed share lifecycle（directed share lifecycle）", "directed share lifecycle"), () => {
   test.describe.configure({ mode: 'serial' });
   const stamp = Date.now();
   let ownerToken = '';
@@ -77,7 +78,7 @@ test.describe('directed share lifecycle', () => {
     }
   });
 
-  test('WH-API-050 the owner sees the directed share in their list', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-050 我发起的定向分享列表", "WH-API-050 the owner sees the directed share in their list"), async () => {
     skipGuards();
     const ctx = await authedRequest(apiBase()!, ownerToken);
     try {
@@ -90,7 +91,7 @@ test.describe('directed share lifecycle', () => {
     }
   });
 
-  test('WH-API-051 the target can list the resources shared to them', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-051 我收到的定向分享列表", "WH-API-051 the target can list the resources shared to them"), async () => {
     skipGuards();
     // NOTE: the received-list endpoint reads the V3 projection tables
     // (internal_shared_resources / internal_share_grants), which the backend
@@ -121,7 +122,7 @@ test.describe('directed share lifecycle', () => {
     }
   });
 
-  test('WH-API-054 the target can browse the shared entries', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-054 定向分享资源浏览 entries", "WH-API-054 the target can browse the shared entries"), async () => {
     skipGuards();
     const ctx = await authedRequest(apiBase()!, targetToken);
     try {
@@ -137,7 +138,7 @@ test.describe('directed share lifecycle', () => {
     }
   });
 
-  test('WH-API-052 a revoked directed share is no longer accessible to the target', async () => {
+  test(localizedTitle("【定向分享(给指定用户) / API】 WH-API-052 撤销定向分享", "WH-API-052 a revoked directed share is no longer accessible to the target"), async () => {
     skipGuards();
     await revokeDirectedShare(apiBase()!, ownerToken, shareId);
     const revokedId = shareId;

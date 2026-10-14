@@ -10,6 +10,7 @@
  * All three skip when `PROJECT_BASE_URL` is unset. When project (currently
  * down on :20833) comes up, these will start passing without code changes.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 
 function skipIfNoService() {
@@ -28,7 +29,7 @@ async function waitForLoginView(page: import('@playwright/test').Page) {
     .waitFor({ state: 'visible', timeout: 15_000 });
 }
 
-test('landing renders the project home', async ({ page }) => {
+test(localizedTitle("【登录、仪表盘与导航 / UI】 项目管理首页正常渲染", "landing renders the project home"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await waitForLoginView(page);
@@ -36,7 +37,7 @@ test('landing renders the project home', async ({ page }) => {
   expect(text.length).toBeGreaterThan(50);
 });
 
-test('navigation surfaces at least one link or menu entry', async ({ page }) => {
+test(localizedTitle("【登录、仪表盘与导航 / UI】 导航中至少显示一个链接或菜单入口", "navigation surfaces at least one link or menu entry"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await waitForLoginView(page);
@@ -45,7 +46,7 @@ test('navigation surfaces at least one link or menu entry', async ({ page }) => 
   expect(await entries.count()).toBeGreaterThan(0);
 });
 
-test('auth or wallet-connect affordance is discoverable', async ({ page }) => {
+test(localizedTitle("【登录、仪表盘与导航 / UI】 可找到身份验证或钱包连接入口", "auth or wallet-connect affordance is discoverable"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/');
   await waitForLoginView(page);

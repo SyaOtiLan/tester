@@ -17,6 +17,7 @@
  * HandleUnreadCount {count}, HandleRead/HandleReadAll {message:"ok"},
  * HandlePreferences (GET items[{Type,Enabled}], POST {type,enabled}).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 import { loginWithWallet, authedRequest } from '../helpers/auth';
@@ -34,7 +35,7 @@ interface Pref {
 const prefType = (p: Pref) => (p.Type ?? p.type)!;
 const prefEnabled = (p: Pref) => (p.Enabled ?? p.enabled)!;
 
-test.describe('notifications', () => {
+test.describe(localizedTitle("【通知】通知（notifications）", "notifications"), () => {
   test.describe.configure({ mode: 'serial' });
   let ctx: Awaited<ReturnType<typeof authedRequest>> | undefined;
 
@@ -48,7 +49,7 @@ test.describe('notifications', () => {
     await ctx?.dispose();
   });
 
-  test('WH-API-065 notification list returns an items array', async () => {
+  test(localizedTitle("【通知 / API】 WH-API-065 通知列表", "WH-API-065 notification list returns an items array"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const res = await ctx!.get('/api/v1/public/notifications/list?limit=20');
     expect(res.status()).toBe(200);
@@ -56,7 +57,7 @@ test.describe('notifications', () => {
     expect(Array.isArray(body.items)).toBe(true);
   });
 
-  test('WH-API-066 unread-count returns a numeric count', async () => {
+  test(localizedTitle("【通知 / API】 WH-API-066 未读数量", "WH-API-066 unread-count returns a numeric count"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const res = await ctx!.get('/api/v1/public/notifications/unread-count');
     expect(res.status()).toBe(200);
@@ -65,7 +66,7 @@ test.describe('notifications', () => {
     expect(body.count).toBeGreaterThanOrEqual(0);
   });
 
-  test('WH-API-067 mark single and all notifications read', async () => {
+  test(localizedTitle("【通知 / API】 WH-API-067 标记单条/全部已读", "WH-API-067 mark single and all notifications read"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     // read with an explicit id list (empty is accepted — the endpoint is wired
     // and idempotent for a fresh inbox).
@@ -81,7 +82,7 @@ test.describe('notifications', () => {
     expect(((await count.json()) as { count: number }).count).toBe(0);
   });
 
-  test('WH-API-068 preferences can be read and toggled', async () => {
+  test(localizedTitle("【通知 / API】 WH-API-068 通知偏好设置", "WH-API-068 preferences can be read and toggled"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const res = await ctx!.get('/api/v1/public/notifications/preferences');
     expect(res.status()).toBe(200);

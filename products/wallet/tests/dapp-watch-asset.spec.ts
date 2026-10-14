@@ -11,6 +11,7 @@
  *   - approve (#approveWatchAsset) → request resolves true;
  *   - reject  (#rejectWatchAsset)  → request resolves false.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -62,7 +63,7 @@ function watchAsset(dapp: Page) {
   ) as Promise<{ ok: boolean; result?: unknown; code?: number; message?: string }>;
 }
 
-test('WL-DAPP-013: wallet_watchAsset shows token details and approving returns true', async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-013 批准 wallet_watchAsset 并返回 true", "WL-DAPP-013: wallet_watchAsset shows token details and approving returns true"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -93,7 +94,7 @@ test('WL-DAPP-013: wallet_watchAsset shows token details and approving returns t
   }
 });
 
-test('WL-DAPP-013: rejecting wallet_watchAsset returns false', async ({ recorder }) => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-013 拒绝 wallet_watchAsset 并返回 false", "WL-DAPP-013: rejecting wallet_watchAsset returns false"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

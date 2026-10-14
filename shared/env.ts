@@ -92,7 +92,21 @@ const EXTRA_KEYS: Record<ProductName, string[]> = {
     'WAREHOUSE_WALLET_PRIVATE_KEY',
     'WAREHOUSE_EXPECTED_ADDRESS',
   ],
-  node: ['NODE_API_URL', 'NODE_WALLET_PRIVATE_KEY', 'NODE_EXPECTED_ADDRESS'],
+  node: [
+    'NODE_API_URL',
+    'NODE_WALLET_PRIVATE_KEY',
+    'NODE_EXPECTED_ADDRESS',
+    // Host the node service dials back for the generic-webhook delivery loop.
+    // Defaults to 127.0.0.1 (node running on the same machine as the tester).
+    'NODE_CALLBACK_HOST',
+    // Optional real bot endpoints for DingTalk/Feishu delivery specs. Absent =
+    // those specs skip. URL must be on the platform allowlist (oapi.dingtalk.com
+    // / open.feishu.cn) and the secret is the bot's signing secret (加签).
+    'NODE_DINGTALK_WEBHOOK_URL',
+    'NODE_DINGTALK_WEBHOOK_SECRET',
+    'NODE_FEISHU_WEBHOOK_URL',
+    'NODE_FEISHU_WEBHOOK_SECRET',
+  ],
   router: [
     'ROUTER_WALLET_PRIVATE_KEY',
     'ROUTER_EXPECTED_ADDRESS',

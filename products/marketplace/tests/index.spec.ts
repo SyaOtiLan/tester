@@ -5,6 +5,7 @@
  *   - MARKETPLACE_BASE_URL (optional; if empty, tests read filesystem)
  *   - MARKETPLACE_REPO_PATH (default: ../marketplace)
  */
+import { localizedTitle } from '../../../shared/title';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test, expect, hasEnv } from '../fixtures';
@@ -30,13 +31,13 @@ function readIndexJson(): CatalogEntry[] {
   return JSON.parse(readFileSync(file, 'utf8')) as CatalogEntry[];
 }
 
-test('marketplace index.json exists and parses', () => {
+test(localizedTitle("【索引与数据校验 / DATA】 市场index.json存在并解析", "marketplace index.json exists and parses"), () => {
   const entries = readIndexJson();
   expect(Array.isArray(entries)).toBe(true);
   expect(entries.length).toBeGreaterThan(0);
 });
 
-test('every entry has id, lang, name and category', () => {
+test(localizedTitle("【索引与数据校验 / DATA】 每个条目都有 ID、语言、名称和类别", "every entry has id, lang, name and category"), () => {
   const entries = readIndexJson();
   for (const entry of entries) {
     expect(typeof entry.id).toBe('string');
@@ -49,14 +50,14 @@ test('every entry has id, lang, name and category', () => {
   }
 });
 
-test('packages.json is well-formed JSON', () => {
+test(localizedTitle("【索引与数据校验 / DATA】 packages.json 格式良好 JSON", "packages.json is well-formed JSON"), () => {
   const file = resolve(repoPath(), 'packages.json');
   test.skip(!existsSync(file), `packages.json not found at ${file}`);
   const parsed = JSON.parse(readFileSync(file, 'utf8'));
   expect(parsed).toBeDefined();
 });
 
-test('(optional) MARKETPLACE_BASE_URL responds 2xx', async ({ request }) => {
+test(localizedTitle("【索引与数据校验 / API】 （可选）MARKETPLACE_BASE_URL 响应 2xx", "(optional) MARKETPLACE_BASE_URL responds 2xx"), async ({ request }) => {
   test.skip(!hasEnv('MARKETPLACE_BASE_URL'), 'MARKETPLACE_BASE_URL not set');
   const baseURL = process.env['MARKETPLACE_BASE_URL']!;
   const res = await request.get(`${baseURL.replace(/\/$/, '')}/index.json`);

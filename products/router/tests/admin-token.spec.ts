@@ -33,6 +33,7 @@
  * `internal/admin/controller/token/admin_handler.go`, `handler.go`,
  * `internal/transport/http/router/api.go`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken, acquireAdminToken } from '../helpers/auth';
@@ -145,7 +146,7 @@ async function createUserToken(
 }
 
 // RT-API-069 (P0) — admin lists any user's token with owner identity; get-by-id + search.
-test('admin lists a user token with owner username, reads it by id, and finds it by search', async () => {
+test(localizedTitle("【管理员令牌管理 / API】 admin 列出带有所有者用户名的用户令牌，通过 id 读取它，并通过搜索找到它", "admin lists a user token with owner username, reads it by id, and finds it by search"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   skipIfNoUserKey();
@@ -193,7 +194,7 @@ test('admin lists a user token with owner username, reads it by id, and finds it
 });
 
 // RT-API-070 (P0) — admin status_only partial update, then full-field rename.
-test('admin status_only update flips status without clobbering fields; full update renames', async () => {
+test(localizedTitle("【管理员令牌管理 / API】 admin status_only 更新翻转状态而不破坏字段；完整更新重命名", "admin status_only update flips status without clobbering fields; full update renames"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   skipIfNoUserKey();
@@ -250,7 +251,7 @@ test('admin status_only update flips status without clobbering fields; full upda
 });
 
 // RT-API-071 (P0) — admin delete, then not-found on re-read / re-delete.
-test('admin delete removes the token; re-read and re-delete report token_not_found', async () => {
+test(localizedTitle("【管理员令牌管理 / API】 管理员删除删除令牌；重新读取并重新删除报告token_not_found", "admin delete removes the token; re-read and re-delete report token_not_found"), async () => {
   skipIfNoService();
   skipIfNoAdminKey();
   skipIfNoUserKey();
@@ -285,7 +286,7 @@ test('admin delete removes the token; re-read and re-delete report token_not_fou
 });
 
 // RT-API-072 (P0) — admin token endpoints reject normal users (200 权限不足) and anonymous (401).
-test('admin token endpoints reject a normal user (200 权限不足) and anonymous (401)', async () => {
+test(localizedTitle("【管理员令牌管理 / API】 管理令牌端点拒绝普通用户（权限不足）和匿名用户（401）", "admin token endpoints reject a normal user (200 权限不足) and anonymous (401)"), async () => {
   skipIfNoService();
   skipIfNoUserKey();
   const baseURL = baseURLFor('router')!;
@@ -328,7 +329,7 @@ test('admin token endpoints reject a normal user (200 权限不足) and anonymou
 // The synthetic model name never collides with a real catalog model, so the isolation
 // is exact and there is zero routing blast radius (the connection points at no real
 // upstream and the token is deleted in finally).
-test('a BYOK connection puts its model into the account set and independently unlocks token creation', async () => {
+test(localizedTitle("【管理员令牌管理 / API】 BYOK 连接将其模型放入帐户集中并独立解锁令牌创建", "a BYOK connection puts its model into the account set and independently unlocks token creation"), async () => {
   skipIfNoService();
   skipIfNoUserKey();
   const baseURL = baseURLFor('router')!;

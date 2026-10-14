@@ -13,6 +13,7 @@
  *   - GET /api/v1/public/health/readiness → 200 {status:"ready", checks:[{name,status}]}
  *     with a check named "database"; returns 503 when a dependency is not ready.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 
@@ -20,8 +21,8 @@ function apiBase(): string | undefined {
   return envFor('warehouse')['WAREHOUSE_WEBDAV_URL'];
 }
 
-test.describe('warehouse health probes', () => {
-  test('WH-API-076 heartbeat returns 200 healthy', async () => {
+test.describe(localizedTitle("【健康检查与冒烟】仓库健康探针（warehouse health probes）", "warehouse health probes"), () => {
+  test(localizedTitle("【健康检查与冒烟 / API】 WH-API-076 心跳检查", "WH-API-076 heartbeat returns 200 healthy"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const ctx = await apiContext(apiBase()!);
     try {
@@ -34,7 +35,7 @@ test.describe('warehouse health probes', () => {
     }
   });
 
-  test('WH-API-077 readiness confirms the database dependency', async () => {
+  test(localizedTitle("【健康检查与冒烟 / API】 WH-API-077 就绪检查确认数据库", "WH-API-077 readiness confirms the database dependency"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     const ctx = await apiContext(apiBase()!);
     try {

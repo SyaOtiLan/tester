@@ -14,6 +14,7 @@
  * HandlePasswordLogin sets the refresh_token cookie and HandleRefresh returns
  * {data:{token, expiresAt, ...}}.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 
@@ -25,7 +26,7 @@ function hasPassword(): boolean {
   return Boolean(env['WAREHOUSE_USER'] && env['WAREHOUSE_PASS']);
 }
 
-test('WH-API-008 a forged/invalid JWT is rejected with 401', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-008 受保护接口非法/过期 JWT 返回 401", "WH-API-008 a forged/invalid JWT is rejected with 401"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   // A structurally-plausible but unsigned/garbage JWT.
@@ -43,7 +44,7 @@ test('WH-API-008 a forged/invalid JWT is rejected with 401', async () => {
   }
 });
 
-test('WH-API-009 auth/refresh mints a fresh access token from the refresh cookie', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-009 auth/refresh 刷新令牌", "WH-API-009 auth/refresh mints a fresh access token from the refresh cookie"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasPassword(), 'WAREHOUSE_USER/PASS required for refresh round-trip');
 

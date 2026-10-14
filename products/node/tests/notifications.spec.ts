@@ -12,6 +12,7 @@
  * Selectors/contract verified against node `src/routes/public/notifications.ts`
  * and `web/src/views/apply/NotificationCenterView.vue`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { Wallet, getAddress } from 'ethers';
 
 import { test, expect, baseURLFor, envFor } from '../fixtures';
@@ -24,7 +25,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('node'), 'NODE_BASE_URL not configured');
 }
 
-test('ND-API-033 notification list, unread-count and read-all stay consistent', async () => {
+test(localizedTitle("【通知中心 / API】 ND-API-033 通知列表、未读数与标记已读", "ND-API-033 notification list, unread-count and read-all stay consistent"), async () => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;
@@ -65,7 +66,7 @@ test('ND-API-033 notification list, unread-count and read-all stay consistent', 
   }
 });
 
-test('ND-UI-010 notification center renders for a seeded session', async ({ page, recorder }) => {
+test(localizedTitle("【通知中心 / UI】 ND-UI-010 通知中心页面渲染", "ND-UI-010 notification center renders for a seeded session"), async ({ page, recorder }) => {
   skipIfNoService();
   test.skip(!envFor('node')['NODE_WALLET_PRIVATE_KEY'], 'node wallet env not configured');
   const baseURL = baseURLFor('node')!;

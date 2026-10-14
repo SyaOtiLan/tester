@@ -20,6 +20,7 @@
  * app normalizes that to `sign` only for internal rendering. So we filter
  * on `sign_message`, not `sign`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -31,7 +32,7 @@ import { createAndUnlockWallet, waitForApproval } from '../helpers/popup';
 // content script still injects the provider because the URL is https.
 const DAPP_ORIGIN = 'https://dapp.e2e.invalid/';
 
-test('dApp personal_sign is approved and returns a valid signature', async ({ recorder }) => {
+test(localizedTitle("【消息签名与授权 / DAPP】 dApp personal_sign 被批准并返回有效签名", "dApp personal_sign is approved and returns a valid signature"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

@@ -24,6 +24,7 @@
  * Verified against router `internal/admin/controller/personalprovider/handler.go`,
  * `internal/admin/model/personal_provider.go`, `common/client/personal_provider.go`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -67,7 +68,7 @@ async function authedContext(baseURL: string) {
 }
 
 // RT-API-049 (P0) — connection CRUD round-trip; credential never leaks.
-test('personal provider connection CRUD round-trip; api_key is write-only', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 个人提供商连接 CRUD 往返； api_key 是只写的", "personal provider connection CRUD round-trip; api_key is write-only"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -136,7 +137,7 @@ test('personal provider connection CRUD round-trip; api_key is write-only', asyn
 });
 
 // RT-API-050 (P1) — api_key rules: required on create, kept on empty update.
-test('create requires an api_key; the exact message is 「API Key 不能为空」', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 创建需要 api_key；确切的消息是「API Key 不能为空」", "create requires an api_key; the exact message is 「API Key 不能为空」"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -155,7 +156,7 @@ test('create requires an api_key; the exact message is 「API Key 不能为空�
 
 // RT-API-051 (P0) — Base URL SSRF guard. Each rejection asserts its exact
 // Chinese message so a generic failure can't be mistaken for the guard firing.
-test('Base URL SSRF guard rejects non-HTTPS / localhost / private / userinfo / query / fragment', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 基类 URL SSRF 防护拒绝非 HTTPS / localhost / private / userinfo / query /fragment", "Base URL SSRF guard rejects non-HTTPS / localhost / private / userinfo / query / fragment"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -192,7 +193,7 @@ test('Base URL SSRF guard rejects non-HTTPS / localhost / private / userinfo / q
 });
 
 // RT-API-052 (P1) — protocol whitelist (openai/anthropic/gemini/ali/deepseek).
-test('protocol whitelist accepts known protocols and rejects unknown ones', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 协议白名单接受已知协议并拒绝未知协议", "protocol whitelist accepts known protocols and rejects unknown ones"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -220,7 +221,7 @@ test('protocol whitelist accepts known protocols and rejects unknown ones', asyn
 });
 
 // RT-API-053 (P1) — field validation: name / models / malformed JSON.
-test('connection field validation (empty name, no models, malformed JSON)', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 连接字段验证（空名称、无模型、格式错误 JSON）", "connection field validation (empty name, no models, malformed JSON)"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -249,7 +250,7 @@ test('connection field validation (empty name, no models, malformed JSON)', asyn
 });
 
 // RT-API-054 (P1) — model routes upsert/list/delete + policy & scope gates.
-test('model-route upsert/list/delete with policy and scope validation', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 具有策略和范围验证的模型路由 upsert/list/delete", "model-route upsert/list/delete with policy and scope validation"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -294,7 +295,7 @@ test('model-route upsert/list/delete with policy and scope validation', async ()
 });
 
 // RT-API-055 (P2) — routing-quota shape (unlimited request-metered).
-test('routing-quota returns the unlimited request-metered shape', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 路由配额返回无限请求计量形状", "routing-quota returns the unlimited request-metered shape"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -320,7 +321,7 @@ test('routing-quota returns the unlimited request-metered shape', async () => {
 
 // RT-API-056 (P1) — ownership isolation: a missing/foreign id is a controlled
 // not-found, never a leak or a 5xx.
-test('operating on a non-existent connection returns personal_provider_not_found', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 对不存在的连接进行操作返回 personal_provider_not_found", "operating on a non-existent connection returns personal_provider_not_found"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const ctx = await authedContext(baseURLFor('router')!);
@@ -344,7 +345,7 @@ test('operating on a non-existent connection returns personal_provider_not_found
 });
 
 // RT-API-057 (P1) — the whole group requires auth.
-test('personal-provider endpoints reject unauthenticated requests with 401', async () => {
+test(localizedTitle("【模型中继与个人供应商 / API】 个人提供商端点拒绝未经身份验证的请求 401", "personal-provider endpoints reject unauthenticated requests with 401"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {

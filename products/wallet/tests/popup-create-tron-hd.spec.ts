@@ -29,13 +29,14 @@
  * `2` or `4`. See `wallet/tests/tron-vault.test.mjs` for the unit-level
  * proof.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
 import { stubPublicEndpoints } from '../helpers/network';
 import { byId, openPopup, sendSw, TEST_PASSWORD } from '../helpers/popup';
 
-test('create Tron HD wallet via wallet-type menu lands on #walletPage with a T... address', async ({ recorder }) => {
+test(localizedTitle("【钱包创建与初始化 / UI】 通过钱包类型菜单创建 Tron HD 钱包，登陆 #walletPage，地址为 T...", "create Tron HD wallet via wallet-type menu lands on #walletPage with a T... address"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -98,7 +99,7 @@ test('create Tron HD wallet via wallet-type menu lands on #walletPage with a T..
   }
 });
 
-test('wallet-type menu exposes the Tron HD entry', async () => {
+test(localizedTitle("【钱包创建与初始化 / UI】 钱包类型菜单公开 Tron HD 条目", "wallet-type menu exposes the Tron HD entry"), async () => {
   const ctx = await loadWalletContext({ headless: true });
   try {
     // The wallet-type menu only renders on `#setPasswordPage` when the

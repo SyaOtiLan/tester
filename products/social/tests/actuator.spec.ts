@@ -9,6 +9,7 @@
  * Requires:
  *   - SOCIAL_BASE_URL (set to the Spring Boot backend, e.g. http://localhost:8888)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { apiContext, expectStatus } from '../../../shared/api';
 
@@ -16,7 +17,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('social'), 'SOCIAL_BASE_URL not configured');
 }
 
-test('actuator/health reports the service is UP', async () => {
+test(localizedTitle("【登录与服务探活 / API】 actuator/health 返回服务运行状态 UP", "actuator/health reports the service is UP"), async () => {
   skipIfNoService();
   const baseURL = baseURLFor('social')!;
   const ctx = await apiContext(baseURL);
@@ -30,7 +31,7 @@ test('actuator/health reports the service is UP', async () => {
   }
 });
 
-test('root URL responds (SPA index or backend redirect)', async () => {
+test(localizedTitle("【登录与服务探活 / API】 根 URL 返回 SPA 首页或后端重定向", "root URL responds (SPA index or backend redirect)"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('social')!);
   try {
@@ -41,7 +42,7 @@ test('root URL responds (SPA index or backend redirect)', async () => {
   }
 });
 
-test('actuator/env is reachable (no auth required in dev)', async () => {
+test(localizedTitle("【登录与服务探活 / API】 actuator/env 在开发环境可访问且无需鉴权", "actuator/env is reachable (no auth required in dev)"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('social')!);
   try {

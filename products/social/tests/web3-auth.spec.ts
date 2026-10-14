@@ -18,6 +18,7 @@
  * Env:
  *  - SOCIAL_IDENTITY_URL  web3-identity SIWE service (8901). Tests skip when unset.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { request } from '@playwright/test';
 import { Wallet } from 'ethers';
@@ -30,7 +31,7 @@ function skipIfNoIdentity() {
 }
 
 // SO-API-019 (P1) — bind a wallet to the current (SIWE-authenticated) session.
-test('SO-API-019 bind wallet to current session', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-019 绑定钱包到当前会话", "SO-API-019 bind wallet to current session"), async () => {
   skipIfNoIdentity();
   // Establish a session by logging in wallet A via SIWE.
   const A = Wallet.createRandom();
@@ -64,7 +65,7 @@ test('SO-API-019 bind wallet to current session', async () => {
 });
 
 // SO-API-019b — without a session the link is rejected (guards the session gate).
-test('SO-API-019b wallet link without a session is rejected', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-019b 没有会话的钱包链接被拒绝", "SO-API-019b wallet link without a session is rejected"), async () => {
   skipIfNoIdentity();
   const W = Wallet.createRandom();
   const ctx = await request.newContext({ baseURL: identityURL()! });
@@ -89,7 +90,7 @@ test('SO-API-019b wallet link without a session is rejected', async () => {
 // SO-API-020 (P2) — unbind a wallet from the current (SIWE-authenticated) session.
 // Live: POST /auth/wallet/unlink {address} with the session in header `accessToken`
 // -> {code:200}. Without a session -> {code:400,"未登录"}.
-test('SO-API-020 unlink wallet from current session', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-020 解绑钱包", "SO-API-020 unlink wallet from current session"), async () => {
   skipIfNoIdentity();
   // Establish a session by logging in wallet A via SIWE.
   const A = Wallet.createRandom();
@@ -133,7 +134,7 @@ test('SO-API-020 unlink wallet from current session', async () => {
 
 // SO-API-022 (P2) — logout the current session; the endpoint reports success.
 // Live: POST /api/v1/public/auth/logout (Authorization: Bearer) -> {code:200}.
-test('SO-API-022 logout current session', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-022 注销会话", "SO-API-022 logout current session"), async () => {
   skipIfNoIdentity();
   const { envelope } = await siweLogin(identityURL()!, Wallet.createRandom().privateKey);
   expect(envelope.code).toBe(200);
@@ -151,7 +152,7 @@ test('SO-API-022 logout current session', async () => {
 });
 
 // SO-API-021 (P1) — web3 public token refresh rotates a valid token pair.
-test('SO-API-021 web3 public auth token refresh', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-021 token 刷新(web3 公共认证)", "SO-API-021 web3 public auth token refresh"), async () => {
   skipIfNoIdentity();
   const { envelope } = await siweLogin(identityURL()!, Wallet.createRandom().privateKey);
   expect(envelope.code).toBe(200);
@@ -185,7 +186,7 @@ test('SO-API-021 web3 public auth token refresh', async () => {
 });
 
 // SO-API-023 (P1) — profile verifies a Bearer token and returns the wallet profile.
-test('SO-API-023 profile verifies token and returns profile', async () => {
+test(localizedTitle("【Web3 身份认证(SIWE / web3-identity) / API】 SO-API-023 profile 校验 token 返回资料(兼容 UCAN)", "SO-API-023 profile verifies token and returns profile"), async () => {
   skipIfNoIdentity();
   const wallet = Wallet.createRandom();
   const { address, envelope } = await siweLogin(identityURL()!, wallet.privateKey);

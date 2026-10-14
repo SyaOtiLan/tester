@@ -15,6 +15,7 @@
  *  - SOCIAL_BASE_URL      platform backend (8888)
  *  - SOCIAL_IDENTITY_URL  web3-identity (8901)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { newSiweIdentity, platformCtx, befriend, type Envelope } from '../helpers/auth';
 
@@ -26,7 +27,7 @@ function skipIfNoStack() {
 }
 
 // SO-API-031 (P1) — read a single friend's info.
-test('SO-API-031 get single friend info', async () => {
+test(localizedTitle("【好友与联系人 / API】 SO-API-031 查询单个好友信息", "SO-API-031 get single friend info"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);
@@ -46,7 +47,7 @@ test('SO-API-031 get single friend info', async () => {
 
 // SO-API-033 (P2) — toggle the per-friend do-not-disturb flag; it round-trips
 // through /friend/find (FriendVO.isDnd).
-test('SO-API-033 friend do-not-disturb toggle', async () => {
+test(localizedTitle("【好友与联系人 / API】 SO-API-033 好友免打扰开关", "SO-API-033 friend do-not-disturb toggle"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);
@@ -71,7 +72,7 @@ test('SO-API-033 friend do-not-disturb toggle', async () => {
     await ctx.dispose();
   }
 });
-test('SO-API-032 delete friend', async () => {
+test(localizedTitle("【好友与联系人 / API】 SO-API-032 删除好友", "SO-API-032 delete friend"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const B = await newSiweIdentity(platformURL()!, identityURL()!);

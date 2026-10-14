@@ -13,6 +13,7 @@
  *                injected provider re-emits it, see inject.js
  *                → _handleAccountsChanged).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -55,7 +56,7 @@ async function fillPasswordPromptIfShown(popup: Page) {
   }
 }
 
-test('WL-DAPP-018: eth_accounts returns [] before the dApp is connected', async ({ recorder }) => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-018 未连接时 `eth_accounts` 返回空数组", "WL-DAPP-018: eth_accounts returns [] before the dApp is connected"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -74,7 +75,7 @@ test('WL-DAPP-018: eth_accounts returns [] before the dApp is connected', async 
   }
 });
 
-test('WL-DAPP-017: switching the active account fires accountsChanged on the connected dApp', async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-017 连接后切换账户触发 accountsChanged", "WL-DAPP-017: switching the active account fires accountsChanged on the connected dApp"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

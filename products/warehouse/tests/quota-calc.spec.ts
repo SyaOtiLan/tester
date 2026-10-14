@@ -16,6 +16,7 @@
  * Source: quota_service.go computes percentage = used/quota*100 for finite
  * quotas and marks unlimited (quota<=0) with available=-1, percentage=0.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 import { loginWithWallet, loginWithPassword, authedRequest } from '../helpers/auth';
@@ -39,7 +40,7 @@ interface Quota {
   unlimited: boolean;
 }
 
-test('WH-API-058 quota percentage matches used/quota after an upload', async () => {
+test(localizedTitle("【配额 / API】 WH-API-058 配额百分比计算正确", "WH-API-058 quota percentage matches used/quota after an upload"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   // A brand-new wallet → empty, finite default quota → exact arithmetic.
@@ -74,7 +75,7 @@ test('WH-API-058 quota percentage matches used/quota after an upload', async () 
   }
 });
 
-test('WH-API-059 an unlimited-quota account is flagged unlimited', async () => {
+test(localizedTitle("【配额 / API】 WH-API-059 无限配额标记 unlimited", "WH-API-059 an unlimited-quota account is flagged unlimited"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasPassword(), 'WAREHOUSE_USER/PASS required (admin has the unlimited quota)');
 

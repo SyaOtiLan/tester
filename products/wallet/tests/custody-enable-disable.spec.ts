@@ -18,6 +18,7 @@
  * `enabled:true` (the rollback semantic: server is the source of truth, so
  * on failure we keep the user enabled until the next successful delete).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -42,7 +43,7 @@ async function settings(popup: import('@playwright/test').Page) {
   return res.settings!;
 }
 
-test('CUST-011: enable fails when custody service reports passkey unbound', async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / API】 CUST-011 未绑定通行证开启被拒", "CUST-011: enable fails when custody service reports passkey unbound"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -65,7 +66,7 @@ test('CUST-011: enable fails when custody service reports passkey unbound', asyn
   }
 });
 
-test('CUST-012: enable with the wallet locked + wrong password fails before any HTTP upload', async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / API】 CUST-012 锁定 + 错误密码开启被拒", "CUST-012: enable with the wallet locked + wrong password fails before any HTTP upload"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -92,7 +93,7 @@ test('CUST-012: enable with the wallet locked + wrong password fails before any 
   }
 });
 
-test('CUST-070: disable with a healthy DELETE flips enabled→false and deletes once', async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / API】 CUST-070 正常关闭托管", "CUST-070: disable with a healthy DELETE flips enabled→false and deletes once"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -114,7 +115,7 @@ test('CUST-070: disable with a healthy DELETE flips enabled→false and deletes 
   }
 });
 
-test('CUST-071: disable with DELETE 500 fails and keeps enabled=true', async ({ recorder }) => {
+test(localizedTitle("【云端密钥托管与恢复 / API】 CUST-071 删除失败保留开启", "CUST-071: disable with DELETE 500 fails and keeps enabled=true"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

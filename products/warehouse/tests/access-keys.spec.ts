@@ -8,6 +8,7 @@
  *   4. PROPFIND /dav/personal using HTTP Basic (accessKeyId:secret) → 207
  *   5. list, revoke, then delete
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 import { expectStatus, webdavPropfind, type Auth } from '../../../shared/api';
@@ -37,7 +38,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test.describe('WebDAV AccessKey lifecycle', () => {
+test.describe(localizedTitle("【WebDAV 目录访问密钥】WebDAV AccessKey 生命周期（WebDAV AccessKey lifecycle）", "WebDAV AccessKey lifecycle"), () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; keyId: string; keySecret: string } | null = null;
 
@@ -54,7 +55,7 @@ test.describe('WebDAV AccessKey lifecycle', () => {
     }
   });
 
-  test('create AccessKey under /personal returns ak + sk', async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥 / API】 在 /personal 下创建 AccessKey 返回 ak + sk", "create AccessKey under /personal returns ak + sk"), async () => {
     skipIfNoService();
     const tokens = await acquireToken(baseURLFor('warehouse')!);
     const ctx = await authedRequest(baseURLFor('warehouse')!, tokens.token);
@@ -81,7 +82,7 @@ test.describe('WebDAV AccessKey lifecycle', () => {
     }
   });
 
-  test('list shows the AccessKey we created', async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥 / API】 列表显示了我们创建的 AccessKey", "list shows the AccessKey we created"), async () => {
     skipIfNoService();
     test.skip(!created, 'previous test did not create an AccessKey');
     const tokens = await acquireToken(baseURLFor('warehouse')!);
@@ -97,7 +98,7 @@ test.describe('WebDAV AccessKey lifecycle', () => {
     }
   });
 
-  test('AccessKey authenticates WebDAV PROPFIND', async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥 / API】 AccessKey 验证 WebDAV PROPFIND", "AccessKey authenticates WebDAV PROPFIND"), async () => {
     skipIfNoService();
     test.skip(!created, 'previous test did not create an AccessKey');
     const env = envFor('warehouse');
@@ -115,7 +116,7 @@ test.describe('WebDAV AccessKey lifecycle', () => {
     expectStatus(res, [207, 401, 403]);
   });
 
-  test('revoke + delete the AccessKey', async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥 / API】 撤销+删除 AccessKey", "revoke + delete the AccessKey"), async () => {
     skipIfNoService();
     test.skip(!created, 'previous test did not create an AccessKey');
     const tokens = await acquireToken(baseURLFor('warehouse')!);

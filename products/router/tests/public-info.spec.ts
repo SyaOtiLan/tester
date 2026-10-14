@@ -10,6 +10,7 @@
  * *object* with `default_currency` + an `items[]` array. Assertions reflect the
  * live shape.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 
@@ -18,7 +19,7 @@ function skipIfNoService() {
 }
 
 // RT-API-003 (P2)
-test('GET /billing/currencies returns available billing currencies', async () => {
+test(localizedTitle("【服务健康与公共信息 / API】 GET /billing/currencies 返回可用的计费货币", "GET /billing/currencies returns available billing currencies"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -41,7 +42,7 @@ test('GET /billing/currencies returns available billing currencies', async () =>
 });
 
 // RT-API-004 (P2)
-test('public content endpoints (/about, /notice, /home_page_content) return strings', async () => {
+test(localizedTitle("【服务健康与公共信息 / API】 公共内容端点（/about, /notice, /home_page_content) 返回字符串", "public content endpoints (/about, /notice, /home_page_content) return strings"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {

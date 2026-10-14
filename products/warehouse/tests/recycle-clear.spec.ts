@@ -17,6 +17,7 @@
  * Source: recycle.go HandleClear (DELETE, wipes all entries for the user) and
  * HandleList ({items,total}).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext, applyAuth, type Auth } from '../../../shared/api';
 import { loginWithPassword, authedRequest } from '../helpers/auth';
@@ -41,7 +42,7 @@ interface RecycleList {
   total?: number;
 }
 
-test('WH-API-042 clearing the recycle bin empties the list', async () => {
+test(localizedTitle("【回收站 / API】 WH-API-042 清空回收站", "WH-API-042 clearing the recycle bin empties the list"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

@@ -27,6 +27,7 @@
  * HandleRefresh (401 without a valid refresh cookie); email login handler
  * (400 invalid address, 401 bad code); identity.go HandleLoginSession.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 
@@ -38,7 +39,7 @@ function hasPassword(): boolean {
   return Boolean(env['WAREHOUSE_USER'] && env['WAREHOUSE_PASS']);
 }
 
-test('WH-API-010 logout clears the refresh session so a later refresh fails', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-010 auth/logout 注销会话", "WH-API-010 logout clears the refresh session so a later refresh fails"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
   test.skip(!hasPassword(), 'WAREHOUSE_USER/PASS required for the logout→refresh round-trip');
 
@@ -70,7 +71,7 @@ test('WH-API-010 logout clears the refresh session so a later refresh fails', as
   }
 });
 
-test('WH-API-011 email code endpoint validates the address and is wired', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-011 邮箱验证码发送", "WH-API-011 email code endpoint validates the address and is wired"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const ctx = await apiContext(apiBase()!);
@@ -97,7 +98,7 @@ test('WH-API-011 email code endpoint validates the address and is wired', async 
   }
 });
 
-test('WH-API-012 email login rejects a wrong/expired code', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-012 邮箱验证码登录", "WH-API-012 email login rejects a wrong/expired code"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   // The success path needs a real delivered code; the mail channel is not
@@ -115,7 +116,7 @@ test('WH-API-012 email login rejects a wrong/expired code', async () => {
   }
 });
 
-test('WH-API-013 identity login session returns an issuerEndpoint', async () => {
+test(localizedTitle("【鉴权与会话 / API】 WH-API-013 identity/UCAN 登录会话创建", "WH-API-013 identity login session returns an issuerEndpoint"), async () => {
   test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
 
   const ctx = await apiContext(apiBase()!);

@@ -4,6 +4,7 @@
  * These assert the VALIDATOR's behavior on synthesized bad input via temp
  * fixtures — the real repo is never mutated (read-only per task constraints).
  */
+import { localizedTitle } from '../../../shared/title';
 import { mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
@@ -19,14 +20,14 @@ function withTempDir(fn: (dir: string) => void): void {
   }
 }
 
-test('MP-DATA-051 missing index.json raises an explicit not-found error', () => {
+test(localizedTitle("【空值与异常数据处理 / DATA】 MP-DATA-051 index.json 缺失时给出明确错误", "MP-DATA-051 missing index.json raises an explicit not-found error"), () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'index.json');
     expect(() => readIndexFrom(dir)).toThrow(`marketplace index.json not found at ${file}`);
   });
 });
 
-test('MP-DATA-052 missing packages.json is gracefully skipped (existsSync guard)', () => {
+test(localizedTitle("【空值与异常数据处理 / DATA】 MP-DATA-052 packages.json 缺失时优雅跳过", "MP-DATA-052 missing packages.json is gracefully skipped (existsSync guard)"), () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'packages.json');
     // The guard the real spec uses: test.skip(!existsSync(file), ...). Assert the
@@ -37,7 +38,7 @@ test('MP-DATA-052 missing packages.json is gracefully skipped (existsSync guard)
   });
 });
 
-test('MP-DATA-053 malformed JSON surfaces a SyntaxError (not swallowed)', () => {
+test(localizedTitle("【空值与异常数据处理 / DATA】 MP-DATA-053 非法 JSON 被解析失败捕获", "MP-DATA-053 malformed JSON surfaces a SyntaxError (not swallowed)"), () => {
   withTempDir((dir) => {
     const file = resolve(dir, 'index.json');
     writeFileSync(file, '[{"id":"a",},'); // trailing comma + truncated
@@ -45,7 +46,7 @@ test('MP-DATA-053 malformed JSON surfaces a SyntaxError (not swallowed)', () => 
   });
 });
 
-test('MP-DATA-054 an empty [] index fails the non-empty assertion', () => {
+test(localizedTitle("【空值与异常数据处理 / DATA】 MP-DATA-054 空数组 index 触发断言失败", "MP-DATA-054 an empty [] index fails the non-empty assertion"), () => {
   withTempDir((dir) => {
     writeFileSync(resolve(dir, 'index.json'), '[]');
     const entries = readIndexFrom(dir);
@@ -55,7 +56,7 @@ test('MP-DATA-054 an empty [] index fails the non-empty assertion', () => {
   });
 });
 
-test('MP-DATA-055 missing OPTIONAL fields do not fail schema validation', () => {
+test(localizedTitle("【空值与异常数据处理 / DATA】 MP-DATA-055 可选字段缺省不报错", "MP-DATA-055 missing OPTIONAL fields do not fail schema validation"), () => {
   const schema = readSkillSchema();
   const required = schema.required as string[];
   // A minimal but VALID skill: all required present, all optionals (description,

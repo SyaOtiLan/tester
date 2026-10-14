@@ -19,6 +19,7 @@
  * HandleCreate (201 adminUserResponse), HandleResetPassword (200 {success}),
  * HandleDelete {username} (used for cleanup).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest, getUserInfo } from '../helpers/auth';
 import { apiContext } from '../../../shared/api';
@@ -35,7 +36,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('admin user management', () => {
+test.describe(localizedTitle("【管理员用户管理】管理员用户管理（admin user management）", "admin user management"), () => {
   test.describe.configure({ mode: 'serial' });
   let adminToken = '';
   let canManage = false;
@@ -56,7 +57,7 @@ test.describe('admin user management', () => {
     );
   }
 
-  test('WH-API-071 an admin can list all users', async () => {
+  test(localizedTitle("【管理员用户管理 / API】 WH-API-071 管理员列出用户", "WH-API-071 an admin can list all users"), async () => {
     gate();
     const ctx = await authedRequest(apiBase()!, adminToken);
     try {
@@ -70,7 +71,7 @@ test.describe('admin user management', () => {
     }
   });
 
-  test('WH-API-072 an admin can create a user', async () => {
+  test(localizedTitle("【管理员用户管理 / API】 WH-API-072 管理员创建用户", "WH-API-072 an admin can create a user"), async () => {
     gate();
     const username = `e2e-admin-create-${Date.now()}`;
     const ctx = await authedRequest(apiBase()!, adminToken);
@@ -90,7 +91,7 @@ test.describe('admin user management', () => {
     }
   });
 
-  test('WH-API-073 an admin can reset a user password', async () => {
+  test(localizedTitle("【管理员用户管理 / API】 WH-API-073 管理员重置用户密码", "WH-API-073 an admin can reset a user password"), async () => {
     gate();
     const username = `e2e-admin-reset-${Date.now()}`;
     const ctx = await authedRequest(apiBase()!, adminToken);

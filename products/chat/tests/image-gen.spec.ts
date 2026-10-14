@@ -7,6 +7,7 @@
  * confirming the page/controls are wired. Entering the page (CH-084), the
  * /sd-new → /sd redirect (CH-086), and the history list (CH-087) are real UI.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { loginOrSkip, openRoute } from '../helpers/auth';
 
@@ -15,7 +16,7 @@ function skipNoService() {
 }
 
 // CH-084 — image generation page renders its panel.
-test('CH-084 image generation page renders', async ({ page }) => {
+test(localizedTitle("【图像生成(Sd) / UI】 CH-084 进入图像生成页 /sd", "CH-084 image generation page renders"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/sd');
@@ -25,7 +26,7 @@ test('CH-084 image generation page renders', async ({ page }) => {
 });
 
 // CH-085 — submit a prompt to generate an image.
-test('CH-085 submit prompt generates an image', async ({ page }) => {
+test(localizedTitle("【图像生成(Sd) / E2E】 CH-085 提交提示词生成图片", "CH-085 submit prompt generates an image"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/sd');
@@ -42,7 +43,7 @@ test('CH-085 submit prompt generates an image', async ({ page }) => {
 });
 
 // CH-086 — /sd-new redirects to /sd.
-test('CH-086 sd-new redirects to sd', async ({ page }) => {
+test(localizedTitle("【图像生成(Sd) / UI】 CH-086 /sd-new 重定向到 /sd", "CH-086 sd-new redirects to sd"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/sd-new', { pin: false });
@@ -55,7 +56,7 @@ test('CH-086 sd-new redirects to sd', async ({ page }) => {
 });
 
 // CH-087 — image generation history list is present (records or empty state).
-test('CH-087 image history list renders', async ({ page }) => {
+test(localizedTitle("【图像生成(Sd) / UI】 CH-087 图像生成历史列表", "CH-087 image history list renders"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/sd');

@@ -6,13 +6,14 @@
  * `opensource/` segment). They are marked test.fixme so the runner stays green
  * while the defect is honestly recorded — do NOT weaken them to pass.
  */
+import { localizedTitle } from '../../../shared/title';
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { test, expect } from '../fixtures';
 import { abs, readText, allMarkdown, parseLinks, isInternalLink } from './helpers';
 
 // BK-DATA-007
-test('BK-DATA-007 every SUMMARY chapter link target exists (no dead links)', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-007 SUMMARY.md 每个章节链接目标文件存在(无死链)", "BK-DATA-007 every SUMMARY chapter link target exists (no dead links)"), () => {
   const text = readText('agent/SUMMARY.md');
   const chapterLinks = parseLinks(text).filter((l) => /\.md$/.test(l.url));
   expect(chapterLinks.length).toBeGreaterThanOrEqual(18);
@@ -25,7 +26,7 @@ test('BK-DATA-007 every SUMMARY chapter link target exists (no dead links)', () 
 });
 
 // BK-DATA-008
-test('BK-DATA-008 all SUMMARY links are repo-relative paths (no machine-absolute)', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-008 SUMMARY.md 链接均为仓库内相对路径", "BK-DATA-008 all SUMMARY links are repo-relative paths (no machine-absolute)"), () => {
   const text = readText('agent/SUMMARY.md');
   const offenders: string[] = [];
   for (const link of parseLinks(text)) {
@@ -37,7 +38,7 @@ test('BK-DATA-008 all SUMMARY links are repo-relative paths (no machine-absolute
 });
 
 // BK-DATA-009 — REAL DEFECT (see fixme reason)
-test('BK-DATA-009 agent/README.md SUMMARY link target exists', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-009 agent/README.md 内 SUMMARY 链接指向的路径存在", "BK-DATA-009 agent/README.md SUMMARY link target exists"), () => {
   test.fixme(
     true,
     'REAL DEFECT in books repo: agent/README.md line 26 links [SUMMARY.md]' +
@@ -54,7 +55,7 @@ test('BK-DATA-009 agent/README.md SUMMARY link target exists', () => {
 });
 
 // BK-DATA-010
-test('BK-DATA-010 all relative links in yeying overview resolve', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-010 yeying 总览内所有相对链接目标存在", "BK-DATA-010 all relative links in yeying overview resolve"), () => {
   const rel = 'yeying/社区文档总览.md';
   const text = readText(rel);
   const baseDir = dirname(abs(rel));
@@ -69,7 +70,7 @@ test('BK-DATA-010 all relative links in yeying overview resolve', () => {
 });
 
 // BK-DATA-011
-test('BK-DATA-011 payment index documents have no dead links', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-011 payment 索引文档内链接目标存在", "BK-DATA-011 payment index documents have no dead links"), () => {
   const indexFiles = [
     'payment/docs/README.md',
     'payment/docs/series-index.md',
@@ -91,7 +92,7 @@ test('BK-DATA-011 payment index documents have no dead links', () => {
 });
 
 // BK-DATA-012 — REAL DEFECT (same root cause as BK-DATA-009)
-test('BK-DATA-012 repo-wide internal .md link scan finds no dead links', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-012 全仓库站内 .md 链接全量死链扫描", "BK-DATA-012 repo-wide internal .md link scan finds no dead links"), () => {
   test.fixme(
     true,
     'REAL DEFECT in books repo: repo-wide scan finds exactly one dead link — ' +
@@ -115,7 +116,7 @@ test('BK-DATA-012 repo-wide internal .md link scan finds no dead links', () => {
 });
 
 // BK-DATA-013
-test('BK-DATA-013 external http(s) links are syntactically valid URLs', () => {
+test(localizedTitle("【链接完整性(死链) / DATA】 BK-DATA-013 外部 http(s) 链接格式合法", "BK-DATA-013 external http(s) links are syntactically valid URLs"), () => {
   const bad: string[] = [];
   let count = 0;
   for (const file of allMarkdown()) {

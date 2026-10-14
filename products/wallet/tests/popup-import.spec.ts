@@ -11,6 +11,7 @@
  * If this fails because the address no longer matches, the mnemonic
  * changed upstream — verify with the wallet repo's existing test first.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -21,7 +22,7 @@ const TEST_MNEMONIC = 'test test test test test test test test test test test ju
 const TEST_PASSWORD = 'E2E-password-2026';
 const TEST_WALLET_NAME = 'Imported E2E Wallet';
 
-test('import mnemonic lands on #walletPage with the expected account address', async ({ recorder }) => {
+test(localizedTitle("【钱包导入 / UI】 import 助记词登陆 #walletPage 并带有预期的账户地址", "import mnemonic lands on #walletPage with the expected account address"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

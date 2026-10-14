@@ -16,6 +16,7 @@
  * reject → 'User rejected the transaction') and the `#transactionRequest`
  * view in `html/approval.html`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -70,7 +71,7 @@ async function connect(context: BrowserContext, extensionId: string, dapp: Page)
   return (await p) as string[];
 }
 
-test('WL-DAPP-014: dApp eth_sendTransaction opens the approval window and resolves on approve', async ({
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-014 `eth_sendTransaction` 从 dApp 触发交易审批窗", "WL-DAPP-014: dApp eth_sendTransaction opens the approval window and resolves on approve"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

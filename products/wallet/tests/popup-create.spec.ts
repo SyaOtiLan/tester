@@ -12,6 +12,7 @@
  * generation. Each call captures a full-page screenshot of the popup
  * state at that point; `pnpm manual:build` renders them into Markdown.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext, type WalletContext } from '../helpers/extension';
@@ -21,7 +22,7 @@ import { POPUP_HEIGHT, POPUP_WIDTH, byId, openPopup } from '../helpers/popup';
 const TEST_PASSWORD = 'E2E-password-2026';
 const TEST_WALLET_NAME = 'E2E Wallet';
 
-test('welcome → create wallet → set password lands on #walletPage', async ({ recorder }) => {
+test(localizedTitle("【钱包创建与初始化 / UI】 欢迎→创建钱包→设置密码登陆#walletPage", "welcome → create wallet → set password lands on #walletPage"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -75,14 +76,14 @@ test('welcome → create wallet → set password lands on #walletPage', async ({
 // Explicit viewport assertions, mostly so the intent is visible in code
 // rather than buried in the helper. If POPUP_WIDTH/HEIGHT ever drift
 // these will catch it.
-test('popup viewport defaults match wallet UI expectations', () => {
+test(localizedTitle("【钱包创建与初始化 / UI】 弹出视口默认匹配钱包 UI 期望", "popup viewport defaults match wallet UI expectations"), () => {
   expect(POPUP_WIDTH).toBe(380);
   expect(POPUP_HEIGHT).toBe(600);
 });
 
 // Type-level sanity: ensure WalletContext shape is stable. If `extension.ts`
 // changes its return shape this will surface at type-check time.
-test('loadWalletContext returns the expected shape', async () => {
+test(localizedTitle("【钱包创建与初始化 / UI】 loadWalletContext 返回预期的形状", "loadWalletContext returns the expected shape"), async () => {
   const ctx: WalletContext = await loadWalletContext({ headless: true });
   try {
     expect(typeof ctx.extensionId).toBe('string');

@@ -20,6 +20,7 @@
  * Source: s3/server.go returns 403 AccessDenied for unsigned/invalid requests
  * and when the CredentialResolver returns ErrNotFound (deleted credential).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 import { signSigV4 } from '../helpers/sigv4';
@@ -39,8 +40,8 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('S3 negative auth', () => {
-  test('WH-API-036 unsigned ListBuckets is rejected with 403 AccessDenied', async () => {
+test.describe(localizedTitle("【S3 凭证与 S3 协议】S3 negative auth（S3 negative auth）", "S3 negative auth"), () => {
+  test(localizedTitle("【S3 凭证与 S3 协议 / API】 WH-API-036 未签名 S3 请求返回 403 AccessDenied", "WH-API-036 unsigned ListBuckets is rejected with 403 AccessDenied"), async () => {
     test.skip(!s3Base(), 'WAREHOUSE_ADMIN_URL (S3 endpoint) not configured');
 
     const res = await fetch(`${s3Base()!}/`, { method: 'GET' });
@@ -49,7 +50,7 @@ test.describe('S3 negative auth', () => {
     expect(xml).toContain('AccessDenied');
   });
 
-  test('WH-API-038 a deleted S3 credential can no longer sign requests (403)', async () => {
+  test(localizedTitle("【S3 凭证与 S3 协议 / API】 WH-API-038 撤销后 SigV4 请求被拒", "WH-API-038 a deleted S3 credential can no longer sign requests (403)"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!s3Base(), 'WAREHOUSE_ADMIN_URL (S3 endpoint) not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');

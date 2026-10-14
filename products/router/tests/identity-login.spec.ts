@@ -22,6 +22,7 @@
  * keys; if Router cannot verify the credentials the verify step fails loudly
  * rather than being faked green.
  */
+import { localizedTitle } from '../../../shared/title';
 import { chromium } from '@playwright/test';
 import type { BrowserContext, Page } from '@playwright/test';
 
@@ -186,10 +187,10 @@ async function onboardAndPresent(
   return { identity, session, vp };
 }
 
-test.describe('Router wallet identity login (real Node + Mailpit)', () => {
+test.describe(localizedTitle("【钱包身份登录(真实 Node + Mailpit)】Router钱包身份登录（真实Node + Mailpit）（Router wallet identity login (real Node + Mailpit)）", "Router wallet identity login (real Node + Mailpit)"), () => {
   test.skip(!ROUTER_BASE, 'ROUTER_BASE_URL not configured');
 
-  test('RT-API-067: a brand-new wallet identity auto-registers, logs in and persists the DID', async ({}, testInfo) => {
+  test(localizedTitle("【钱包身份登录(真实 Node + Mailpit) / API】 RT-API-067 全新钱包身份自动注册并落库 DID", "RT-API-067: a brand-new wallet identity auto-registers, logs in and persists the DID"), async ({}, testInfo) => {
     testInfo.setTimeout(150_000);
     const routerBase = ROUTER_BASE!;
     const nodeUrl = resolveNodeUrl();
@@ -230,7 +231,7 @@ test.describe('Router wallet identity login (real Node + Mailpit)', () => {
     }
   });
 
-  test('RT-API-068: unlinked identity is rejected when auto-register is disabled', async ({}, testInfo) => {
+  test(localizedTitle("【钱包身份登录(真实 Node + Mailpit) / API】 RT-API-068 未关联身份在关闭自动注册时被拒", "RT-API-068: unlinked identity is rejected when auto-register is disabled"), async ({}, testInfo) => {
     testInfo.setTimeout(150_000);
     const routerBase = ROUTER_BASE!;
     const nodeUrl = resolveNodeUrl();

@@ -12,6 +12,7 @@
  * Optional:
  *   - WAREHOUSE_WEBDAV_PREFIX  (defaults to /dav)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest } from '../helpers/auth';
 import { expectStatus, webdavPropfind, type Auth } from '../../../shared/api';
@@ -29,7 +30,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('WebDAV AccessKey revocation', () => {
+test.describe(localizedTitle("【WebDAV 目录访问密钥】WebDAV AccessKey 撤销（WebDAV AccessKey revocation）", "WebDAV AccessKey revocation"), () => {
   test.describe.configure({ mode: 'serial' });
   let created: { id: string; keyId: string; keySecret: string } | null = null;
 
@@ -44,7 +45,7 @@ test.describe('WebDAV AccessKey revocation', () => {
     }
   });
 
-  test('WH-API-029 revoked AccessKey is rejected on PROPFIND', async () => {
+  test(localizedTitle("【WebDAV 目录访问密钥(AccessKey) / API】 WH-API-029 撤销后 AccessKey 认证被拒", "WH-API-029 revoked AccessKey is rejected on PROPFIND"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
 

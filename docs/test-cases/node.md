@@ -17,9 +17,9 @@
 | 六、应用审核 | 2 | 1 | 1 |
 | 七、申请使用应用 | 1 | 1 | 0 |
 | 八、身份能力(TOTP/Passkey/授权码) | 4 | 4 | 0 |
-| 九、通知中心 | 2 | 2 | 0 |
+| 九、通知中心 | 6 | 6 | 0 |
 | 十、会话与鉴权守卫 | 2 | 2 | 0 |
-| **合计** | **50** | **46** | **4** |
+| **合计** | **54** | **50** | **4** |
 
 > 说明:后端与前端由同一 Express 实例托管,API 根路径统一为 `/api/v1/public/*`;响应统一信封 `{code, message, data, timestamp}`(成功 `code=0`)。写操作(建应用、发布、下线、删除、配置)均需在请求体内携带 `personal_sign` 的**签名动作信封**(action 分别为 `application_create` / `application_update` / `application_publish` / `application_unpublish` / `application_delete` / `application_config_upsert`)。剩余 4 个待实现均为**降级跳过**(依赖管理员审批或非破坏性造 DB 断连,环境不具备),已在对应 spec 中以 `test.skip` + 明确原因落地,绝不伪造通过。
 
@@ -511,6 +511,49 @@
   1. GET `/api/v1/public/notifications` 与 `/notifications/unread-count`。
   2. POST `/api/v1/public/notifications/:uid/read`(或 `/notifications/read-all`)。
 - 预期结果:列表分页返回;标记已读后未读数相应减少;`read-all` 清零未读。
+
+### ND-API-034 通用 Webhook 投递闭环(签名校验)
+- 优先级:P1
+- 类型:API
+- 状态:✅ 已实现 — products/node/tests/notification-delivery.spec.ts
+- 前置条件:node 服务运行;配置 `NODE_WALLET_PRIVATE_KEY`;可选 `NODE_CALLBACK_HOST`(默认 127.0.0.1)。
+- 步骤:
+  1. 全新钱包登录;在本机起一个临时 HTTP 回调服务器。
+  2. POST `/api/v1/public/notifications/webhooks` 注册 `format=generic` 的 webhook(带 secret、events=['application.created'])。
+  3. 创建应用触发 `application.created` 通知,扇出生成投递记录,后台 worker 回调本地服务器。
+  4. 轮询 `/webhooks/:uid/deliveries` 直到该通知的投递到达终态。
+- 预期结果:回调命中,携带正确的 `x-yeying-*` 头与合法 HMAC-SHA256 签名(`sha256=` + HMAC(secret, `${timestamp}.${rawBody}`));投递记录 `channel=webhook`、`status=delivered`。
+
+### ND-API-035 钉钉机器人真实投递(需配置)
+- 优先级:P2
+- 类型:API
+- 状态:✅ 已实现 — products/node/tests/notification-delivery.spec.ts(未配置 `NODE_DINGTALK_WEBHOOK_URL`/`_SECRET` 时跳过)
+- 前置条件:node 服务运行;提供真实钉钉群机器人 URL(需在平台白名单 `oapi.dingtalk.com`)与加签 secret。
+- 步骤:
+  1. 全新钱包登录,注册 `format=dingtalk` 的 webhook(URL + 加签 secret)。
+  2. 创建应用触发通知,轮询投递记录直到终态。
+- 预期结果:投递记录 `channel=dingtalk`、`status=delivered`(钉钉返回 errcode=0);钉钉群实际收到消息。
+
+### ND-API-036 飞书机器人真实投递(需配置)
+- 优先级:P2
+- 类型:API
+- 状态:✅ 已实现 — products/node/tests/notification-delivery.spec.ts(未配置 `NODE_FEISHU_WEBHOOK_URL`/`_SECRET` 时跳过)
+- 前置条件:node 服务运行;提供真实飞书群机器人 URL(需在平台白名单 `open.feishu.cn`)与加签 secret。
+- 步骤:
+  1. 全新钱包登录,注册 `format=feishu` 的 webhook(URL + 加签 secret)。
+  2. 创建应用触发通知,轮询投递记录直到终态。
+- 预期结果:投递记录 `channel=feishu`、`status=delivered`(飞书返回 code/StatusCode=0);飞书群实际收到消息。
+
+### ND-API-037 通知中心 SSE 实时推送闭环
+- 优先级:P1
+- 类型:API
+- 状态:✅ 已实现 — products/node/tests/notification-delivery.spec.ts
+- 前置条件:node 服务运行;配置 `NODE_WALLET_PRIVATE_KEY`。
+- 步骤:
+  1. 全新钱包登录,用 Node `fetch` + `Authorization: Bearer` 打开 `/api/v1/public/notifications/stream`(EventSource 无法设置鉴权头)。
+  2. 等待 `ready` 握手帧(校验 recipient 为本人地址)。
+  3. 创建应用触发通知。
+- 预期结果:握手后实时收到 `notification.created` 事件,`notificationUid` 与新建应用的通知一致。
 
 ---
 

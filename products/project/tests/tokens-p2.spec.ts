@@ -13,6 +13,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { registerUser, apiPost, createProject } from '../helpers/api';
 import { seedUiSession } from '../helpers/session';
@@ -44,16 +45,16 @@ function signGet(path: string, accessKey: string, secretKey: string): Record<str
   };
 }
 
-test.describe('project automation tokens AK/SK & UI (P2)', () => {
+test.describe(localizedTitle("【自动化访问令牌】项目自动化代币 AK/SK 和 UI (P2)（project automation tokens AK/SK & UI (P2)）", "project automation tokens AK/SK & UI (P2)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   // PJ-123 令牌审计记录
-  test('PJ-123 automation token audit log', async () => {
+  test(localizedTitle("【自动化访问令牌 / API】 PJ-123 令牌审计记录", "PJ-123 automation token audit log"), async () => {
     test.skip(true, 'token/admin/audits requires identity("admin"); the site admin account is captcha-locked and cannot be driven with a throwaway user.');
   });
 
   // PJ-124 使用 AK/SK 头鉴权调用受限接口
-  test('PJ-124 a signed AK/SK request reaches a scoped API; bad/absent signatures are rejected', async () => {
+  test(localizedTitle("【自动化访问令牌 / API】 PJ-124 使用 AK/SK 头鉴权调用受限接口", "PJ-124 a signed AK/SK request reaches a scoped API; bad/absent signatures are rejected"), async () => {
     const user = await registerUser(baseURL!);
     const { id: pid } = await createProject(baseURL!, user.token, { name: `AKSK项目${Date.now() % 100000}` });
     const created = await apiPost(
@@ -97,7 +98,7 @@ test.describe('project automation tokens AK/SK & UI (P2)', () => {
   });
 
   // PJ-125 UI 设置页创建令牌并显示密钥
-  test('PJ-125 creating a token in the settings UI reveals the access/secret keys', async ({ page }) => {
+  test(localizedTitle("【自动化访问令牌 / UI】 PJ-125 UI 设置页创建令牌并显示密钥", "PJ-125 creating a token in the settings UI reveals the access/secret keys"), async ({ page }) => {
     const acc = await seedUiSession(page, baseURL!);
     // A token needs a project the user participates in; the registration flow
     // already created a personal project, but make an explicit one to be safe.

@@ -12,6 +12,7 @@
  *
  * Selectors verified against warehouse `web/src/views/home/Index.vue`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 
@@ -21,7 +22,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('side-panel switches between recycle, share and profile views in place', async ({
+test(localizedTitle("【文件管理与导航界面 / UI】 侧面板在回收、共享和配置文件视图之间切换", "side-panel switches between recycle, share and profile views in place"), async ({
   page,
   baseURL,
   recorder,

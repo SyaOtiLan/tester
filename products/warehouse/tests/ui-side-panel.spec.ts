@@ -12,6 +12,7 @@
  * challenge -> sign -> verify flow so we never exercise the wallet
  * button / UCAN identity-presentation path (that's `ui-wallet.spec.ts`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 import { seedAuthenticatedSession } from '../helpers/session';
@@ -20,7 +21,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('authenticated session renders all four side-panel nav groups', async ({
+test(localizedTitle("【文件管理与导航界面 / UI】 经过身份验证的会话呈现所有四个侧面板导航组", "authenticated session renders all four side-panel nav groups"), async ({
   page,
   baseURL,
 }) => {
@@ -63,7 +64,7 @@ test('authenticated session renders all four side-panel nav groups', async ({
   await expect(sidePanel.getByRole('button', { name: '使用指南' })).toBeVisible();
 });
 
-test('clicking 密钥管理 enters the keys management view without leaving the SPA', async ({
+test(localizedTitle("【文件管理与导航界面 / UI】 点击“密钥管理”后在当前 SPA 中进入密钥管理视图", "clicking 密钥管理 enters the keys management view without leaving the SPA"), async ({
   page,
   baseURL,
 }) => {

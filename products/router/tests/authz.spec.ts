@@ -17,6 +17,7 @@
  * AdminAuth returns HTTP 200 with `{success:false, message:"…权限不足"}` for an
  * under-privileged user (not a 403 status), so RT-API-021 accepts either.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -29,7 +30,7 @@ function skipIfNoKey() {
 }
 
 // RT-API-021 (P0)
-test('a normal-user JWT is denied access to /api/v1/admin/*', async () => {
+test(localizedTitle("【鉴权与权限边界 / API】 普通用户 JWT 被拒绝访问 /api/v1/admin/*", "a normal-user JWT is denied access to /api/v1/admin/*"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -52,7 +53,7 @@ test('a normal-user JWT is denied access to /api/v1/admin/*', async () => {
 });
 
 // RT-API-019 + RT-API-020 (P1)
-test('UserAuth and Token CRUD endpoints reject unauthenticated requests with 401', async () => {
+test(localizedTitle("【鉴权与权限边界 / API】 UserAuth 和令牌 CRUD 端点拒绝未经身份验证的请求，返回 401", "UserAuth and Token CRUD endpoints reject unauthenticated requests with 401"), async () => {
   skipIfNoService();
   const ctx = await apiContext(baseURLFor('router')!);
   try {
@@ -75,7 +76,7 @@ test('UserAuth and Token CRUD endpoints reject unauthenticated requests with 401
 });
 
 // RT-API-043 (P1) — /api/v1/public/models requires an API Key (TokenAuth).
-test('GET /api/v1/public/models rejects non-API-Key credentials with 401', async () => {
+test(localizedTitle("【鉴权与权限边界 / API】 GET /api/v1/public/models 使用 401 拒绝非 API-Key 凭据", "GET /api/v1/public/models rejects non-API-Key credentials with 401"), async () => {
   skipIfNoService();
 
   // No credentials at all → TokenAuth 401.
@@ -125,7 +126,7 @@ test('GET /api/v1/public/models rejects non-API-Key credentials with 401', async
 });
 
 // RT-API-023 (P2)
-test('token/status requires an API key (TokenAuth), not a user JWT', async () => {
+test(localizedTitle("【鉴权与权限边界 / API】 token/status 需要 API 密钥 (TokenAuth)，而不是用户 JWT", "token/status requires an API key (TokenAuth), not a user JWT"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;
@@ -153,7 +154,7 @@ test('token/status requires an API key (TokenAuth), not a user JWT', async () =>
 });
 
 // RT-API-018 + RT-API-022 + RT-API-042 (P1/P2)
-test('verify and profile use different envelopes; user/self returns the account', async () => {
+test(localizedTitle("【鉴权与权限边界 / API】 验证和配置文件使用不同的信封； user/self 返回帐户", "verify and profile use different envelopes; user/self returns the account"), async () => {
   skipIfNoService();
   skipIfNoKey();
   const baseURL = baseURLFor('router')!;

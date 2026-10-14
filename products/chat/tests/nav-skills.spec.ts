@@ -8,6 +8,7 @@
  * Cases that require a ready text/image model or a deletable custom skill can't
  * be exercised against an empty catalog and are skipped with that reason.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { loginWithWallet, SIDEBAR } from '../helpers/chat-auth';
 
@@ -21,7 +22,7 @@ function skipIfNoService() {
 test.describe.configure({ retries: 2 });
 
 // CH-017 — sidebar shows Discovery / NewChat main buttons plus help, settings, account.
-test('CH-017 sidebar renders navigation entries', async ({ page }) => {
+test(localizedTitle("【首页导航与路由 / UI】 CH-017 侧栏渲染发现/新建会话/帮助/设置入口", "CH-017 sidebar renders navigation entries"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -34,7 +35,7 @@ test('CH-017 sidebar renders navigation entries', async ({ page }) => {
 });
 
 // CH-018 — clicking the NewChat main button navigates to /new-chat in-SPA.
-test('CH-018 new-chat button navigates to /new-chat', async ({ page }) => {
+test(localizedTitle("【首页导航与路由 / UI】 CH-018 点击新建会话进入 /new-chat", "CH-018 new-chat button navigates to /new-chat"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -45,7 +46,7 @@ test('CH-018 new-chat button navigates to /new-chat', async ({ page }) => {
 });
 
 // CH-019 — home auto-redirects to /new-chat when a model is ready but no sessions exist.
-test('CH-019 empty-session home redirects to /new-chat', async () => {
+test(localizedTitle("【首页导航与路由 / E2E】 CH-019 首页在无会话时自动进入新建会话", "CH-019 empty-session home redirects to /new-chat"), async () => {
   test.skip(
     true,
     'requires a ready text/image model with zero message-bearing sessions; this environment has an empty model catalog (no funded Router token), so Home routes to /setup instead of /new-chat.',
@@ -53,7 +54,7 @@ test('CH-019 empty-session home redirects to /new-chat', async () => {
 });
 
 // CH-020 — with no usable model, protected navigation is guided to /setup.
-test('CH-020 no-model navigation is guided to /setup', async ({ page }) => {
+test(localizedTitle("【首页导航与路由 / E2E】 CH-020 无可用模型时引导到 Setup 页", "CH-020 no-model navigation is guided to /setup"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -64,7 +65,7 @@ test('CH-020 no-model navigation is guided to /setup', async ({ page }) => {
 });
 
 // CH-021 — model-load failure shows a Bootstrap error with a retry entry.
-test('CH-021 model-load failure shows retry', async () => {
+test(localizedTitle("【首页导航与路由 / UI】 CH-021 模型加载失败展示重试入口", "CH-021 model-load failure shows retry"), async () => {
   test.skip(
     true,
     "cannot deterministically force Router llm.models() to fail; without a token it returns an empty catalog gracefully (no throw), so the Bootstrap error/retry state never renders. The live Router is up and returns [].",
@@ -72,7 +73,7 @@ test('CH-021 model-load failure shows retry', async () => {
 });
 
 // CH-022 — /help is reachable without logging in.
-test('CH-022 help page is accessible without login', async ({ page }) => {
+test(localizedTitle("【首页导航与路由 / UI】 CH-022 帮助页 /help 免登录可访问", "CH-022 help page is accessible without login"), async ({ page }) => {
   skipIfNoService();
   await page.goto('/#/help');
   // Not bounced to /auth (help is an allowed unauth path).
@@ -82,7 +83,7 @@ test('CH-022 help page is accessible without login', async ({ page }) => {
 });
 
 // CH-025 — new-chat renders the featured-skills area (or its empty state).
-test('CH-025 new-chat renders featured skills area', async ({ page }) => {
+test(localizedTitle("【新建对话(new-chat) / UI】 CH-025 精选技能列表渲染", "CH-025 new-chat renders featured skills area"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -95,7 +96,7 @@ test('CH-025 new-chat renders featured skills area', async ({ page }) => {
 });
 
 // CH-027 — the "More/All" entry jumps to /discovery?type=skill.
-test('CH-027 more-skills navigates to discovery', async ({ page }) => {
+test(localizedTitle("【新建对话(new-chat) / UI】 CH-027 \"更多/探索技能\"跳转发现页", "CH-027 more-skills navigates to discovery"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -107,7 +108,7 @@ test('CH-027 more-skills navigates to discovery', async ({ page }) => {
 });
 
 // CH-029 — the Return button navigates back to the home route.
-test('CH-029 new-chat return goes home', async ({ page }) => {
+test(localizedTitle("【新建对话(new-chat) / UI】 CH-029 返回按钮回到首页", "CH-029 new-chat return goes home"), async ({ page }) => {
   skipIfNoService();
   test.setTimeout(90_000);
   await loginWithWallet(page);
@@ -120,15 +121,15 @@ test('CH-029 new-chat return goes home', async ({ page }) => {
 });
 
 // CH-023 / CH-024 / CH-026 / CH-028 need a ready model or a deletable custom skill.
-test('CH-023 blank-session draft starts a chat', async () => {
+test(localizedTitle("【新建对话(new-chat) / E2E】 CH-023 空白会话:输入草稿后开始对话", "CH-023 blank-session draft starts a chat"), async () => {
   test.skip(true, 'starting a chat requires a ready text model; empty catalog routes back to /setup.');
 });
-test('CH-024 new-chat model dropdown selection', async () => {
+test(localizedTitle("【新建对话(new-chat) / UI】 CH-024 新建会话模型下拉选择", "CH-024 new-chat model dropdown selection"), async () => {
   test.skip(true, 'needs multiple available models; catalog is empty (no funded Router token).');
 });
-test('CH-026 featured skill creates a session', async () => {
+test(localizedTitle("【新建对话(new-chat) / E2E】 CH-026 点击精选技能创建对应会话", "CH-026 featured skill creates a session"), async () => {
   test.skip(true, 'creating a session from a skill requires a ready text model; empty catalog routes to /setup.');
 });
-test('CH-028 delete a skill card', async () => {
+test(localizedTitle("【新建对话(new-chat) / UI】 CH-028 删除技能卡片", "CH-028 delete a skill card"), async () => {
   test.skip(true, 'needs a deletable custom skill; none exist and none can be created without a model-ready workspace.');
 });

@@ -23,6 +23,7 @@
  *   - the warehouse backend integration tests (full UCAN path against a
  *     real wallet).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { injectWallet } from '../helpers/wallet';
 
@@ -30,7 +31,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('landing page renders the wallet + passport login options', async ({ page, baseURL }) => {
+test(localizedTitle("【文件管理与导航界面 / UI】 登陆页面呈现钱包+护照登录选项", "landing page renders the wallet + passport login options"), async ({ page, baseURL }) => {
   skipIfNoService();
   await page.goto(baseURL!, { waitUntil: 'networkidle' });
 
@@ -42,7 +43,7 @@ test('landing page renders the wallet + passport login options', async ({ page, 
   await expect(walletBtn.or(noWallet)).toBeVisible();
 });
 
-test('wallet button click drives the SDK identity flow and surfaces a clean error', async ({
+test(localizedTitle("【文件管理与导航界面 / UI】 钱包按钮点击驱动 SDK 身份流程并显示一个干净的错误", "wallet button click drives the SDK identity flow and surfaces a clean error"), async ({
   page,
   baseURL,
 }) => {

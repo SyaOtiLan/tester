@@ -7,6 +7,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import {
   registerUser,
@@ -22,7 +23,7 @@ import {
 const baseURL = baseURLFor('project');
 const now = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-test.describe('project task management (P1 API)', () => {
+test.describe(localizedTitle("【任务管理】项目任务管理（P1 API）（project task management (P1 API)）", "project task management (P1 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -32,7 +33,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-060 任务描述为空/超长被拒
-  test('PJ-060 empty / over-255 task name is rejected', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-060 任务描述为空/超长被拒", "PJ-060 empty / over-255 task name is rejected"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `任务校验${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
 
@@ -51,7 +52,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-062 获取单个任务信息
-  test('PJ-062 task/one returns the task with project_name and column_name', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-062 获取单个任务信息", "PJ-062 task/one returns the task with project_name and column_name"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `单任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, { projectId: pid, columnId: cid, name: '查看用任务' });
@@ -64,7 +65,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-063 无权限查看任务返回无任务权限
-  test('PJ-063 a member without task visibility gets 无任务权限', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-063 无权限查看任务返回无任务权限", "PJ-063 a member without task visibility gets 无任务权限"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `私密任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const member = await registerUser(baseURL!);
@@ -88,7 +89,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-064 添加子任务(继承父任务)
-  test('PJ-064 addsub creates a child task under the parent', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-064 添加子任务(继承父任务)", "PJ-064 addsub creates a child task under the parent"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `子任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, { projectId: pid, columnId: cid, name: '父任务' });
@@ -101,7 +102,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-065 主任务已完成禁止加子任务
-  test('PJ-065 cannot add a subtask to a completed parent', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-065 主任务已完成禁止加子任务", "PJ-065 cannot add a subtask to a completed parent"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `完成父${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, {
@@ -119,7 +120,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-066 修改任务(负责人/协助人上限)
-  test('PJ-066 update rejects more than 10 owners / assists', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-066 修改任务(名称/负责人/时间)", "PJ-066 update rejects more than 10 owners / assists"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `改任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, { projectId: pid, columnId: cid, name: '待改任务' });
@@ -149,7 +150,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-068 任务移动到其它列表
-  test('PJ-068 move a task to another column; unknown target column is rejected', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-068 任务移动到其它列表/项目", "PJ-068 move a task to another column; unknown target column is rejected"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `移动${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const col2 = await apiPost(baseURL!, '/api/project/column/add', { project_id: pid, name: '目标列' }, user.token);
@@ -178,7 +179,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-070 归档任务与恢复
-  test('PJ-070 archive/recover a main task; subtasks are not supported', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-070 归档任务与恢复", "PJ-070 archive/recover a main task; subtasks are not supported"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `归档任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     // Only a *completed* task may be archived, so create it owned by us and complete it.
@@ -209,7 +210,7 @@ test.describe('project task management (P1 API)', () => {
   });
 
   // PJ-071 删除任务与恢复
-  test('PJ-071 delete then recover a task', async () => {
+  test(localizedTitle("【任务管理 / API】 PJ-071 删除任务与恢复", "PJ-071 delete then recover a task"), async () => {
     const { id: pid } = await createProject(baseURL!, user.token, { name: `删任务${Date.now() % 100000}` });
     const cid = await firstColumnId(baseURL!, user.token, pid);
     const { id: tid } = await addTask(baseURL!, user.token, { projectId: pid, columnId: cid, name: '待删除任务' });

@@ -5,6 +5,7 @@
  *   - BOOKS_BASE_URL (optional; if empty, tests read filesystem)
  *   - BOOKS_REPO_PATH (default: ../books)
  */
+import { localizedTitle } from '../../../shared/title';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test, expect, hasEnv } from '../fixtures';
@@ -21,14 +22,14 @@ function readText(rel: string): string {
   return readFileSync(file, 'utf8');
 }
 
-test('books repo exists and contains at least one document', () => {
+test(localizedTitle("【目录索引与结构校验 / DATA】 Books 仓库存在且至少包含一个文档", "books repo exists and contains at least one document"), () => {
   expect(existsSync(repoPath())).toBe(true);
   const files = readdirSync(repoPath(), { recursive: true }) as string[];
   const md = files.filter((f) => f.endsWith('.md'));
   expect(md.length).toBeGreaterThan(0);
 });
 
-test('yeying product docs mention YeYing', () => {
+test(localizedTitle("【目录索引与结构校验 / DATA】 YeYing 产品文档中包含 YeYing", "yeying product docs mention YeYing"), () => {
   const candidates = ['yeying/agent.md', 'yeying/router.md', 'README.md'];
   let found = false;
   for (const candidate of candidates) {
@@ -45,7 +46,7 @@ test('yeying product docs mention YeYing', () => {
   expect(found).toBe(true);
 });
 
-test('agent book has a SUMMARY.md with chapter links', () => {
+test(localizedTitle("【目录索引与结构校验 / DATA】 Agent 文档包含带章节链接的 SUMMARY.md", "agent book has a SUMMARY.md with chapter links"), () => {
   const summary = 'agent/SUMMARY.md';
   let text: string;
   try {
@@ -58,7 +59,7 @@ test('agent book has a SUMMARY.md with chapter links', () => {
   expect(linkMatches.length).toBeGreaterThanOrEqual(5);
 });
 
-test('(optional) BOOKS_BASE_URL responds 2xx', async ({ request }) => {
+test(localizedTitle("【可选在线站点冒烟 / API】 （可选）BOOKS_BASE_URL 响应 2xx", "(optional) BOOKS_BASE_URL responds 2xx"), async ({ request }) => {
   test.skip(!hasEnv('BOOKS_BASE_URL'), 'BOOKS_BASE_URL not set');
   const baseURL = process.env['BOOKS_BASE_URL']!;
   const res = await request.get(baseURL.replace(/\/$/, ''));

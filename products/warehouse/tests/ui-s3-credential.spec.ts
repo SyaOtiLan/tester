@@ -19,6 +19,7 @@
  * and `web/src/api/index.ts` `s3CredentialApi` (create/list/revoke/delete
  * under `/api/v1/public/s3/credentials/*`).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { Wallet } from 'ethers';
 
@@ -28,7 +29,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('warehouse'), 'WAREHOUSE_BASE_URL not configured');
 }
 
-test('create an S3 credential and reveal its Access Key ID + Secret', async ({
+test(localizedTitle("【文件管理与导航界面 / UI】 创建 S3 凭证并公开其访问密钥 ID + Secret", "create an S3 credential and reveal its Access Key ID + Secret"), async ({
   page,
   baseURL,
   recorder,

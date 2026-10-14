@@ -17,6 +17,7 @@
  * `popup.location.href = data.redirect_url`. A non-paid status keeps the code
  * on the redirect branch (a paid status would close the popup instead).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 
 import { seedWalletSession } from '../helpers/session';
@@ -25,7 +26,7 @@ function skipIfNoService() {
   test.skip(!baseURLFor('router'), 'ROUTER_BASE_URL not configured');
 }
 
-test('立即充值 opens the payment popup and creates an order (boundary only)', async ({
+test(localizedTitle("【令牌、充值与余额 / UI】 立即充值打开付款弹出窗口并创建订单（仅限边界）", "立即充值 opens the payment popup and creates an order (boundary only)"), async ({
   page,
   baseURL,
   recorder,

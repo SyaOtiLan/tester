@@ -11,6 +11,7 @@
  * (error → showError, stays on importPage) and `js/domain/wallet-domain.js`
  * (`importFromMnemonic` word-count guard).
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -25,7 +26,7 @@ const BAD_MNEMONIC = 'abandon ability';
 // touching the keyring.
 const BAD_PRIVATE_KEY = 'not-a-valid-private-key';
 
-test('WL-UI-009: an invalid mnemonic is rejected and no wallet is created', async ({
+test(localizedTitle("【钱包导入 / UI】 WL-UI-009 导入非法助记词报错且不进入主页", "WL-UI-009: an invalid mnemonic is rejected and no wallet is created"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -58,7 +59,7 @@ test('WL-UI-009: an invalid mnemonic is rejected and no wallet is created', asyn
   }
 });
 
-test('WL-UI-010: an invalid private key is rejected and no wallet is created', async ({
+test(localizedTitle("【钱包导入 / UI】 WL-UI-010 导入非法私钥报错", "WL-UI-010: an invalid private key is rejected and no wallet is created"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

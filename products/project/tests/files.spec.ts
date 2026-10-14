@@ -7,6 +7,7 @@
  * Env vars consumed:
  *   - PROJECT_BASE_URL
  */
+import { localizedTitle } from '../../../shared/title';
 import { createHash } from 'node:crypto';
 import { request } from '@playwright/test';
 import { test, expect, baseURLFor } from '../fixtures';
@@ -14,7 +15,7 @@ import { registerUser, apiGet, apiPost, type RegisteredUser } from '../helpers/a
 
 const baseURL = baseURLFor('project');
 
-test.describe('project file cabinet (P1 API)', () => {
+test.describe(localizedTitle("【文件管理(文件柜)】项目文件柜（P1 API）（project file cabinet (P1 API)）", "project file cabinet (P1 API)"), () => {
   test.skip(!baseURL, 'PROJECT_BASE_URL not configured');
 
   let user: RegisteredUser;
@@ -24,14 +25,14 @@ test.describe('project file cabinet (P1 API)', () => {
   });
 
   // PJ-095 获取文件列表
-  test('PJ-095 file/lists returns the file/folder list', async () => {
+  test(localizedTitle("【文件管理(文件柜) / API】 PJ-095 获取文件列表", "PJ-095 file/lists returns the file/folder list"), async () => {
     const body = await apiGet(baseURL!, '/api/file/lists?pid=0', user.token);
     expect(body.ret).toBe(1);
     expect(Array.isArray(body.data)).toBe(true);
   });
 
   // PJ-096 新建文件/文件夹
-  test('PJ-096 file/add creates a folder', async () => {
+  test(localizedTitle("【文件管理(文件柜) / API】 PJ-096 新建文件/文件夹", "PJ-096 file/add creates a folder"), async () => {
     const name = `夹${Date.now() % 100000}`;
     const body = await apiPost(baseURL!, '/api/file/add', { name, type: 'folder', pid: 0 }, user.token);
     expect(body.ret).toBe(1);
@@ -41,7 +42,7 @@ test.describe('project file cabinet (P1 API)', () => {
   });
 
   // PJ-097 复制/移动文件
-  test('PJ-097 copy a document then move it into a folder', async () => {
+  test(localizedTitle("【文件管理(文件柜) / API】 PJ-097 复制/移动文件", "PJ-097 copy a document then move it into a folder"), async () => {
     const doc = await apiPost(baseURL!, '/api/file/add', { name: `文档${Date.now() % 100000}`, type: 'document', pid: 0 }, user.token);
     expect(doc.ret).toBe(1);
     const docId = Number(doc.data.id);
@@ -60,7 +61,7 @@ test.describe('project file cabinet (P1 API)', () => {
   });
 
   // PJ-098 删除文件
-  test('PJ-098 file/remove deletes a file', async () => {
+  test(localizedTitle("【文件管理(文件柜) / API】 PJ-098 删除文件", "PJ-098 file/remove deletes a file"), async () => {
     const folder = await apiPost(baseURL!, '/api/file/add', { name: `待删夹${Date.now() % 100000}`, type: 'folder', pid: 0 }, user.token);
     expect(folder.ret).toBe(1);
     const id = Number(folder.data.id);
@@ -71,7 +72,7 @@ test.describe('project file cabinet (P1 API)', () => {
   });
 
   // PJ-101 分片上传 init/chunk/merge
-  test('PJ-101 chunked upload init -> chunk -> merge ingests a file', async () => {
+  test(localizedTitle("【文件管理(文件柜) / API】 PJ-101 分片上传 init/chunk/merge", "PJ-101 chunked upload init -> chunk -> merge ingests a file"), async () => {
     const content = Buffer.from(`e2e upload ${Date.now()}`);
     const hash = createHash('md5').update(content).digest('hex');
 

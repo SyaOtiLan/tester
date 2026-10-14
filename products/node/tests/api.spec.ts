@@ -15,6 +15,7 @@
  *   - NODE_BASE_URL / NODE_API_URL
  *   - NODE_WALLET_PRIVATE_KEY
  */
+import { localizedTitle } from '../../../shared/title';
 import type { APIResponse } from '@playwright/test';
 import { Wallet, getAddress, type BaseWallet } from 'ethers';
 
@@ -65,7 +66,7 @@ async function siweVerify(api: string, wallet: BaseWallet) {
 
 const JWT_RE = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
 
-test('health endpoint returns ok', async () => {
+test(localizedTitle("【健康检查与就绪 / API】 健康端点返回正常", "health endpoint returns ok"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -81,7 +82,7 @@ test('health endpoint returns ok', async () => {
   }
 });
 
-test('ready endpoint confirms the database', async () => {
+test(localizedTitle("【健康检查与就绪 / API】 就绪端点确认数据库", "ready endpoint confirms the database"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -98,7 +99,7 @@ test('ready endpoint confirms the database', async () => {
   }
 });
 
-test('SIWE challenge returns an EIP-4361 message', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 SIWE 质询返回 EIP-4361 消息", "SIWE challenge returns an EIP-4361 message"), async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -119,7 +120,7 @@ test('SIWE challenge returns an EIP-4361 message', async () => {
   }
 });
 
-test('SIWE verify yields a JWT and binds it to the wallet', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 SIWE 验证产生 JWT 并将其绑定到钱包", "SIWE verify yields a JWT and binds it to the wallet"), async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -130,7 +131,7 @@ test('SIWE verify yields a JWT and binds it to the wallet', async () => {
   );
 });
 
-test('profile/me requires a valid JWT', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 profile/me 需要有效的 JWT", "profile/me requires a valid JWT"), async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -147,7 +148,7 @@ test('profile/me requires a valid JWT', async () => {
   }
 });
 
-test('profile/me rejects requests without a JWT', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 profile/me 拒绝没有 JWT 的请求", "profile/me rejects requests without a JWT"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -160,7 +161,7 @@ test('profile/me rejects requests without a JWT', async () => {
   }
 });
 
-test('auth/refresh + auth/logout keep the refresh-cookie contract', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 auth/refresh + auth/logout 保留刷新 cookie 合约", "auth/refresh + auth/logout keep the refresh-cookie contract"), async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
@@ -186,7 +187,7 @@ test('auth/refresh + auth/logout keep the refresh-cookie contract', async () => 
   expect(initial.expiresAt).toBeGreaterThan(Date.now());
 });
 
-test('ND-API-004 ready returns 503 when the database is down', async () => {
+test(localizedTitle("【健康检查与就绪 / API】 ND-API-004 数据库不可用时就绪返回 503", "ND-API-004 ready returns 503 when the database is down"), async () => {
   skipIfNoService();
   // Inducing a real DB outage would require stopping/disconnecting the shared
   // Postgres instance this suite (and every other product) runs against — a
@@ -196,7 +197,7 @@ test('ND-API-004 ready returns 503 when the database is down', async () => {
   test.skip(true, 'cannot induce a DB outage non-destructively against the shared live instance');
 });
 
-test('ND-API-003 healthCheck alias mirrors /health (backward-compatible)', async () => {
+test(localizedTitle("【健康检查与就绪 / API】 ND-API-003 健康检查向后兼容别名", "ND-API-003 healthCheck alias mirrors /health (backward-compatible)"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -213,7 +214,7 @@ test('ND-API-003 healthCheck alias mirrors /health (backward-compatible)', async
   }
 });
 
-test('ND-API-008 verify rejects a signature made with the wrong private key', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-008 verify 拒绝错误私钥的签名", "ND-API-008 verify rejects a signature made with the wrong private key"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -243,7 +244,7 @@ test('ND-API-008 verify rejects a signature made with the wrong private key', as
   }
 });
 
-test('ND-API-010 verify with a missing field returns 400 Missing address, nonce or signature', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-010 verify 缺字段返回 400", "ND-API-010 verify with a missing field returns 400 Missing address, nonce or signature"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -265,7 +266,7 @@ test('ND-API-010 verify with a missing field returns 400 Missing address, nonce 
   }
 });
 
-test('ND-API-006 challenge without an address returns 400 Missing address', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-006 challenge 缺少 address 返回 400", "ND-API-006 challenge without an address returns 400 Missing address"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -279,7 +280,7 @@ test('ND-API-006 challenge without an address returns 400 Missing address', asyn
   }
 });
 
-test('ND-API-009 verify rejects unknown / already-consumed (single-use) nonces', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-009 verify 拒绝过期/未知 nonce", "ND-API-009 verify rejects unknown / already-consumed (single-use) nonces"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -318,7 +319,7 @@ test('ND-API-009 verify rejects unknown / already-consumed (single-use) nonces',
   }
 });
 
-test('ND-API-014 refresh rotates the access token and invalidates the old refresh cookie', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-014 携带 refresh cookie 刷新出新 access token", "ND-API-014 refresh rotates the access token and invalidates the old refresh cookie"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -373,7 +374,7 @@ test('ND-API-014 refresh rotates the access token and invalidates the old refres
   }
 });
 
-test('ND-API-015 logout revokes the refresh token and clears the cookie', async () => {
+test(localizedTitle("【SIWE 认证与会话 / API】 ND-API-015 logout 撤销并清除 refresh cookie", "ND-API-015 logout revokes the refresh token and clears the cookie"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;

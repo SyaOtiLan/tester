@@ -20,6 +20,7 @@
  * handler responds 507 "Insufficient Storage"; MKCOL is exempt (0 additional
  * size), PUT/POST use the request body size.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { acquireToken, authedRequest, getUserInfo } from '../helpers/auth';
 import { apiContext } from '../../../shared/api';
@@ -39,7 +40,7 @@ function hasCredential(): boolean {
   );
 }
 
-test.describe('quota enforcement', () => {
+test.describe(localizedTitle("【配额】配额执行（quota enforcement）", "quota enforcement"), () => {
   let adminToken = '';
   let canManage = false;
 
@@ -50,7 +51,7 @@ test.describe('quota enforcement', () => {
     canManage = info.capabilities.manageUsers;
   });
 
-  test('WH-API-060 a write that exceeds quota is rejected with 507', async () => {
+  test(localizedTitle("【配额 / API】 WH-API-060 超配额上传被拒", "WH-API-060 a write that exceeds quota is rejected with 507"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasCredential(), 'no warehouse credential configured');
     test.skip(

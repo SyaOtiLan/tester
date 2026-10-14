@@ -16,13 +16,14 @@
  * "two entries differ" branch of WL-UI-005 does not apply here; we assert the
  * behavior that actually runs — empty and too-short are rejected.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
 import { stubPublicEndpoints } from '../helpers/network';
 import { byId, openPopup, TEST_WALLET_NAME, TEST_PASSWORD } from '../helpers/popup';
 
-test('WL-UI-005: empty and too-short passwords are rejected and no wallet is created', async ({
+test(localizedTitle("【钱包创建与初始化 / UI】 WL-UI-005 设置密码时两次输入不一致 / 空密码被拒绝", "WL-UI-005: empty and too-short passwords are rejected and no wallet is created"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

@@ -16,6 +16,7 @@
  *   - buildEthAccountsPermission → { parentCapability:'eth_accounts', caveats:[…] }.
  *   - handleWalletRevokePermissions deletes the authorization.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -24,7 +25,7 @@ import { createAndUnlockWallet, waitForApproval } from '../helpers/popup';
 
 const DAPP_ORIGIN = 'https://dapp.e2e.invalid/';
 
-test('WL-DAPP-010: request → get → revoke eth_accounts permission', async ({ recorder }) => {
+test(localizedTitle("【dApp 连接与 Provider / DAPP】 WL-DAPP-010 EIP-2255 权限:request / get / revoke", "WL-DAPP-010: request → get → revoke eth_accounts permission"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

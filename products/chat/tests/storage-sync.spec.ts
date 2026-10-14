@@ -12,6 +12,7 @@
  *   - allowed proxy_method: MKCOL/GET/HEAD/PUT/DELETE. PROPFIND is NOT allowed
  *     (→ 403), despite the case text — flagged as a doc/impl mismatch.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor } from '../fixtures';
 import { loginOrSkip, openRoute } from '../helpers/auth';
 
@@ -25,7 +26,7 @@ function skipNoService() {
 // ---------------- WebDAV proxy API (no login) ----------------
 
 // CH-069 — non-whitelisted / missing endpoint is rejected before forwarding.
-test('CH-069 WebDAV proxy rejects non-whitelisted endpoint', async ({ request }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / API】 CH-069 非白名单或缺失 endpoint 时拒绝请求", "CH-069 WebDAV proxy rejects non-whitelisted endpoint"), async ({ request }) => {
   skipNoService();
   const res = await request.get(
     `/api/webdav/${FOLDER}?endpoint=${encodeURIComponent('http://evil.example.com')}`,
@@ -39,7 +40,7 @@ test('CH-069 WebDAV proxy rejects non-whitelisted endpoint', async ({ request })
 });
 
 // CH-069b — whitelisted endpoint but a path outside the sync folder is refused.
-test('CH-069 WebDAV proxy refuses a path outside the sync folder', async ({ request }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / API】 CH-069b 白名单端点拒绝访问同步目录外路径", "CH-069 WebDAV proxy refuses a path outside the sync folder"), async ({ request }) => {
   skipNoService();
   const res = await request.get(
     `/api/webdav/notallowed?endpoint=${encodeURIComponent(BACKEND)}`,
@@ -52,7 +53,7 @@ test('CH-069 WebDAV proxy refuses a path outside the sync folder', async ({ requ
 // CH-070 — a GET on a whitelisted endpoint inside the folder is forwarded to
 // the backend (proves passthrough); the 401 we get back is the backend's, not
 // a local rejection. PROPFIND is method-rejected by the proxy (403).
-test('CH-070 WebDAV proxy forwards GET to the backend and rejects PROPFIND', async ({
+test(localizedTitle("【云同步与 WebDAV 代理 / API】 CH-070 WebDAV 代理透传 PROPFIND/PUT/GET", "CH-070 WebDAV proxy forwards GET to the backend and rejects PROPFIND"), async ({
   request,
 }) => {
   skipNoService();
@@ -75,7 +76,7 @@ test('CH-070 WebDAV proxy forwards GET to the backend and rejects PROPFIND', asy
 // ---------------- Cloud storage UI (login) ----------------
 
 // CH-066 — storage page shows cloud sync status + config sections.
-test('CH-066 storage page renders cloud sync status', async ({ page }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / UI】 CH-066 存储页展示云同步状态", "CH-066 storage page renders cloud sync status"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/storage');
@@ -88,7 +89,7 @@ test('CH-066 storage page renders cloud sync status', async ({ page }) => {
 });
 
 // CH-067 — the "Check connection" control probes the configured backend.
-test('CH-067 storage check-connection is available and runs', async ({ page }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / E2E】 CH-067 检查连接(WebDAV 可达性)", "CH-067 storage check-connection is available and runs"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/storage');
@@ -102,7 +103,7 @@ test('CH-067 storage check-connection is available and runs', async ({ page }) =
 });
 
 // CH-068 — "Sync now" triggers a sync run against the configured backend.
-test('CH-068 storage sync-now control triggers a sync', async ({ page }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / E2E】 CH-068 立即同步会话数据", "CH-068 storage sync-now control triggers a sync"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/storage');
@@ -119,7 +120,7 @@ test('CH-068 storage sync-now control triggers a sync', async ({ page }) => {
 });
 
 // CH-071 — auto-sync toggle reveals the interval control when enabled.
-test('CH-071 storage auto-sync toggle exposes an interval', async ({ page }) => {
+test(localizedTitle("【云同步与 WebDAV 代理 / E2E】 CH-071 自动同步开关与间隔", "CH-071 storage auto-sync toggle exposes an interval"), async ({ page }) => {
   skipNoService();
   await loginOrSkip(page);
   await openRoute(page, '/storage');

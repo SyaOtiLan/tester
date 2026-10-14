@@ -10,6 +10,7 @@
  * Selectors verified against router web/src/components/TokensTable.jsx and
  * web/src/pages/Token/EditToken.jsx.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import { acquireRouterToken } from '../helpers/auth';
@@ -64,7 +65,7 @@ async function mintOwnToken(
 }
 
 // RT-UI-022 (P2)
-test('token row supports copy and enable/disable toggle', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【令牌、充值与余额 / API】 令牌行支持复制和启用/禁用切换", "token row supports copy and enable/disable toggle"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   skipIfNoKey();
   const existing = await firstToken(baseURL!);
@@ -105,7 +106,7 @@ test('token row supports copy and enable/disable toggle', async ({ page, baseURL
 });
 
 // RT-UI-023 (P2)
-test('the token edit page saves name changes', async ({ page, baseURL, recorder }) => {
+test(localizedTitle("【令牌、充值与余额 / UI】 令牌编辑页面保存名称更改", "the token edit page saves name changes"), async ({ page, baseURL, recorder }) => {
   skipIfNoService();
   skipIfNoKey();
   // Mint a DEDICATED token to edit: the account is shared across token specs via

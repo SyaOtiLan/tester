@@ -12,6 +12,7 @@
  * The background lowercases stored addresses (`js/background/operations/contacts.js`),
  * so we assert the filled value against the option's own `data-address`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -21,7 +22,7 @@ import { byId, createAndUnlockWallet, openTransferPage } from '../helpers/popup'
 const CONTACT_NAME = 'Alice E2E';
 const CONTACT_ADDRESS = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
 
-test('WL-UI-033: add a contact and select it as the transfer recipient', async ({ recorder }) => {
+test(localizedTitle("【转账与交易 / UI】 WL-UI-033 通讯录新增联系人并在转账中选用", "WL-UI-033: add a contact and select it as the transfer recipient"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);

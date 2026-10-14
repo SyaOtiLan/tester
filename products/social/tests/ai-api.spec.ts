@@ -14,6 +14,7 @@
  *  - SOCIAL_BASE_URL      platform backend (8888)
  *  - SOCIAL_IDENTITY_URL  web3-identity (8901) — mints the authenticated caller
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { newSiweIdentity, platformCtx, type Envelope } from '../helpers/auth';
 
@@ -25,7 +26,7 @@ function skipIfNoStack() {
 }
 
 // SO-API-059 (P2) — AI rewrites a message; the local provider returns rewritten text.
-test('SO-API-059 AI rewrite message', async () => {
+test(localizedTitle("【AI 助手 / API】 SO-API-059 AI 改写消息", "SO-API-059 AI rewrite message"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, A.login.accessToken);
@@ -42,7 +43,7 @@ test('SO-API-059 AI rewrite message', async () => {
 });
 
 // SO-API-060 (P2) — AI suggests replies; returns a non-empty candidate list.
-test('SO-API-060 AI reply suggestions', async () => {
+test(localizedTitle("【AI 助手 / API】 SO-API-060 AI 回复建议", "SO-API-060 AI reply suggestions"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, A.login.accessToken);
@@ -60,7 +61,7 @@ test('SO-API-060 AI reply suggestions', async () => {
 });
 
 // SO-API-061 (P2) — AI summarizes a conversation; returns summary text.
-test('SO-API-061 AI conversation summary', async () => {
+test(localizedTitle("【AI 助手 / API】 SO-API-061 AI 会话摘要", "SO-API-061 AI conversation summary"), async () => {
   skipIfNoStack();
   const A = await newSiweIdentity(platformURL()!, identityURL()!);
   const ctx = await platformCtx(platformURL()!, A.login.accessToken);

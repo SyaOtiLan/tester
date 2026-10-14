@@ -12,6 +12,7 @@
  * All selectors verified against `wallet/html/popup.html` and the
  * account controllers under `js/controller/account/`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -36,7 +37,7 @@ async function fillPasswordPromptIfShown(popup: import('@playwright/test').Page)
   }
 }
 
-test('add a second HD account, then switch to it from the header switcher', async ({
+test(localizedTitle("【账户管理 / UI】 添加第二个 HD 帐户，然后从标题切换器切换到该帐户", "add a second HD account, then switch to it from the header switcher"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();
@@ -99,7 +100,7 @@ test('add a second HD account, then switch to it from the header switcher', asyn
   }
 });
 
-test('rename an account from the detail page persists the new name', async ({ recorder }) => {
+test(localizedTitle("【账户管理 / UI】 从详细信息页面重命名帐户会保留新名称", "rename an account from the detail page persists the new name"), async ({ recorder }) => {
   const ctx = await loadWalletContext();
   try {
     await stubPublicEndpoints(ctx.context);
@@ -131,7 +132,7 @@ test('rename an account from the detail page persists the new name', async ({ re
   }
 });
 
-test('WL-UI-013: delete a derived account with the password removes it from the list', async ({
+test(localizedTitle("【账户管理 / UI】 WL-UI-013 删除 / 移除账户", "WL-UI-013: delete a derived account with the password removes it from the list"), async ({
   recorder,
 }) => {
   const ctx = await loadWalletContext();

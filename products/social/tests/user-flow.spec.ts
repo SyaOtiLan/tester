@@ -13,6 +13,7 @@
  * we want the Vue 2 SPA on 8082. Deeper social coverage (real login
  * form, post-login /home/chat navigation) lives in `spa-login.spec.ts`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 
 function skipIfNoSPA() {
@@ -21,7 +22,7 @@ function skipIfNoSPA() {
 
 const spaURL = () => envFor('social')['SOCIAL_WEB_URL']!;
 
-test('landing renders the social SPA', async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 社交应用页面正常渲染", "landing renders the social SPA"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   await expect(page.locator('body')).toBeVisible();
@@ -29,7 +30,7 @@ test('landing renders the social SPA', async ({ page }) => {
   expect(text.length).toBeGreaterThan(50);
 });
 
-test('navigation surfaces at least one link or menu entry', async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 导航中至少显示一个链接或菜单入口", "navigation surfaces at least one link or menu entry"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   const entries = page.locator('a[href], [role="link"], [role="menuitem"]');
@@ -37,7 +38,7 @@ test('navigation surfaces at least one link or menu entry', async ({ page }) => 
   expect(await entries.count()).toBeGreaterThan(0);
 });
 
-test('auth or wallet-connect affordance is discoverable', async ({ page }) => {
+test(localizedTitle("【登录与服务探活 / UI】 可找到身份验证或钱包连接入口", "auth or wallet-connect affordance is discoverable"), async ({ page }) => {
   skipIfNoSPA();
   await page.goto(spaURL());
   // Element Plus wraps `<input>` in a styled container; the raw

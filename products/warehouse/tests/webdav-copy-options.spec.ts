@@ -14,6 +14,7 @@
  * Source: golang.org/x/net/webdav (COPY→201, OPTIONS advertises Allow + DAV,
  * GET missing→404); webdav_service.go wiring.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, envFor } from '../fixtures';
 import { apiContext, applyAuth, type Auth } from '../../../shared/api';
 
@@ -35,8 +36,8 @@ async function davContext() {
   return apiContext(apiBase()!, applyAuth({}, basicAuth()));
 }
 
-test.describe('WebDAV protocol edges', () => {
-  test('WH-API-020 COPY duplicates a file to a new path', async () => {
+test.describe(localizedTitle("【WebDAV 文件访问协议】WebDAV 协议边缘（WebDAV protocol edges）", "WebDAV protocol edges"), () => {
+  test(localizedTitle("【WebDAV 文件访问协议 / API】 WH-API-020 COPY 复制文件", "WH-API-020 COPY duplicates a file to a new path"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -74,7 +75,7 @@ test.describe('WebDAV protocol edges', () => {
     }
   });
 
-  test('WH-API-021 OPTIONS advertises supported verbs and DAV capabilities', async () => {
+  test(localizedTitle("【WebDAV 文件访问协议 / API】 WH-API-021 OPTIONS 返回支持的方法与 DAV 头", "WH-API-021 OPTIONS advertises supported verbs and DAV capabilities"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 
@@ -94,7 +95,7 @@ test.describe('WebDAV protocol edges', () => {
     }
   });
 
-  test('WH-API-024 GET of a non-existent file returns 404', async () => {
+  test(localizedTitle("【WebDAV 文件访问协议 / API】 WH-API-024 GET 不存在文件返回 404", "WH-API-024 GET of a non-existent file returns 404"), async () => {
     test.skip(!apiBase(), 'WAREHOUSE_WEBDAV_URL not configured');
     test.skip(!hasBasic(), 'WAREHOUSE_USER/PASS required');
 

@@ -17,6 +17,7 @@
  * Signed-action / identity contracts mirror node
  * `src/routes/public/identity.ts` + `src/auth/identity*`.
  */
+import { localizedTitle } from '../../../shared/title';
 import { Wallet, getAddress, type BaseWallet } from 'ethers';
 
 import { test, expect, baseURLFor, envFor } from '../fixtures';
@@ -34,7 +35,7 @@ function audienceFor(api: string): string {
   return new URL(api).origin;
 }
 
-test('ND-API-029 identity status reports the enabled capability surface', async () => {
+test(localizedTitle("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-029 身份状态查询", "ND-API-029 identity status reports the enabled capability surface"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -80,7 +81,7 @@ test('ND-API-029 identity status reports the enabled capability surface', async 
   }
 });
 
-test('ND-API-030 TOTP setup → confirm → verify → revoke closed loop', async () => {
+test(localizedTitle("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-030 TOTP 绑定与校验闭环", "ND-API-030 TOTP setup → confirm → verify → revoke closed loop"), async () => {
   skipIfNoService();
   const env = envFor('node');
   const api = env['NODE_API_URL'] ?? env['baseURL']!;
@@ -160,7 +161,7 @@ test('ND-API-030 TOTP setup → confirm → verify → revoke closed loop', asyn
   }
 });
 
-test('ND-API-032 PKCE authorize request → approve → exchange (single-use code)', async () => {
+test(localizedTitle("【身份能力(TOTP/Passkey/授权码) / API】 ND-API-032 应用授权码(PKCE)请求 → 批准 → 兑换", "ND-API-032 PKCE authorize request → approve → exchange (single-use code)"), async () => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');

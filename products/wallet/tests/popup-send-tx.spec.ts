@@ -38,6 +38,7 @@
  * Sepolia RPC to be reachable. We still block `*.yeying.pub` so the
  * keyring-init balance fetch doesn't stall on YeYing Mainnet.
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect } from '../fixtures';
 
 import { loadWalletContext, teardownWalletContext } from '../helpers/extension';
@@ -113,7 +114,7 @@ async function sepoliaBalanceWei(address: string): Promise<bigint> {
   return BigInt(hex);
 }
 
-test('broadcast a real transaction on Sepolia and see it in the activity list', async ({
+test(localizedTitle("【转账与交易 / E2E】 在 Sepolia 上广播真实交易并在活动列表中看到它", "broadcast a real transaction on Sepolia and see it in the activity list"), async ({
   recorder,
 }) => {
   // Block every YeYing public host — this test specifically targets

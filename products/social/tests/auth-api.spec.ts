@@ -18,6 +18,7 @@
  *      · well-formed but tampered JWT -> {code:401,"token无效或已过期"} (INVALID_TOKEN)
  *      · malformed garbage token      -> {code:500,"系统繁忙"} (parse error)
  */
+import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
 import { apiContext } from '../../../shared/api';
 import {
@@ -38,7 +39,7 @@ function skipIfNoPlatform() {
 }
 
 // SO-API-001 — email+password login yields a JWT envelope.
-test('SO-API-001 email+password login returns LoginVO', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-001 邮箱+密码登录成功换取 JWT", "SO-API-001 email+password login returns LoginVO"), async () => {
   skipIfNoPlatform();
   const { login } = await registerAndLogin(platformURL()!);
   expect(login.code).toBe(200);
@@ -50,7 +51,7 @@ test('SO-API-001 email+password login returns LoginVO', async () => {
 });
 
 // SO-API-002 — wrong password is rejected, no token issued.
-test('SO-API-002 wrong password is rejected', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-002 错误密码登录被拒", "SO-API-002 wrong password is rejected"), async () => {
   skipIfNoPlatform();
   const { creds } = await registerAndLogin(platformURL()!);
   const ctx = await apiContext(platformURL()!);
@@ -67,7 +68,7 @@ test('SO-API-002 wrong password is rejected', async () => {
 });
 
 // SO-API-003 (P1) — unregistered email is rejected.
-test('SO-API-003 unknown email login is rejected', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-003 未注册邮箱登录被拒", "SO-API-003 unknown email login is rejected"), async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -84,7 +85,7 @@ test('SO-API-003 unknown email login is rejected', async () => {
 });
 
 // SO-API-004 — register a new user, then log in with it.
-test('SO-API-004 register new user then login', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-004 注册新用户", "SO-API-004 register new user then login"), async () => {
   skipIfNoPlatform();
   const creds = randomEmailCreds();
   const { register, login } = await registerAndLogin(platformURL()!, creds);
@@ -94,7 +95,7 @@ test('SO-API-004 register new user then login', async () => {
 });
 
 // SO-API-011 — protected route without accessToken header is rejected.
-test('SO-API-011 protected route without accessToken is rejected', async () => {
+test(localizedTitle("【鉴权与会话守卫 / API】 SO-API-011 受保护接口缺 accessToken 头被拒", "SO-API-011 protected route without accessToken is rejected"), async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -109,7 +110,7 @@ test('SO-API-011 protected route without accessToken is rejected', async () => {
 });
 
 // SO-API-012 — tampered (well-formed) accessToken is rejected as INVALID_TOKEN.
-test('SO-API-012 tampered accessToken is rejected', async () => {
+test(localizedTitle("【鉴权与会话守卫 / API】 SO-API-012 非法/篡改 accessToken 被拒", "SO-API-012 tampered accessToken is rejected"), async () => {
   skipIfNoPlatform();
   test.skip(!identityURL(), 'SOCIAL_IDENTITY_URL not configured');
   // Mint a real JWT, then flip one char of its signature segment so the
@@ -134,7 +135,7 @@ test('SO-API-012 tampered accessToken is rejected', async () => {
 });
 
 // SO-API-005 (P1) — registering an already-used email is rejected (no dup account).
-test('SO-API-005 duplicate email register is rejected', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-005 重复邮箱注册被拒", "SO-API-005 duplicate email register is rejected"), async () => {
   skipIfNoPlatform();
   const creds = randomEmailCreds();
   const first = await registerAndLogin(platformURL()!, creds);
@@ -154,7 +155,7 @@ test('SO-API-005 duplicate email register is rejected', async () => {
 });
 
 // SO-API-006 (P1) — register field validation (invalid email / oversized nickName).
-test('SO-API-006 register field validation rejects bad input', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-006 注册字段校验(缺昵称/非法邮箱)", "SO-API-006 register field validation rejects bad input"), async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -187,7 +188,7 @@ test('SO-API-006 register field validation rejects bad input', async () => {
 });
 
 // SO-API-007 (P1) — PUT /refreshToken (header) mints a working LoginVO.
-test('SO-API-007 refresh token yields a usable accessToken', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-007 刷新令牌换取新 accessToken", "SO-API-007 refresh token yields a usable accessToken"), async () => {
   skipIfNoPlatform();
   const { login } = await registerAndLogin(platformURL()!);
   expect(login.code).toBe(200);
@@ -226,7 +227,7 @@ test('SO-API-007 refresh token yields a usable accessToken', async () => {
 // SO-API-008 (P2) — missing / forged refreshToken is rejected, no new token issued.
 // Live: PUT /refreshToken with no header -> {code:500,"系统繁忙..."}; with a
 // garbage token -> {code:500,"您的登录信息已过期，请重新登录"}. Both non-200, data null.
-test('SO-API-008 missing/invalid refreshToken is rejected', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-008 缺失/非法 refreshToken 刷新失败", "SO-API-008 missing/invalid refreshToken is rejected"), async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -250,7 +251,7 @@ test('SO-API-008 missing/invalid refreshToken is rejected', async () => {
 
 // SO-API-010 (P2) — change password with the wrong old password is rejected,
 // and the original password still works (password unchanged).
-test('SO-API-010 change password with wrong old password is rejected', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-010 修改密码旧密码错误被拒", "SO-API-010 change password with wrong old password is rejected"), async () => {
   skipIfNoPlatform();
   const { creds, login } = await registerAndLogin(platformURL()!);
   expect(login.code).toBe(200);
@@ -280,7 +281,7 @@ test('SO-API-010 change password with wrong old password is rejected', async () 
 });
 
 // SO-API-009 (P1) — change password; new password works, old one no longer does.
-test('SO-API-009 change password succeeds', async () => {
+test(localizedTitle("【登录与注册 / API】 SO-API-009 修改密码成功", "SO-API-009 change password succeeds"), async () => {
   skipIfNoPlatform();
   const { creds, login } = await registerAndLogin(platformURL()!);
   expect(login.code).toBe(200);
@@ -317,7 +318,7 @@ test('SO-API-009 change password succeeds', async () => {
 // SO-API-013 (P1) — public paths are reachable without an accessToken header.
 // Each must reach business logic (a domain error) rather than the AuthInterceptor
 // NO_LOGIN (code 400 "未登录") gate that protected routes hit (see SO-API-011).
-test('SO-API-013 public paths need no auth', async () => {
+test(localizedTitle("【鉴权与会话守卫 / API】 SO-API-013 公共路径无需鉴权可访问", "SO-API-013 public paths need no auth"), async () => {
   skipIfNoPlatform();
   const ctx = await apiContext(platformURL()!);
   try {
@@ -358,7 +359,7 @@ test('SO-API-013 public paths need no auth', async () => {
 // server HMAC secret (out of scope to extract), and the 1800s TTL makes real
 // expiry impractical inside an e2e run. Invalid-signature/tampered-token
 // rejection (the same 401 INVALID_TOKEN path) is covered by SO-API-012.
-test('SO-API-014 expired accessToken rejected', async () => {
+test(localizedTitle("【鉴权与会话守卫 / API】 SO-API-014 过期 accessToken 被拒", "SO-API-014 expired accessToken rejected"), async () => {
   test.skip(
     true,
     'Cannot mint a validly-signed expired JWT without the server HMAC secret; ' +
@@ -367,7 +368,7 @@ test('SO-API-014 expired accessToken rejected', async () => {
 });
 
 // SO-API-024 — GET /user/self returns the current user (via a real SIWE token).
-test('SO-API-024 /user/self returns the current user', async () => {
+test(localizedTitle("【用户资料与搜索 / API】 SO-API-024 获取当前登录用户信息", "SO-API-024 /user/self returns the current user"), async () => {
   skipIfNoPlatform();
   test.skip(!identityURL(), 'SOCIAL_IDENTITY_URL not configured');
   const wallet = Wallet.createRandom();
