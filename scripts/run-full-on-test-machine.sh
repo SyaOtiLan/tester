@@ -9,24 +9,53 @@ export PWWORKERS=1
 export TESTER_SCHEDULED_FULL=1
 export TESTER_SOCIAL_UPLOAD_STORAGE_AVAILABLE=0
 
-tester=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-publisher="$tester/scripts/publish-sanitized-report.py"
-project_index="$tester/scripts/publish-project-report.py"
-project_menu="$tester/scripts/add-project-menu.py"
-notifier="$tester/scripts/notify-feishu-report.py"
-public=${TESTER_REPORT_DIR:-/data/test-results}
-private=${TESTER_PRIVATE_REPORT_DIR:-/data/test-results-private}
+project=${1:-}
+if (( $# > 1 )); then
+    echo 'Usage: run-full-on-test-machine.sh [project]' >&2
+    exit 2
+fi
+case "$project" in
+    ''|agent|books|chat|marketplace|node|project|router|social|wallet|warehouse) ;;
+    *) echo "Unknown or disabled Tester project: $project" >&2; exit 2 ;;
+esac
+if [[ "$project" == router ]]; then
+    # The local Router listens on IPv4; localhost resolves to ::1 for Node here.
+    export ROUTER_BASE_URL=http://127.0.0.1:3011
+fi
+
+runner_home=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+tester=${TESTER_SOURCE_DIR:-$runner_home}
+publisher="$runner_home/scripts/publish-sanitized-report.py"
+project_index="$runner_home/scripts/publish-project-report.py"
+project_menu="$runner_home/scripts/add-project-menu.py"
+notifier="$runner_home/scripts/notify-feishu-report.py"
+export TESTER_REPORT_SOURCE="$tester/reports/index.html"
+public_root=${TESTER_REPORT_DIR:-/data/test-results}
+private_root=${TESTER_PRIVATE_REPORT_DIR:-/data/test-results-private}
+public=$public_root
+private=$private_root
+if [[ -n "$project" ]]; then
+    public="$public_root/projects/$project"
+    private="$private_root/projects/$project"
+fi
+export TESTER_PROJECT="$project"
 lock=${TESTER_LOCK_FILE:-/run/lock/yeying-tester-full.lock}
 
-exec 9>"$lock"
-if ! flock -n 9; then
-    echo 'Tester full run already active; skipped.'
-    exit 0
+if [[ "${TESTER_PARENT_LOCK_HELD:-0}" != 1 ]]; then
+    exec 9>"$lock"
+    if ! flock -n 9; then
+        echo 'Tester run already active; retry later.'
+        if [[ -n "$project" || -n "${TESTER_REQUEST_ID:-}" ]]; then exit 75; fi
+        exit 0
+    fi
 fi
 
 stamp=$(date '+%Y-%m-%d_%H-%M-%S%z')
 run_dir="$private/$stamp"
 mkdir -p "$run_dir" "$public/runs"
+if [[ -n "$project" ]]; then
+    chmod 755 "$public_root" "$public_root/projects" "$public"
+fi
 chmod 700 "$private" "$run_dir"
 export ROUTER_TEST_AUTH_CACHE_PATH="$run_dir/router-auth-cache.json"
 attempt="$public/last-attempt.txt"
@@ -38,7 +67,7 @@ write_attempt() {
     chmod 644 "$temp"
     mv -f "$temp" "$attempt"
     printf '%s\n' "$message"
-    if [[ "$message" != running:* ]]; then
+    if [[ "$message" != running:* && -z "$project" ]]; then
         local finished_at
         finished_at=$(date '+%Y-%m-%dT%H:%M:%S%:z')
         if ! python3 "$notifier" --stamp "$stamp" --result "$message" --finished-at "$finished_at"; then
@@ -49,6 +78,7 @@ write_attempt() {
 
 if [[ ! -f "$tester/.env.local" || ! -f "$tester/node_modules/@playwright/test/cli.js" || ! -x "$node_bin" ]]; then
     write_attempt 'skipped: Tester environment or dependencies missing'
+    if [[ -n "$project" ]]; then exit 75; fi
     exit 0
 fi
 
@@ -62,16 +92,27 @@ if [[ ! "$stuck_chrome_limit" =~ ^[0-9]+$ ]]; then
 fi
 if (( available_memory < 4294967296 || available_disk < 2147483648 )); then
     write_attempt 'skipped: insufficient free memory or disk'
+    if [[ -n "$project" ]]; then exit 75; fi
     exit 0
 fi
-if (( stuck_chrome > stuck_chrome_limit )); then
+if [[ "$project" != books && "$project" != marketplace ]] && (( stuck_chrome > stuck_chrome_limit )); then
     write_attempt 'skipped: additional Chromium processes are stuck in D state'
+    if [[ -n "$project" ]]; then exit 75; fi
     exit 0
 fi
 
 cd "$tester"
 started=$(date +%s)
-write_attempt 'running: full enabled Tester suite'
+if [[ -n "$project" ]]; then
+    write_attempt "running: $project Tester suite"
+else
+    write_attempt 'running: full enabled Tester suite'
+fi
+
+playwright_args=(test --config=playwright.safe.config.ts --workers=1)
+if [[ -n "$project" ]]; then
+    playwright_args+=("--project=$project")
+fi
 
 set +e
 timeout --signal=TERM --kill-after=30s 9000s \
@@ -82,8 +123,7 @@ timeout --signal=TERM --kill-after=30s 9000s \
         --tmpfs /sys/bus/pci/devices \
         --tmpfs /sys/class/drm \
         --chdir "$tester" \
-        "$node_bin" node_modules/@playwright/test/cli.js test \
-            --config=playwright.safe.config.ts --workers=1 \
+        "$node_bin" node_modules/@playwright/test/cli.js "${playwright_args[@]}" \
     > "$run_dir/test.log" 2>&1
 test_rc=$?
 set -e
@@ -172,17 +212,30 @@ if Path(junit_path).exists():
         'failed': sum(case.find('failure') is not None or case.find('error') is not None for case in cases),
         'skipped': sum(case.find('skipped') is not None for case in cases),
     }
+project = os.environ.get('TESTER_PROJECT', '')
 summary = {
     'run': stamp,
     'started_at': started_at,
     'finished_at': finished_at,
-    'suite': 'all enabled projects (Knowledge excluded)',
+    'suite': f'project: {project}' if project else 'all enabled projects (Knowledge excluded)',
     'status': 'passed' if exit_code == '0' else 'failed',
     'exit_code': int(exit_code),
     **counts,
     'report': f'runs/{stamp}/index.html',
     'full_report': f'runs/{stamp}/full.html',
 }
+if project:
+    summary['project'] = project
+    summary['target_sha'] = os.environ.get('TESTER_TARGET_SHA', '')
+    summary['trigger'] = os.environ.get('TESTER_TRIGGER', 'manual')
+    summary['request_id'] = os.environ.get('TESTER_REQUEST_ID', '')
+    if os.environ.get('TESTER_BUILD_NOTE'):
+        summary['build_note'] = os.environ['TESTER_BUILD_NOTE']
+elif os.environ.get('TESTER_REQUEST_ID'):
+    summary['trigger'] = os.environ.get('TESTER_TRIGGER', 'manual')
+    summary['request_id'] = os.environ['TESTER_REQUEST_ID']
+if os.environ.get('TESTER_SOURCE_SHA'):
+    summary['tester_sha'] = os.environ['TESTER_SOURCE_SHA']
 for name in ('latest.json', f'runs/{stamp}/summary.json'):
     target = public / name
     fd, temp = tempfile.mkstemp(prefix='.summary.', dir=target.parent)

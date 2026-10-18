@@ -47,11 +47,15 @@ Notification failure preserves the report and the test runner's exit code.
 Review the repository path, Node.js location, directories and host timezone
 before installing `scripts/yeying-tester-full.cron`. The example runs daily at
 **03:00** on a host configured for **Asia/Shanghai**; it does not set the timezone.
+It calls `test-tester-main.sh`, which fetches the latest Tester main into a
+separate managed worktree before running the existing report pipeline. See
+[test-control.md](test-control.md) for the separate worktree and protected
+manual controls.
 
 ```bash
 sudo install -m 644 scripts/yeying-tester-full.cron /etc/cron.d/yeying-tester-full
-# Manual run:
-bash scripts/run-full-on-test-machine.sh
+# Manual run with the latest Tester main:
+bash scripts/test-tester-main.sh
 ```
 
 Exit `0` means a passed suite or a preflight skip; `last-attempt.txt` distinguishes

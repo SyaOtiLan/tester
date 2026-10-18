@@ -13,6 +13,8 @@ node_modules/
 /dist/
 *.tsbuildinfo
 .turbo/
+__pycache__/
+*.pyc
 
 # Environment
 .env

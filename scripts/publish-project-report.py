@@ -190,6 +190,15 @@ def render(junit: Path, stamp: str) -> str:
     except ValueError:
         run_time = stamp
 
+    version_line = ''
+    project = os.environ.get('TESTER_PROJECT', '')
+    target_sha = os.environ.get('TESTER_TARGET_SHA', '')
+    if project and re.fullmatch(r'[0-9a-f]{40}', target_sha):
+        trigger = {'main': 'main 更新', 'manual': '手动'}.get(
+            os.environ.get('TESTER_TRIGGER', ''), '单项目'
+        )
+        version_line = f' · 提交 {target_sha[:12]} · {trigger}触发'
+
     blocks = []
     for project in sorted(groups, key=lambda name: (-sum(c.status == 'failed' for c in groups[name]), name)):
         cases = groups[project]
@@ -250,7 +259,7 @@ def render(junit: Path, stamp: str) -> str:
 :root{color-scheme:light;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#17212f;background:#f5f7fa}
 *{box-sizing:border-box}body{margin:0}main{max-width:1100px;margin:auto;padding:32px 20px 64px}
 .top{display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap}h1{margin:0;font-size:28px}
-.subtitle{color:#5f6b7a;margin:8px 0 0}.detail{color:#1768bf;text-decoration:none;padding:9px 14px;border:1px solid #bed4e9;border-radius:10px;background:#fff}
+.subtitle{color:#5f6b7a;margin:8px 0 0}.detail{color:#1768bf;text-decoration:none;padding:9px 14px;border:1px solid #bed4e9;border-radius:10px;background:#fff}.actions{display:flex;gap:8px;flex-wrap:wrap}
 .totals{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 18px}.total{background:#fff;border:1px solid #dde4ec;border-radius:12px;padding:15px 20px;min-width:130px}
 .total b{display:block;font-size:25px;margin-top:4px}.total span{color:#647386;font-size:14px}.hint{color:#5f6b7a;font-size:14px;margin:0 0 18px}
 .project{background:#fff;border:1px solid #dde4ec;border-radius:12px;margin:10px 0;overflow:hidden}.project summary{display:flex;align-items:center;gap:12px;flex-wrap:wrap;cursor:pointer;padding:17px 20px;list-style:none}
@@ -267,7 +276,7 @@ def render(junit: Path, stamp: str) -> str:
 .skip-detail{display:block;color:#69778a;font-size:12px;margin-top:3px;overflow-wrap:anywhere}
 @media(max-width:650px){main{padding:22px 12px}.project summary{padding:14px}.project-name{min-width:90px}.cases{padding:0 14px 10px}.total{min-width:calc(50% - 6px);flex:1}}
 </style></head><body><main>
-<div class="top"><div><h1>Tester 测试环境报告</h1><p class="subtitle">运行时间：$run_time（北京时间） · $project_count 个项目</p></div><a class="detail" href="full.html">查看 Playwright 详细报告 →</a></div>
+<div class="top"><div><h1>Tester 测试环境报告</h1><p class="subtitle">运行时间：$run_time（北京时间） · $project_count 个项目$version_line</p></div><div class="actions"><a class="detail" href="/report/control/">手动测试</a><a class="detail" href="full.html">查看 Playwright 详细报告 →</a></div></div>
 <div class="totals"><div class="total"><span>用例总数</span><b>$total</b></div><div class="total"><span>通过</span><b>$passed</b></div><div class="total"><span>失败</span><b>$failed</b></div><div class="total"><span>跳过</span><b>$skipped</b></div></div>
 <section class="skip-breakdown"><h2>跳过分类</h2><p class="hint">按跳过原因归类；即使代码调用了 skip，也可能是环境或测试前提不足。这些用例均不计入通过。</p>
 ${skip_groups}</section>
@@ -276,6 +285,7 @@ ${projects}
 </main></body></html>
 ''').substitute(
         run_time=public_text(run_time, secrets),
+        version_line=public_text(version_line, secrets),
         project_count=len(groups),
         total=sum(totals.values()),
         passed=totals['passed'],

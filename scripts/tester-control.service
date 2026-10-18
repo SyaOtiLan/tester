@@ -1,0 +1,23 @@
+[Unit]
+Description=Tester single-project control and main watcher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/code/tester
+Environment=PYTHONUNBUFFERED=1
+Environment=TESTER_CONTROL_HOST=127.0.0.1
+Environment=TESTER_CONTROL_PORT=18082
+Environment=TESTER_NODE_BIN=/opt/node-v24/bin/node
+Environment=TESTER_STUCK_CHROME_LIMIT=4
+ExecStart=/usr/bin/python3 /root/code/tester/scripts/tester-control.py
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "agent": {"repo": "/root/code/agent", "enabled": true},
+    "books": {"repo": "/root/code/books", "enabled": true},
+    "chat": {"repo": "/root/code/chat", "enabled": true},
+    "marketplace": {"repo": "/root/code/marketplace", "enabled": true},
+    "node": {"repo": "/root/code/node", "enabled": false, "reason": "新 main 含数据库迁移；隔离数据库与服务部署尚未验证"},
+    "project": {"repo": "/root/code/project", "enabled": false, "reason": "隔离部署尚未验证；本地工作树有未提交改动"},
+    "router": {"repo": "/root/code/router", "enabled": true},
+    "social": {"repo": "/root/code/social", "enabled": false, "reason": "多个 Java 服务的隔离部署与回滚尚未验证"},
+    "wallet": {"repo": "/root/code/wallet", "enabled": true},
+    "warehouse": {"repo": "/root/code/warehouse", "enabled": false, "reason": "隔离部署尚未验证；本地工作树有未提交改动"}
+  }
+}

@@ -141,6 +141,8 @@ pass against any HTTP server.
 
 Daily execution, public reports grouped by product, and Feishu notifications
 are documented in [docs/test-machine-report.md](docs/test-machine-report.md).
+For protected manual runs and main-update triggers on the test machine, see
+[docs/test-control.md](docs/test-control.md).
 
 ## License
 
