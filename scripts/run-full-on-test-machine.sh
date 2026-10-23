@@ -5,6 +5,7 @@ umask 077
 node_bin=${TESTER_NODE_BIN:-$(command -v node || true)}
 export PATH="$(dirname "$node_bin"):/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 export TEST_ENV=local
+export TEST_TITLE_LANG=zh
 export PWWORKERS=1
 export TESTER_SCHEDULED_FULL=1
 export TESTER_SOCIAL_UPLOAD_STORAGE_AVAILABLE=0
@@ -28,6 +29,7 @@ tester=${TESTER_SOURCE_DIR:-$runner_home}
 publisher="$runner_home/scripts/publish-sanitized-report.py"
 project_index="$runner_home/scripts/publish-project-report.py"
 project_menu="$runner_home/scripts/add-project-menu.py"
+bilingual_report="$runner_home/scripts/publish-bilingual-report.py"
 notifier="$runner_home/scripts/notify-feishu-report.py"
 export TESTER_REPORT_SOURCE="$tester/reports/index.html"
 public_root=${TESTER_REPORT_DIR:-/data/test-results}
@@ -178,12 +180,19 @@ if ! python3 "$project_menu" --report "$published_run/full.html" --junit "$run_d
     exit 1
 fi
 
+bilingual_args=(--report "$published_run/full.html" --output "$published_run/full.en.html" --tester "$tester" --node-bin "$node_bin")
+if [[ -n "$project" ]]; then bilingual_args+=(--project "$project"); fi
+if ! python3 "$bilingual_report" "${bilingual_args[@]}" >> "$run_dir/test.log" 2>&1; then
+    write_attempt 'not published: bilingual report generation failed; previous report retained'
+    exit 1
+fi
+
 if ! python3 "$project_index" --junit "$run_dir/junit.xml" --stamp "$stamp" --output "$published_run/index.html" >> "$run_dir/test.log" 2>&1; then
     write_attempt 'not published: project report generation failed; previous report retained'
     exit 1
 fi
 
-for name in full.html index.html; do
+for name in full.html full.en.html index.html; do
     temporary="$public/.$name.$stamp"
     cp "$published_run/$name" "$temporary"
     chmod 644 "$temporary"

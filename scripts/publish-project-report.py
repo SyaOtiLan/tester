@@ -3,9 +3,11 @@
 
 import argparse
 from collections import defaultdict
+import csv
 from dataclasses import dataclass
 from datetime import datetime
 import html
+import io
 import os
 from pathlib import Path
 import re
@@ -24,6 +26,8 @@ ENV_FILES = [
     DEPLOY_ROOT / 'node/web/.env.local',
     DEPLOY_ROOT / 'social/config/runtime.env',
 ]
+REPORT_ACCESS_KEY = Path(os.environ.get(
+    'TESTER_REPORT_ACCESS_KEY_FILE', '/data/test-results-private/control/admin-password'))
 SECRET_NAME = re.compile(r'(KEY|PASS|TOKEN|PRIVATE|SECRET|AUTH)', re.I)
 SECRET_SHAPES = [
     re.compile(rb'sk-[A-Za-z0-9_-]{12,}'),
@@ -42,6 +46,14 @@ SKIP_LABELS = {
     'planned': '计划内暂不执行',
     'unmarked': '未标注跳过',
     'unknown': '待归因',
+}
+SKIP_LABELS_EN = {
+    'environment': 'Environment or prerequisites missing',
+    'test_todo': 'Test pending or needs revision',
+    'product_issue': 'Known product or test issue',
+    'planned': 'Not run in this test plan',
+    'unmarked': 'Unmarked skip',
+    'unknown': 'Needs review',
 }
 SKIP_DESCRIPTIONS = {
     'environment': '缺少账号、模型、服务、配置或测试数据等前提；补齐后应重新执行。',
@@ -121,16 +133,156 @@ def configured_secrets() -> list[bytes]:
                 value = value.strip().strip("\"'")
                 if len(value) >= 8:
                     values.add(value.encode())
+    if REPORT_ACCESS_KEY.is_file():
+        value = REPORT_ACCESS_KEY.read_text(encoding='utf-8').strip()
+        if len(value) >= 8:
+            values.add(value.encode())
     return sorted(values, key=len, reverse=True)
 
 
-def public_text(value: str, secrets: list[bytes]) -> str:
+def redact_text(value: str, secrets: list[bytes]) -> str:
     data = value.encode('utf-8')
     for secret in secrets:
         data = data.replace(secret, b'[REDACTED]')
     for pattern in SECRET_SHAPES:
         data = pattern.sub(b'[REDACTED]', data)
-    return html.escape(data.decode('utf-8', errors='replace'), quote=True)
+    return data.decode('utf-8', errors='replace')
+
+
+def public_text(value: str, secrets: list[bytes]) -> str:
+    return html.escape(redact_text(value, secrets), quote=True)
+
+
+def csv_cell(value: str, secrets: list[bytes]) -> str:
+    value = redact_text(value, secrets).replace('\x00', '')
+    if value.lstrip().startswith(('=', '+', '-', '@')):
+        return "'" + value
+    return value
+
+
+def write_error_exports(junit: Path, directory: Path) -> set[str]:
+    """Publish one sanitized CSV per project with failed test cases."""
+    secrets = configured_secrets()
+    failures: dict[str, list[list[str]]] = defaultdict(list)
+    for case in ET.parse(junit).getroot().iter('testcase'):
+        errors = [node for name in ('failure', 'error') for node in case.findall(name)]
+        if not errors:
+            continue
+        source = case.attrib.get('classname', '')
+        match = PROJECT_FROM_CLASS.search(source)
+        project = match.group(1) if match else 'other'
+        error = errors[0]
+        failures[project].append([
+            csv_cell(project, secrets),
+            csv_cell(case.attrib.get('name', 'Unnamed test'), secrets),
+            csv_cell(source, secrets),
+            csv_cell(error.attrib.get('message', ''), secrets),
+            csv_cell(error.text or '', secrets),
+        ])
+    directory.mkdir(parents=True, exist_ok=True)
+    directory.chmod(0o755)
+    for project, rows in failures.items():
+        output = io.StringIO(newline='')
+        writer = csv.writer(output)
+        writer.writerow(['项目', '失败用例', '测试文件', '错误摘要', '错误堆栈'])
+        writer.writerows(rows)
+        data = ('\ufeff' + output.getvalue()).encode('utf-8')
+        if any(secret in data for secret in secrets):
+            raise ValueError('Configured secret remains in error export')
+        if any(pattern.search(data) for pattern in SECRET_SHAPES):
+            raise ValueError('Key-shaped value remains in error export')
+        fd, temporary = tempfile.mkstemp(prefix='.error-export.', dir=directory)
+        try:
+            os.fchmod(fd, 0o644)
+            with os.fdopen(fd, 'wb') as file:
+                file.write(data)
+            os.replace(temporary, directory / f'{project}.csv')
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+    return set(failures)
+
+
+def write_project_logs(junit: Path, stamp: str, directory: Path) -> set[str]:
+    """Publish sanitized Chinese and English case logs for every project."""
+    secrets = configured_secrets()
+    projects: dict[str, list[ET.Element]] = defaultdict(list)
+    for case in ET.parse(junit).getroot().iter('testcase'):
+        match = PROJECT_FROM_CLASS.search(case.attrib.get('classname', ''))
+        projects[match.group(1) if match else 'other'].append(case)
+    directory.mkdir(parents=True, exist_ok=True)
+    directory.chmod(0o755)
+    for project, cases in projects.items():
+        counts = {status: sum(status_of(case) == status for case in cases) for status in STATUS_LABELS}
+        for language in ('zh', 'en'):
+            labels = {
+                'zh': {
+                    'title': 'Tester 项目日志', 'project': '项目', 'run': '运行', 'cases': '用例',
+                    'passed': '通过', 'failed': '失败', 'skipped': '跳过',
+                    'source': '来源: Playwright JUnit；逐用例日志，不是混合项目的原始 test.log。',
+                    'file': '测试文件', 'duration': '耗时', 'seconds': '秒',
+                    'skip_category': '跳过分类', 'skip_reason': '跳过原因',
+                    'failure': '失败', 'error': '错误', 'skip': '跳过', 'type': '类型',
+                    'stdout': '标准输出', 'stderr': '标准错误',
+                },
+                'en': {
+                    'title': 'Tester project log', 'project': 'Project', 'run': 'Run', 'cases': 'Cases',
+                    'passed': 'Passed', 'failed': 'Failed', 'skipped': 'Skipped',
+                    'source': 'Source: Playwright JUnit; case-by-case log, not the combined raw test.log.',
+                    'file': 'Test file', 'duration': 'Duration', 'seconds': 's',
+                    'skip_category': 'Skip category', 'skip_reason': 'Skip reason',
+                    'failure': 'Failure', 'error': 'Error', 'skip': 'Skipped', 'type': 'Type',
+                    'stdout': 'Standard output', 'stderr': 'Standard error',
+                },
+            }[language]
+            lines = [
+                f'{labels["title"]} | {labels["project"]}: {project} | {labels["run"]}: {stamp}',
+                f'{labels["cases"]}: {len(cases)} | {labels["passed"]}: {counts["passed"]} | '
+                f'{labels["failed"]}: {counts["failed"]} | {labels["skipped"]}: {counts["skipped"]}',
+                labels['source'],
+            ]
+            for index, case in enumerate(cases, 1):
+                status = status_of(case)
+                status_label = STATUS_LABELS[status] if language == 'zh' else status.upper()
+                lines.extend([
+                    '', f'[{index}/{len(cases)}] [{status_label}] {case.attrib.get("name", "Unnamed test")}',
+                    f'{labels["file"]}: {case.attrib.get("classname", "")}',
+                    f'{labels["duration"]}: {case.attrib.get("time", "")} {labels["seconds"]}',
+                ])
+                kind, reason = skip_info(case)
+                if kind:
+                    category = SKIP_LABELS[kind] if language == 'zh' else SKIP_LABELS_EN[kind]
+                    lines.append(f'{labels["skip_category"]}: {category}')
+                    if reason:
+                        lines.append(f'{labels["skip_reason"]}: {reason}')
+                for tag, label in (('failure', labels['failure']), ('error', labels['error']),
+                                   ('skipped', labels['skip'])):
+                    for node in case.findall(tag):
+                        lines.append(f'{label}: {node.attrib.get("message", "")}')
+                        if node.attrib.get('type'):
+                            lines.append(f'{labels["type"]}: {node.attrib["type"]}')
+                        if node.text and node.text.strip():
+                            lines.append(node.text.rstrip())
+                for tag, label in (('system-out', labels['stdout']), ('system-err', labels['stderr'])):
+                    for node in case.findall(tag):
+                        if node.text and node.text.strip():
+                            lines.extend([f'{label}:', node.text.rstrip()])
+            data = (redact_text('\n'.join(lines) + '\n', secrets).replace('\x00', '')).encode('utf-8')
+            if any(secret in data for secret in secrets):
+                raise ValueError('Configured secret remains in project log')
+            if any(pattern.search(data) for pattern in SECRET_SHAPES):
+                raise ValueError('Key-shaped value remains in project log')
+            filename = f'{project}.log' if language == 'zh' else f'{project}.en.log'
+            fd, temporary = tempfile.mkstemp(prefix='.project-log.', dir=directory)
+            try:
+                os.fchmod(fd, 0o644)
+                with os.fdopen(fd, 'wb') as file:
+                    file.write(data)
+                os.replace(temporary, directory / filename)
+            finally:
+                if os.path.exists(temporary):
+                    os.unlink(temporary)
+    return set(projects)
 
 
 def status_of(case: ET.Element) -> str:
@@ -216,6 +368,18 @@ def render(junit: Path, stamp: str) -> str:
                 f'<span>{public_text(case.name, secrets)}{detail}</span></li>'
             )
         project_name = public_text(project, secrets)
+        run_prefix = f'runs/{stamp}/'
+        zh_log = f'logs/{project}.log'
+        en_log = f'logs/{project}.en.log'
+        export_links = [
+            f'<a class="export log-export" href="{run_prefix}{zh_log}" data-log-zh="{zh_log}" '
+            f'data-log-en="{en_log}" download>导出项目日志 LOG</a>'
+            f'<noscript><a class="export" href="{run_prefix}{en_log}" download>English LOG</a></noscript>'
+        ]
+        if counts['failed']:
+            export_links.append(
+                f'<a class="export project-error-export" href="{run_prefix}errors/{project}.csv" '
+                f'data-export="errors/{project}.csv" download>导出失败项 CSV</a>')
         blocks.append(
             f'<details class="project" id="project-{project}">'
             '<summary>'
@@ -224,7 +388,7 @@ def render(junit: Path, stamp: str) -> str:
             f'<span class="count passed">{counts["passed"]} 通过</span>'
             f'<span class="count failed">{counts["failed"]} 失败</span>'
             f'<span class="count skipped">{counts["skipped"]} 跳过</span>'
-            '</summary><ul class="cases">'
+            '</summary><div class="project-actions">' + ''.join(export_links) + '</div><ul class="cases">'
             + ''.join(rows)
             + '</ul></details>'
         )
@@ -268,6 +432,8 @@ def render(junit: Path, stamp: str) -> str:
 .passed{color:#14764b;background:#e8f7ef}.failed{color:#b42318;background:#fef0ee}.skipped{color:#8a6211;background:#fff7df}
 .cases{list-style:none;padding:0 20px 12px;margin:0}.cases li{display:flex;gap:12px;align-items:start;border-top:1px solid #edf0f4;padding:10px 0;font-size:14px;overflow-wrap:anywhere}
 .case-status{display:inline-block;flex:0 0 auto;border-radius:5px;padding:2px 6px;font-size:12px}
+.project-actions{display:flex;gap:16px;flex-wrap:wrap;padding:0 20px 12px}.export{color:#1768bf;text-decoration:none;font-size:13px}.export:hover{text-decoration:underline}
+.log-language{display:flex;align-items:center;gap:7px;color:#5f6b7a;font-size:13px}.log-language select{padding:8px;border:1px solid #bed4e9;border-radius:8px;background:#fff;color:#17212f}
 .skip-breakdown{margin:24px 0}.skip-breakdown h2{font-size:20px;margin:0 0 8px}.skip-breakdown .hint{margin-bottom:12px}
 .skip-group{background:#fff;border:1px solid #dde4ec;border-radius:10px;margin:8px 0;overflow:hidden}
 .skip-group summary{display:flex;justify-content:space-between;gap:12px;cursor:pointer;padding:13px 18px;font-weight:600}
@@ -276,14 +442,33 @@ def render(junit: Path, stamp: str) -> str:
 .skip-detail{display:block;color:#69778a;font-size:12px;margin-top:3px;overflow-wrap:anywhere}
 @media(max-width:650px){main{padding:22px 12px}.project summary{padding:14px}.project-name{min-width:90px}.cases{padding:0 14px 10px}.total{min-width:calc(50% - 6px);flex:1}}
 </style></head><body><main>
-<div class="top"><div><h1>Tester 测试环境报告</h1><p class="subtitle">运行时间：$run_time（北京时间） · $project_count 个项目$version_line</p></div><div class="actions"><a class="detail" href="/report/control/">手动测试</a><a class="detail" href="full.html">查看 Playwright 详细报告 →</a></div></div>
+<div class="top"><div><h1>Tester 测试环境报告</h1><p class="subtitle">运行时间：$run_time（北京时间） · $project_count 个项目$version_line</p></div><div class="actions"><label class="log-language" for="log-language">项目日志语言 <select id="log-language"><option value="zh">中文</option><option value="en">English</option></select></label><a class="detail" href="/report/control/">手动测试</a><a class="detail" href="full.html">查看 Playwright 详细报告 →</a></div></div>
 <div class="totals"><div class="total"><span>用例总数</span><b>$total</b></div><div class="total"><span>通过</span><b>$passed</b></div><div class="total"><span>失败</span><b>$failed</b></div><div class="total"><span>跳过</span><b>$skipped</b></div></div>
 <section class="skip-breakdown"><h2>跳过分类</h2><p class="hint">按跳过原因归类；即使代码调用了 skip，也可能是环境或测试前提不足。这些用例均不计入通过。</p>
 ${skip_groups}</section>
 <p class="hint">按项目查看结果，点击项目名称展开用例；错误步骤和附件请打开详细报告。</p>
 ${projects}
-</main></body></html>
+</main><script>
+(() => {
+  const picker = document.getElementById('log-language');
+  const links = document.querySelectorAll('.log-export');
+  const archived = /[/]runs[/][^/]+[/]index[.]html$$/.test(location.pathname);
+  const prefix = archived ? '' : 'runs/$stamp/';
+  function choose(language) {
+    const selected = language === 'en' ? 'en' : 'zh';
+    picker.value = selected;
+    links.forEach(link => { link.href = prefix + (selected === 'en' ? link.dataset.logEn : link.dataset.logZh); });
+    try { localStorage.setItem('tester-log-language', selected); } catch (_) {}
+  }
+  document.querySelectorAll('.project-error-export').forEach(link => { link.href = prefix + link.dataset.export; });
+  let saved = 'zh';
+  try { saved = localStorage.getItem('tester-log-language') || 'zh'; } catch (_) {}
+  picker.addEventListener('change', () => choose(picker.value));
+  choose(saved);
+})();
+</script></body></html>
 ''').substitute(
+        stamp=stamp,
         run_time=public_text(run_time, secrets),
         version_line=public_text(version_line, secrets),
         project_count=len(groups),
@@ -310,6 +495,8 @@ def main() -> None:
     args = parser.parse_args()
     page = render(args.junit, args.stamp)
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    write_error_exports(args.junit, args.output.parent / 'errors')
+    write_project_logs(args.junit, args.stamp, args.output.parent / 'logs')
     fd, temporary = tempfile.mkstemp(prefix='.project-index.', dir=args.output.parent)
     try:
         os.fchmod(fd, 0o644)

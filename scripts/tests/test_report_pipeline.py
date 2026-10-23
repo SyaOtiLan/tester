@@ -1,6 +1,7 @@
 """Offline checks for public reports and Feishu links; no external calls."""
 
 import base64
+import csv
 import importlib.util
 import io
 import json
@@ -15,6 +16,7 @@ import unittest
 from unittest.mock import patch
 from urllib.parse import unquote
 import zipfile
+import xml.etree.ElementTree as ET
 
 
 SCRIPTS = Path(__file__).resolve().parents[1]
@@ -38,6 +40,7 @@ def load_module(name, filename):
 
 notifier = load_module('report_notifier', 'notify-feishu-report.py')
 project_report = load_module('project_report', 'publish-project-report.py')
+full_report = load_module('full_report', 'publish-bilingual-report.py')
 
 
 def html_fixture(text=''):
@@ -157,6 +160,80 @@ class PublicationTests(unittest.TestCase):
         self.assertIn('未标注跳过', rendered)
         self.assertIn('<span>跳过</span><b>1</b>', rendered)
 
+    def test_project_downloads_are_isolated_bilingual_and_redacted(self):
+        secret = 'sk-syntheticcredential123456789'
+        root = ET.Element('testsuites')
+        suite = ET.SubElement(root, 'testsuite')
+        failed = ET.SubElement(suite, 'testcase', {
+            'classname': 'products/router/tests/example.spec.ts',
+            'name': 'router failure', 'time': '0.2',
+        })
+        ET.SubElement(failed, 'failure', {'message': '=HYPERLINK("bad")'}).text = secret
+        ET.SubElement(suite, 'testcase', {
+            'classname': 'products/chat/tests/example.spec.ts',
+            'name': 'chat success', 'time': '0.1',
+        })
+        ET.ElementTree(root).write(self.junit, encoding='unicode')
+        with patch.object(project_report, 'configured_secrets', return_value=[secret.encode()]):
+            page = project_report.render(self.junit, STAMP)
+            self.assertEqual(project_report.write_project_logs(
+                self.junit, STAMP, self.root / 'logs'), {'router', 'chat'})
+            self.assertEqual(project_report.write_error_exports(
+                self.junit, self.root / 'errors'), {'router'})
+
+        self.assertIn('id="log-language"', page)
+        self.assertIn(f'runs/{STAMP}/logs/router.log', page)
+        self.assertIn('data-log-en="logs/router.en.log"', page)
+        self.assertIn(f'runs/{STAMP}/errors/router.csv', page)
+        self.assertIn('data-export="errors/router.csv"', page)
+        self.assertIn('const prefix = archived ?', page)
+        for name in ('router.log', 'router.en.log'):
+            content = (self.root / 'logs' / name).read_text(encoding='utf-8')
+            self.assertIn('router failure', content)
+            self.assertNotIn('chat success', content)
+            self.assertNotIn(secret, content)
+        self.assertIn('Tester project log',
+                      (self.root / 'logs' / 'router.en.log').read_text(encoding='utf-8'))
+        self.assertFalse((self.root / 'errors' / 'chat.csv').exists())
+        with (self.root / 'errors' / 'router.csv').open(encoding='utf-8-sig', newline='') as file:
+            rows = list(csv.reader(file))
+        self.assertEqual(len(rows), 2)
+        self.assertTrue(rows[1][3].startswith("'="))
+        self.assertNotIn(secret, rows[1][4])
+
+    def test_english_report_reuses_original_results_and_errors(self):
+        location = {'file': 'products/router/tests/example.spec.ts', 'line': 12, 'column': 1}
+        chinese = {'suites': [{**location, 'title': '', 'specs': [{
+            **location, 'title': '中文用例', 'tests': [{'projectName': 'router'}],
+        }]}]}
+        english = {'suites': [{**location, 'title': '', 'specs': [{
+            **location, 'title': 'English case', 'tests': [{'projectName': 'router'}],
+        }]}]}
+        title_map = full_report.paired_titles(chinese, english)
+        test = {'testId': 'stable-id', 'title': '中文用例', 'path': [],
+                'projectName': 'router', 'location': location,
+                'errors': [{'message': 'original failure'}]}
+        archive_bytes = io.BytesIO()
+        with zipfile.ZipFile(archive_bytes, 'w') as archive:
+            archive.writestr('report.json', json.dumps({'files': [{'tests': [test]}]}))
+            archive.writestr('detail.json', json.dumps({'tests': [test]}))
+        encoded = base64.b64encode(archive_bytes.getvalue()).decode()
+        source = self.root / 'full.html'
+        target = self.root / 'full.en.html'
+        source.write_text('<html><script id="tester-report-language-script"></script>'
+                          f'data:application/zip;base64,{encoded}</html>')
+        count, _ = full_report.publish(source, target, title_map)
+        self.assertEqual(count, 1)
+        match = re.search(rb'data:application/zip;base64,([A-Za-z0-9+/=]+)', target.read_bytes())
+        with zipfile.ZipFile(io.BytesIO(base64.b64decode(match.group(1)))) as archive:
+            summary = json.loads(archive.read('report.json'))['files'][0]['tests'][0]
+            detail = json.loads(archive.read('detail.json'))['tests'][0]
+        for converted in (summary, detail):
+            self.assertEqual(converted['title'], 'English case')
+            self.assertEqual(converted['testId'], 'stable-id')
+            self.assertEqual(converted['errors'][0]['message'], 'original failure')
+        self.assertEqual(test['title'], '中文用例')
+
     @unittest.skipUnless(hasattr(os, 'fchmod'), 'Linux publication permissions')
     def test_project_menu_links_and_rejects_duplicate(self):
         report = self.root / 'full.html'
@@ -178,6 +255,19 @@ class RunnerTests(unittest.TestCase):
         scripts.mkdir(parents=True)
         for source in SCRIPTS.glob('*.py'):
             shutil.copyfile(source, scripts / source.name)
+        shutil.copyfile(SCRIPTS / 'report-language.js', scripts / 'report-language.js')
+        # The real translator is exercised above; this fixture checks the runner's
+        # publication sequence without running Playwright test collection.
+        (scripts / 'publish-bilingual-report.py').write_text('''
+import argparse
+from pathlib import Path
+p = argparse.ArgumentParser()
+for name in ('report', 'output', 'tester', 'node-bin'):
+    p.add_argument('--' + name, required=True)
+p.add_argument('--project', default='')
+args = p.parse_args()
+Path(args.output).write_bytes(Path(args.report).read_bytes())
+''')
         shutil.copyfile(SCRIPTS / 'run-full-on-test-machine.sh',
                         scripts / 'run-full-on-test-machine.sh')
         (repo / '.env.local').write_text('# Synthetic fixture only\n')
@@ -243,6 +333,8 @@ exit "${FAKE_EXIT:-1}"
             self.assertEqual(summary['status'], 'failed')
             self.assertTrue((public / summary['report']).is_file())
             self.assertTrue((public / summary['full_report']).is_file())
+            self.assertTrue((public / 'full.en.html').is_file())
+            self.assertTrue((public / 'runs' / summary['run'] / 'full.en.html').is_file())
             self.assertIn('project-chat', (public / 'index.html').read_text())
             self.assertIn('tester-project-menu', (public / 'full.html').read_text())
             self.assertLessEqual(summary['started_at'], summary['finished_at'])

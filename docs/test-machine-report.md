@@ -29,6 +29,7 @@ A nonblocking lock prevents overlap, and execution is limited to 2.5 hours.
 | `TESTER_FEISHU_WEBHOOK_URL` | unset                                 | Intended report group's robot webhook            |
 | `TESTER_FEISHU_SECRET`      | unset                                 | Optional robot signing secret                    |
 | `TESTER_REPORT_URL`         | unset                                 | Public HTTPS report directory, including subpath |
+| `TESTER_REPORT_ACCESS_KEY_FILE` | `/data/test-results-private/control/admin-password` | Optional report/control access secret to redact from exports |
 
 Notification settings can be environment variables or entries in the private
 file. Environment variables take precedence. Start with the example:
@@ -69,13 +70,31 @@ JUnit XML or the private directory.
 
 ```text
 index.html                 Latest overview grouped by product
-full.html                  Latest redacted Playwright report
+full.html                  Latest redacted Playwright report with Chinese test titles
+full.en.html               Same run with English test titles
 latest.json                Start/end times, counts and archived report paths
 last-attempt.txt           Most recent attempt status
 runs/<run>/index.html      Archived overview
-runs/<run>/full.html       Archived redacted Playwright report
+runs/<run>/full.html       Archived report with Chinese test titles
+runs/<run>/full.en.html    Archived report with English test titles
+runs/<run>/logs/<project>.log      Sanitized, project-only case log
+runs/<run>/logs/<project>.en.log   Same cases with English field labels
+runs/<run>/errors/<project>.csv   Failed cases only; absent when none failed
 runs/<run>/summary.json    Archived summary
 ```
+
+The overview offers project-specific LOG downloads and a failed-case CSV when
+applicable. Its log-language selector changes the LOG download links between
+Chinese and English labels. Test names in these LOG files come from the JUnit
+result of the run and are not translated. The two Playwright detail pages use
+the same test results, IDs, durations, errors, and attachments; only test titles,
+group paths, and report controls change language. Switching detail pages keeps
+the current URL query and fragment. Single-project reports use the same layout
+under `projects/<project>/runs/<run>/`.
+
+Serve these downloads behind the same report access rule as their overview.
+Older archived runs that predate this feature retain their original files and
+may not have an English page or per-project downloads.
 
 The publisher redacts configured sensitive values and credential shapes from
 HTML and its embedded ZIP. The Playwright configuration omits the complete

@@ -14,6 +14,7 @@ import xml.etree.ElementTree as ET
 
 PROJECT = re.compile(r'(?:^|/)products/([a-z0-9_-]+)/')
 MENU_ID = b'id="tester-project-menu"'
+LANGUAGE_SCRIPT = Path(__file__).with_name('report-language.js')
 
 
 def main() -> None:
@@ -33,6 +34,8 @@ def main() -> None:
 
     style = b'''<style id="tester-project-menu-style">
 #tester-project-menu{position:fixed;right:18px;bottom:18px;z-index:2147483647;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;color:#17212f}
+#tester-project-menu .language{display:block;margin:0 0 8px auto;padding:7px 12px;background:#fff;border:1px solid #b9c6d6;border-radius:8px;box-shadow:0 4px 18px #0003;color:#135da8;cursor:pointer;font:inherit}
+#tester-project-menu .language:hover,#tester-project-menu .language:focus{background:#ecf4fc}
 #tester-project-menu details{width:230px;max-width:calc(100vw - 36px);background:#fff;border:1px solid #b9c6d6;border-radius:10px;box-shadow:0 4px 18px #0003}
 #tester-project-menu summary{padding:11px 14px;cursor:pointer;font-weight:700;list-style:none}
 #tester-project-menu summary::-webkit-details-marker{display:none}
@@ -47,9 +50,11 @@ def main() -> None:
         safe = html.escape(project, quote=True)
         href = html.escape(f'full.html?view={quote(project)}#?q={quote("p:" + project)}', quote=True)
         links.append(f'<a href="{href}"><span>{safe}</span><small>{counts[project]} 条</small></a>')
-    menu = ('<nav id="tester-project-menu" aria-label="项目目录"><details>'
+    menu = ('<nav id="tester-project-menu" aria-label="项目目录">'
+            '<button id="tester-report-language" class="language" type="button" aria-label="当前中文，点击切换为英文">中文</button><details>'
             f'<summary>项目目录（{len(counts)}）</summary><div class="links">'
             + ''.join(links) + '</div></details></nav>').encode('utf-8')
+    language_script = b'<script id="tester-report-language-script">' + LANGUAGE_SCRIPT.read_bytes() + b'</script>'
 
     source = args.report.read_bytes()
     if MENU_ID in source:
@@ -57,7 +62,7 @@ def main() -> None:
     if source.count(b'</head>') != 1 or source.count(b'</body>') != 1:
         raise ValueError('Unexpected Playwright HTML structure')
     rendered = source.replace(b'</head>', style + b'</head>', 1)
-    rendered = rendered.replace(b'</body>', menu + b'</body>', 1)
+    rendered = rendered.replace(b'</body>', menu + language_script + b'</body>', 1)
 
     fd, temporary = tempfile.mkstemp(prefix='.project-menu.', dir=args.report.parent)
     try:
