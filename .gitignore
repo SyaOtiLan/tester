@@ -41,13 +41,12 @@ pnpm-debug.log*
 # `pnpm manual:build` from scripts/build-manual.ts.
 /manual/
 
-# Project skill local task state
-.project-task.json
-.project-lifecycle.json
-.project-execution.json
-.project-execution/
-.project-task-*.json
-.project-lifecycle-*.json
-.project-execution-*.json
-.project-execution-*/
+# YeYing Project local task state
+/.project/
+
+# Legacy root-level state; migrate into .project/ when the task is closed.
+/.project-task
+/.project-*.json
+/.project-execution/
+/.project-execution-*/
 .playwright-cli
