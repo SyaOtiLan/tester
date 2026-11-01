@@ -91,3 +91,58 @@ test(
     await recorder.step(page, '切换到通行证模式渲染二维码');
   },
 );
+
+// RT-UI-032 (P1)
+test(
+  localizedTitle(
+    '【管理后台与工作台 / UI】 通行证状态轮询遇到 429 后会停止重试',
+    'passkey status polling stops after a 429 response',
+  ),
+  async ({ page, baseURL, recorder }) => {
+    skipIfNoService();
+    let statusPolls = 0;
+    await page.route('**/api/v1/public/auth/identity/passkey/login/session', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: true,
+          data: {
+            session_id: 'e2e-passkey-session',
+            verify_url: 'https://node.example.test/identity/authorize?requestId=e2e',
+            poll_interval: 0.1,
+          },
+        }),
+      });
+    });
+    await page.route('**/api/v1/public/auth/identity/passkey/login/status?*', async (route) => {
+      statusPolls += 1;
+      if (statusPolls === 1) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true, data: { status: 'pending' } }),
+        });
+        return;
+      }
+      await route.fulfill({
+        status: 429,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: false, message: 'rate limited' }),
+      });
+    });
+
+    await page.goto(`${baseURL}/login`, { waitUntil: 'domcontentloaded' });
+    await page.locator('.router-login-mode-switch').click();
+    const rateLimitAlert = page.locator('.router-identity-login-panel [role="alert"]');
+    await expect(rateLimitAlert).toBeVisible({ timeout: 15_000 });
+    await expect(rateLimitAlert).toContainText(/Too many requests|请求次数过多/);
+    // Observe several poll intervals to catch any retry after the 429 response.
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(500);
+
+    expect(statusPolls).toBe(2);
+    await expect(page.getByRole('button', { name: /Refresh QR code|刷新二维码/ })).toBeVisible();
+    await recorder.step(page, '通行证状态查询收到 429 后停止自动轮询');
+  },
+);
