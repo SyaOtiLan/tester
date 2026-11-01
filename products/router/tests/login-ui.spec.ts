@@ -137,12 +137,12 @@ test(
     const rateLimitAlert = page.locator('.router-identity-login-panel [role="alert"]');
     await expect(rateLimitAlert).toBeVisible({ timeout: 15_000 });
     await expect(rateLimitAlert).toContainText(/Too many requests|请求次数过多/);
+    // Observe several poll intervals to catch any retry after the 429 response.
+    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(500);
 
     expect(statusPolls).toBe(2);
-    await expect(
-      page.getByRole('button', { name: /Refresh QR code|刷新二维码/ }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /Refresh QR code|刷新二维码/ })).toBeVisible();
     await recorder.step(page, '通行证状态查询收到 429 后停止自动轮询');
   },
 );
