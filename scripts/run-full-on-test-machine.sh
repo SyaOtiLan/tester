@@ -16,7 +16,7 @@ if (( $# > 1 )); then
     exit 2
 fi
 case "$project" in
-    ''|agent|books|chat|marketplace|node|project|router|social|wallet|warehouse) ;;
+    ''|books|chat|marketplace|node|orchestrator|project|router|social|wallet|warehouse) ;;
     *) echo "Unknown or disabled Tester project: $project" >&2; exit 2 ;;
 esac
 if [[ "$project" == router ]]; then

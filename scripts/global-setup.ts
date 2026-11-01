@@ -30,7 +30,7 @@ async function warmup(name: string, url: string | undefined, timeoutMs = 30_000)
 export default async function globalSetup(): Promise<void> {
   // Pre-compile both warehouse and node in parallel. Other products are
   // either backend-only (router, social, project) or down (chat,
-  // knowledge, agent) and don't need warming.
+  // knowledge, orchestrator) and don't need warming.
   await Promise.all([
     warmup('warehouse', baseURLFor('warehouse')),
     warmup('node', baseURLFor('node')),

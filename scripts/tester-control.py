@@ -48,7 +48,9 @@ def load_config() -> dict[str, dict]:
         if not name.replace("-", "").isalnum() or not isinstance(value, dict):
             raise ValueError("Invalid project configuration")
         repo = Path(value.get("repo", ""))
-        if not repo.is_absolute() or not (repo / ".git").exists():
+        if not repo.is_absolute() or (
+            value.get("enabled", False) and not (repo / ".git").exists()
+        ):
             raise ValueError(f"Project repository is missing: {name}")
     return projects
 

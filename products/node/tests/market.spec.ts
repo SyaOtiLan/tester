@@ -8,7 +8,7 @@
  *
  *   1. /market                → app grid renders (`.app-center`); if any app
  *      cards exist, open one's 详情 and land on the detail view.
- *   2. /market/dev/my-apps    → 我创建的 / 我申请的 tabs + 创建应用 button.
+ *   2. /market/dev/my-apps    → 我创建的 / 历史申请 tabs + 创建应用 button.
  *
  * Mutating flows (create/publish an app) live in `app-lifecycle.spec.ts`
  * because every write triggers a wallet `personal_sign`.
@@ -59,7 +59,7 @@ test(localizedTitle("【应用市场与应用生命周期 / UI】 市场网格�
   }
 });
 
-test(localizedTitle("【应用市场与应用生命周期 / UI】 我的应用程序视图显示创建者/申请人选项卡和创建按钮", "my-apps view shows creator/applicant tabs and the create button"), async ({
+test(localizedTitle("【应用市场与应用生命周期 / UI】 我的应用程序视图显示创建者/历史申请选项卡和创建按钮", "my-apps view shows creator/request-history tabs and the create button"), async ({
   page,
   recorder,
 }) => {
@@ -74,10 +74,11 @@ test(localizedTitle("【应用市场与应用生命周期 / UI】 我的应用�
   await page.goto(`${baseURL}/market/dev/my-apps`, { waitUntil: 'domcontentloaded' });
 
   await expect(page.getByRole('tab', { name: '我创建的' })).toBeVisible({ timeout: 15_000 });
-  await expect(page.getByRole('tab', { name: '我申请的' })).toBeVisible();
-  // 创建应用 is shown while the default (我创建的) tab is active.
+  await expect(page.getByRole('tab', { name: '历史申请' })).toBeVisible();
+  // 创建应用 is shown while the default (我创建的) tab is active; the
+  // history tab is read-only and does not expose a new usage-request action.
   await expect(page.getByRole('button', { name: '创建应用' })).toBeVisible();
-  await recorder.step(page, '我的应用（我创建的 / 我申请的）');
+  await recorder.step(page, '我的应用（我创建的 / 历史申请）');
 });
 
 test(localizedTitle("【应用市场浏览 / UI】 ND-UI-009 应用检索/筛选", "ND-UI-009 market keyword search drives the grid and shows an empty state"), async ({

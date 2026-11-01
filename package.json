@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "End-to-end Playwright + Chromium test suite for the YeYing community products (warehouse, node, router, chat, social, project, knowledge, marketplace, books, agent, wallet).",
+  "description": "End-to-end Playwright + Chromium test suite for the YeYing community products (warehouse, node, router, chat, social, project, knowledge, marketplace, books, orchestrator, wallet).",
   "engines": {
     "node": ">=24.18.0",
     "pnpm": ">=9"
@@ -19,7 +19,7 @@
     "test:knowledge": "playwright test --project=knowledge",
     "test:marketplace": "playwright test --project=marketplace",
     "test:books": "playwright test --project=books",
-    "test:agent": "playwright test --project=agent",
+    "test:orchestrator": "playwright test --project=orchestrator",
     "test:wallet": "playwright test --project=wallet",
     "test:all": "playwright test",
     "env:check": "tsx scripts/check-env.ts",

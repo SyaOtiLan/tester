@@ -106,6 +106,8 @@ const EXTRA_KEYS: Record<ProductName, string[]> = {
     'NODE_DINGTALK_WEBHOOK_SECRET',
     'NODE_FEISHU_WEBHOOK_URL',
     'NODE_FEISHU_WEBHOOK_SECRET',
+    'NODE_IDENTITY_EMAIL_E2E_ENABLED',
+    'MAILPIT_URL',
   ],
   router: [
     'ROUTER_WALLET_PRIVATE_KEY',
@@ -141,7 +143,7 @@ const EXTRA_KEYS: Record<ProductName, string[]> = {
   knowledge: ['KNOWLEDGE_API_URL'],
   marketplace: ['MARKETPLACE_BASE_URL', 'MARKETPLACE_REPO_PATH'],
   books: ['BOOKS_BASE_URL', 'BOOKS_REPO_PATH'],
-  agent: ['AGENT_API_URL', 'AGENT_PRIVATE_KEY'],
+  orchestrator: ['ORCHESTRATOR_API_URL'],
   /**
    * Wallet is a Chromium MV3 extension, not a web app — it has no
    * `_BASE_URL`. Instead, specs need the path to the extension's source

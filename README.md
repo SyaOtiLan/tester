@@ -8,24 +8,24 @@ of the E2E cases each product should have (see its `README.md` for progress).
 
 ## What this repo covers
 
-| product     | frontend / dev port  | backend port            | what is tested                                              |
-| ----------- | -------------------- | ----------------------- | ----------------------------------------------------------- |
-| warehouse   | 5173 (Vite)          | 6065 WebDAV, 6066 admin | admin login, WebDAV PROPFIND/PUT/GET, bucket UI             |
-| node        | 8991                 | 8100                    | home, navigation, publish-app view                          |
-| router      | 3011 (bundled)       | 3011 (Go binary)        | admin root page, sidebar items                              |
-| chat        | 3020                 | embedded Next.js API    | home, new-chat dialog; LLM conversation tests gated on keys |
-| social      | 8082                 | 8888 (via /api)         | login, nav after auth                                       |
-| project     | 20833 (APP_DEV_PORT) | same                    | login, dashboard sidebar                                    |
-| knowledge   | 5173                 | 8000 FastAPI            | home, search box, /health                                   |
-| marketplace | none (static)        | none                    | index.json schema and shape                                 |
-| books       | none (docs)          | none                    | SUMMARY.md links                                            |
-| agent hub   | 5174                 | 3900 uvicorn            | home, /health, wallet tests gated on key                    |
+| product      | frontend / dev port  | backend port            | what is tested                                              |
+| ------------ | -------------------- | ----------------------- | ----------------------------------------------------------- |
+| warehouse    | 5173 (Vite)          | 6065 WebDAV, 6066 admin | admin login, WebDAV PROPFIND/PUT/GET, bucket UI             |
+| node         | 8991                 | 8100                    | home, navigation, publish-app view                          |
+| router       | 3011 (bundled)       | 3011 (Go binary)        | admin root page, sidebar items                              |
+| chat         | 3020                 | embedded Next.js API    | home, new-chat dialog; LLM conversation tests gated on keys |
+| social       | 8082                 | 8888 (via /api)         | login, nav after auth                                       |
+| project      | 20833 (APP_DEV_PORT) | same                    | login, dashboard sidebar                                    |
+| knowledge    | 5173                 | 8000 FastAPI            | home, search box, /health                                   |
+| marketplace  | none (static)        | none                    | index.json schema and shape                                 |
+| books        | none (docs)          | none                    | SUMMARY.md links                                            |
+| orchestrator | 5174                 | 3900 uvicorn            | wallet login, cookie session, protected console routes      |
 
 ## Layout
 
 ```
 tester/
-├── playwright.config.ts          # 10 projects, one per product
+├── playwright.config.ts          # 11 projects, one per product
 ├── shared/                       # env, auth, api, fixtures, reporters
 ├── scripts/                      # check-env, list-projects, reset-state
 └── products/<name>/              # one directory per product
@@ -125,7 +125,7 @@ pass against any HTTP server.
 - **knowledge** — `cd ../knowledge && docker compose up -d postgres && uvicorn ...`
 - **marketplace** — no service needed (tests read `MARKETPLACE_REPO_PATH`)
 - **books** — no service needed (tests read `BOOKS_REPO_PATH`)
-- **agent** — `cd ../agent/hub/backend && uv run agent-hub`; `cd ../agent/hub/frontend && pnpm dev`
+- **orchestrator** — start the backend with `cd ../orchestrator/backend && uv run orchestrator`, then the web app with `cd ../orchestrator/web && npm run dev`
 
 ## Conventions
 

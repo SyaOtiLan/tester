@@ -3,25 +3,25 @@
 > 测试人员视角整理的**应有** E2E 用例清单,作为实现依据。
 > 状态说明:✅ 已实现(链接到 spec) / ⬜ 待实现 / 🐞 已实现但被真实产品缺陷阻塞(`test.fixme`,产品修复后即恢复真跑)。
 > 形态:浏览器扩展(popup + service worker + dApp provider)。基于 MV3,名称「夜莺钱包 / YeYing Wallet」,rdns `io.github.yeying`。
-> 最后更新:2026-09-16
+> 最后更新:2026-10-29
 
 ## 覆盖总览
 
-| 模块 | 用例数 | 已实现 | 待实现 |
-| --- | --- | --- | --- |
-| 一、钱包创建与初始化 | 5 | 5 | 0 |
-| 二、钱包导入 | 5 | 5 | 0 |
-| 三、账户管理 | 5 | 5 | 0 |
-| 四、网络管理 | 5 | 5 | 0 |
-| 五、安全与锁定恢复 | 5 | 5 | 0 |
-| 六、转账与交易 | 9 | 9 | 0 |
-| 七、消息签名与授权 | 5 | 5 | 0 |
-| 八、dApp 连接与 Provider | 13 | 13 | 0 |
-| 九、错误、异常与安全边界 | 4 | 4 | 0 |
-| 十、云端密钥托管与恢复 | 11 | 11 | 0 |
-| **合计** | **67** | **67** | **0** |
+| 模块                     | 用例数 | 已实现 | 待实现 |
+| ------------------------ | ------ | ------ | ------ |
+| 一、钱包创建与初始化     | 5      | 5      | 0      |
+| 二、钱包导入             | 6      | 6      | 0      |
+| 三、账户管理             | 5      | 5      | 0      |
+| 四、网络管理             | 5      | 5      | 0      |
+| 五、安全与锁定恢复       | 5      | 5      | 0      |
+| 六、转账与交易           | 9      | 9      | 0      |
+| 七、消息签名与授权       | 5      | 5      | 0      |
+| 八、dApp 连接与 Provider | 13     | 13     | 0      |
+| 九、错误、异常与安全边界 | 4      | 4      | 0      |
+| 十、云端密钥托管与恢复   | 12     | 12     | 0      |
+| **合计**                 | **69** | **69** | **0**  |
 
-> 文档与基线:wallet 云端密钥托管的可重复验收基线见钱包仓库 `docs/钱包测试/密钥托管验收标准.md`(CUST-001..072)。本节 CUST-* 用例覆盖其中 11 条**当前可在离线 stub 模式下跑通**的子集(配置、状态、启用/停用、密文与恢复读取完整性),步骤、断言以该基线为准;其余 CUST-* 用例(已绑定通行证下的整链开启 CUST-010/020..023、HD/私钥整链恢复 CUST-031/032、新设备通行证恢复 CUST-040..043、UCAN 权限边界 CUST-060..062、本地删除钱包后清理远端 CUST-072 等)仍 ⬜,前置条件为真实 Node/托管服务联调,在 tester 仓库环境变量未提供时不具备可重复执行条件。
+> 文档与基线:wallet 云端密钥托管的可重复验收基线见钱包仓库 `docs/钱包测试/密钥托管验收标准.md`(CUST-001..072)。本节 11 条 CUST-001..071 用例覆盖离线配置、启停、密文和恢复校验；新增 CUST-073 通过 stub Node 授权与托管服务覆盖新设备 PKCE 恢复 UI、原 DID 恢复及身份登录签名。该用例验证 Wallet 客户端全链路，不替代真实 Node/Passkey 联调；CUST-010/020..023、CUST-031/032 实际服务联调、UCAN 权限边界 CUST-060..062 和远端删除 CUST-072 仍待真实 Node/托管服务环境。
 
 > 编号说明:`WL-UI-*` 为 popup 内交互;`WL-DAPP-*` 为经 `window.ethereum` / 审批窗的 dApp 交互;`WL-E2E-*` 为跨真实链/网络的端到端流程。
 > 通用前置(除特别说明外均适用):已通过 `WALLET_EXTENSION_PATH` 指向钱包源码目录;用 `loadWalletContext()` 启动带扩展的持久化 Chromium;`stubPublicEndpoints` 屏蔽 YeYing 公共端点以保证用例可离线运行。
@@ -32,6 +32,7 @@
 ## 一、钱包创建与初始化
 
 ### WL-UI-001 欢迎页 → 新建钱包 → 设置密码 → 进入主页
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-create.spec.ts
@@ -44,6 +45,7 @@
 - 预期结果:`#walletPage` 在 30s 内可见;`#accountAddress` 为截断地址形式 `0x1234…abcd`(`…` 或 `...`)。
 
 ### WL-UI-002 创建后关闭并重开弹窗仍停留主页(状态持久化)
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-create.spec.ts
@@ -54,6 +56,7 @@
 - 预期结果:直接落在 `#walletPage`,无需重新创建,说明钱包状态已持久化到 `chrome.storage`。
 
 ### WL-UI-003 设置密码页自动填充 `hd-NNNN` 钱包名且可编辑
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-create.spec.ts
@@ -64,6 +67,7 @@
 - 预期结果:默认名格式正确;自定义名生效并沿用到主页账户名。
 
 ### WL-UI-004 popup 视口与上下文形态符合预期
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-create.spec.ts
@@ -74,6 +78,7 @@
 - 预期结果:形态稳定,契约不漂移。
 
 ### WL-UI-005 设置密码时两次输入不一致 / 空密码被拒绝
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-set-password-validation.spec.ts
@@ -88,6 +93,7 @@
 ## 二、钱包导入
 
 ### WL-UI-006 助记词导入并派生正确地址
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-import.spec.ts
@@ -99,6 +105,7 @@
 - 预期结果:落在 `#walletPage`;`#accountAddress` 截断形式包含 `0xf39`…`92266`。
 
 ### WL-UI-007 私钥导入得到对应账户
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-import-privatekey.spec.ts
@@ -109,18 +116,31 @@
 - 预期结果:落在 `#walletPage`,`#accountAddress` 为该私钥对应地址的截断形式。
 
 ### WL-UI-008 备份文件 / Keystore 导入
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-import-file.spec.ts
-- 前置条件:准备一份钱包导出的备份文件及其解密口令。
+- 前置条件:准备一份包含钱包账户和 Wallet Identity 的加密备份文件及其解密口令。
 - 步骤:
   1. 进入 `#importPage`,点击外层「备份文件」来源 tab(`.import-source-tab[data-source=file]`),`#fileImportSection` 显示。
   2. 选择备份文件、输入口令并提交(「导入备份」)。
-- 预期结果:成功恢复其中账户,落在 `#walletPage`,账户列表与备份一致。
+  3. 在全新扩展上下文查询恢复后的 Wallet Identity。
+- 预期结果:成功恢复其中账户,落在 `#walletPage`,账户列表与备份一致；`walletIdentityId` 与导出设备保持一致。
+- **任务 239 回归**:导出会校验并重新包裹 Wallet Identity 私钥；历史 Identity 仍由旧钱包密码保护时可输入旧密码修复，旧密码不可得时允许仅恢复钱包账户并明确提示 Identity 未恢复。自动化用例覆盖正常的跨设备账户 + Wallet Identity 往返；旧密码修复和降级恢复由产品仓库单元/控制器测试覆盖。
+- **恢复登录回归**:导入后通过 dApp 的 `wallet_requestPermissions` 授权 `identity.basic`，检查 Wallet Identity 登录 Presentation 的 audience、nonce、DID 文档签名和 Presentation 签名；锁定钱包后输入密码仍可继续身份登录。
 - **修复记录(云端恢复改造回归,已修)**:导入页改为「来源 tab(助记词/私钥·备份文件·云端恢复)+ 方式 tab(助记词/私钥)」两级后,`import-wallet-controller.js:handleImportWallet` 曾只按 `.import-method-tab.active`(默认恒为 mnemonic)推导 `importType`,从不根据 `source==='file'` 路由 → 点击「导入备份」实际走了助记词分支,因助记词为空报「请输入助记词」并返回。修复:`importType = source === 'file' ? 'file' : <方式 tab 类型>`,文件导入分支已完整支持(`importAccountsFile`)。修复后本用例移除 `test.fixme` 恢复真跑,导出→导入整程通过。
 
+### WL-UI-035 错误密码 / 篡改备份文件不得产生部分恢复
+
+- 优先级:P0
+- 类型:UI
+- 状态:✅ 已实现 — products/wallet/tests/popup-import-backup-integrity.spec.ts
+- 前置条件:准备一份有效的加密备份及一份 AES-GCM 密文被修改的副本;导入设备为空。
+- 步骤:依次使用错误密码导入有效文件、再以正确密码导入被篡改文件。
+- 预期结果:两次都停留在导入页;不显示钱包主页、不创建钱包或身份，错误必须可见。
 
 ### WL-UI-009 导入非法助记词报错且不进入主页
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-import-negative.spec.ts
@@ -130,6 +150,7 @@
 - 预期结果:停留在导入页,给出「助记词无效」类错误提示,不创建账户。
 
 ### WL-UI-010 导入非法私钥报错
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-import-negative.spec.ts:61
@@ -143,6 +164,7 @@
 ## 三、账户管理
 
 ### WL-UI-011 新增第二个 HD 派生账户并从顶部切换
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-accounts.spec.ts
@@ -154,6 +176,7 @@
 - 预期结果:账户列表出现 2 行;切换后 `#accountName` 变为另一账户名。
 
 ### WL-UI-012 账户详情页重命名并持久化
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-accounts.spec.ts
@@ -164,6 +187,7 @@
 - 预期结果:`#accountDetailNameText` 显示新名并持久化。
 
 ### WL-UI-013 删除 / 移除账户
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-accounts.spec.ts
@@ -174,6 +198,7 @@
 - 预期结果:该账户从列表移除;若删除的是当前账户则自动切到其他账户;取消(`#cancelDeleteAccount`)则不删除。
 
 ### WL-UI-014 账户详情展示收款二维码并复制地址
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-account-detail.spec.ts:33
@@ -184,6 +209,7 @@
 - 预期结果:二维码可见;复制后剪贴板为该账户完整地址,并有复制成功提示。
 
 ### WL-UI-015 导出账户
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-account-detail.spec.ts:94
@@ -197,6 +223,7 @@
 ## 四、网络管理
 
 ### WL-UI-016 新增自定义网络并切换
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-network.spec.ts
@@ -208,6 +235,7 @@
 - 预期结果:新网络出现在 `#networkManageList`;切换后 `.network-label` 显示其名称。
 
 ### WL-UI-017 编辑已有自定义网络
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-network.spec.ts:174
@@ -217,6 +245,7 @@
 - 预期结果:列表与选择器反映更新后的字段;切换后标签为新名称。
 
 ### WL-UI-018 删除自定义网络
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-network.spec.ts:256
@@ -226,6 +255,7 @@
 - 预期结果:该网络从列表与所有选择器移除;不影响默认网络。
 
 ### WL-UI-019 默认网络存在且可切换
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-network.spec.ts:309
@@ -236,6 +266,7 @@
 - 预期结果:内置至少含「以太坊主网」与「YeYing 主网」;切换后标签与 `chainId` 相应变化。
 
 ### WL-UI-020 切换到不可达 RPC 网络时失败并回退
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-network.spec.ts
@@ -249,6 +280,7 @@
 ## 五、安全与锁定恢复
 
 ### WL-UI-021 输入密码查看助记词与私钥
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-security.spec.ts
@@ -260,6 +292,7 @@
 - 预期结果:助记词词数合法、私钥格式正确;均需密码校验后才展示。
 
 ### WL-UI-022 修改密码后旧密码失效、新密码可解锁
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-security.spec.ts
@@ -270,6 +303,7 @@
 - 预期结果:旧密码无法解锁(停留 `#unlockPage`);新密码进入 `#walletPage`。
 
 ### WL-UI-023 锁定 → 解锁 → 错误密码 toast → SW 被杀恢复
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-lock-unlock.spec.ts
@@ -281,6 +315,7 @@
 - 预期结果:SW 被回收后仍能凭密码 + `chrome.storage` 恢复到**同一账户**;`#globalWaitingOverlay` 不卡住。
 
 ### WL-UI-024 使用错误密码查看私钥/助记词被拒绝
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-security.spec.ts
@@ -290,6 +325,7 @@
 - 预期结果:不展示 `#secretDisplayModal`,给出密码错误提示;敏感信息不泄露。
 
 ### WL-UI-025 修改密码时旧密码错误被拒绝
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-security.spec.ts
@@ -303,6 +339,7 @@
 ## 六、转账与交易
 
 ### WL-UI-026 转账表单跨弹窗关闭/重开保留输入
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-transfer-form.spec.ts
@@ -313,6 +350,7 @@
 - 预期结果:重开自动回到 `#transferPage` 且字段值保留;未触发重新锁定;后退返回 `#walletPage`。
 
 ### WL-E2E-001 Sepolia 真实广播交易并在活动列表与链上确认
+
 - 优先级:P0
 - 类型:E2E
 - 状态:✅ 已实现 — products/wallet/tests/popup-send-tx.spec.ts
@@ -325,6 +363,7 @@
 - 预期结果:`#transactionList` 出现携带 `data-tx-hash`(`0x`+64 hex)的新交易;经 `eth_getTransactionByHash` 交叉校验 `from` 为该账户,交易确实上链。
 
 ### WL-UI-027 收款地址非法(EIP-55 校验和)被拒绝
+
 - 优先级:P0
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-transfer-address-validation.spec.ts
@@ -335,6 +374,7 @@
 - 预期结果:拒绝提交并提示地址无效;纯大小写(全大写/全小写)地址应放行,混合大小写强制 EIP-55 校验。
 
 ### WL-UI-028 金额超过余额 / 余额不足提示
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-send-insufficient.spec.ts
@@ -344,6 +384,7 @@
 - 预期结果:阻止发送并提示余额不足 / 无法覆盖金额+gas,不产生广播。
 
 ### WL-UI-029 交易详情页展示
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-tx-detail.spec.ts
@@ -354,6 +395,7 @@
 - 预期结果:各字段与该交易一致;`#txDetailCopyHash` 等复制按钮可用;浏览器链接指向正确 explorer。
 
 ### WL-UI-030 清空交易历史
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-clear-transactions.spec.ts:33
@@ -363,6 +405,7 @@
 - 预期结果:`#transactionList` 清空(或仅清本地记录),操作有确认防误触。
 
 ### WL-UI-031 添加 ERC-20 代币并展示余额
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-token.spec.ts
@@ -372,6 +415,7 @@
 - 预期结果:`#tokenList` 出现该代币并展示余额;`#cancelTokenBtn` 可取消不添加。
 
 ### WL-UI-032 转账 ERC-20 代币
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-token.spec.ts
@@ -381,6 +425,7 @@
 - 预期结果:构造 ERC-20 `transfer` 调用而非原生转账,数额按 decimals 换算正确,进入待广播/审批流程。
 
 ### WL-UI-033 通讯录新增联系人并在转账中选用
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-contacts.spec.ts:24
@@ -395,6 +440,7 @@
 ## 七、消息签名与授权
 
 ### WL-DAPP-001 dApp `personal_sign` 审批通过返回 65 字节签名
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/popup-signature.spec.ts
@@ -405,6 +451,7 @@
 - 预期结果:dApp 收到 `0x`+130 hex(65 字节)签名。
 
 ### WL-DAPP-002 dApp `personal_sign` 用户拒绝返回 4001
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-reject.spec.ts
@@ -414,6 +461,7 @@
 - 预期结果:dApp 侧 Promise 以 EIP-1193 `4001`(用户拒绝)reject;不产生任何签名。
 
 ### WL-DAPP-003 `eth_signTypedData_v4` 审批通过(EIP-712)
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-typed-data.spec.ts
@@ -424,6 +472,7 @@
 - 预期结果:返回合法 65 字节签名;审批窗对 typed data 做结构化展示而非原始串。
 
 ### WL-DAPP-004 SIWE(EIP-4361)消息结构化展示并签名
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-siwe.spec.ts
@@ -435,6 +484,7 @@
 - 预期结果:SIWE 字段解析正确并逐项展示;必要时给出告警(`#siweWarnings`);签名有效。
 
 ### WL-DAPP-005 ReCap(EIP-5573)能力结构化展示
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-recap.spec.ts:25
@@ -449,6 +499,7 @@
 ## 八、dApp 连接与 Provider
 
 ### WL-DAPP-006 钱包向 dApp 注入 `window.ethereum`(YeYing provider)
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-node.spec.ts、products/wallet/tests/dapp-router.spec.ts、products/wallet/tests/dapp-warehouse.spec.ts
@@ -459,6 +510,7 @@
 - 预期结果:`isYeYing===true`、`isMetaMask` 假值、`chainId` 匹配 `^0x[0-9a-fA-F]+$`(默认 YeYing 0x1538),未被任何 shim 覆盖。
 
 ### WL-DAPP-007 EIP-6963 `announceProvider` 被 dApp 发现
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-node.spec.ts、products/wallet/tests/dapp-router.spec.ts、products/wallet/tests/dapp-warehouse.spec.ts
@@ -468,6 +520,7 @@
 - 预期结果:收到 detail.info:`name==='YeYing Wallet'`、`rdns==='io.github.yeying'`、`uuid` 为 36 位、`icon` 为 `data:image/svg+xml`。
 
 ### WL-DAPP-008 `eth_requestAccounts` 弹审批窗并批准返回账户
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-node.spec.ts、products/wallet/tests/dapp-router.spec.ts、products/wallet/tests/dapp-warehouse.spec.ts
@@ -478,6 +531,7 @@
 - 预期结果:dApp 收到长度 1 的账户数组,元素匹配 `^0x[\da-fA-F]{40}$`。
 
 ### WL-DAPP-009 连接请求被拒绝返回 4001
+
 - 优先级:P0
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-reject.spec.ts
@@ -487,6 +541,7 @@
 - 预期结果:dApp Promise 以 `4001` reject;`eth_accounts` 仍返回空;站点未被授权。
 
 ### WL-DAPP-010 EIP-2255 权限:request / get / revoke
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-permissions.spec.ts
@@ -498,6 +553,7 @@
 - 预期结果:批准后 getPermissions 含 `eth_accounts`;撤销后不再包含,`eth_accounts` 回到空。
 
 ### WL-DAPP-011 `wallet_switchEthereumChain`(EIP-3326)审批 + chainChanged
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-chain.spec.ts
@@ -509,6 +565,7 @@
 - 预期结果:切换成功;dApp 收到 `chainChanged` 且 `ethereum.chainId` 更新为目标链;切换未知链应返回 4902。
 
 ### WL-DAPP-012 `wallet_addEthereumChain`(EIP-3085)审批
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-chain.spec.ts
@@ -520,6 +577,7 @@
 - 预期结果:新链加入钱包网络列表;字段与请求一致;`#rejectAddChain` 则不添加。
 
 ### WL-DAPP-013 `wallet_watchAsset`(EIP-747)审批
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-watch-asset.spec.ts:65
@@ -530,6 +588,7 @@
 - 预期结果:代币加入代币列表;`#rejectWatchAsset` 则不加入并返回 false。
 
 ### WL-DAPP-014 `eth_sendTransaction` 从 dApp 触发交易审批窗
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-send-tx.spec.ts
@@ -540,6 +599,7 @@
 - 预期结果:批准后返回交易哈希并广播;`#rejectTx` 返回 4001 且不广播。
 
 ### WL-DAPP-015 已连接站点管理:查看与撤销授权
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-sites.spec.ts
@@ -550,6 +610,7 @@
 - 预期结果:撤销后该源从列表移除;该站点后续请求需重新走连接审批。
 
 ### WL-DAPP-016 钱包锁定时 dApp 请求触发解锁审批窗
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-unlock.spec.ts
@@ -560,6 +621,7 @@
 - 预期结果:解锁后原请求继续完成;`#cancelUnlock` 则原请求以拒绝/错误返回。
 
 ### WL-DAPP-017 连接后切换账户触发 accountsChanged
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-accounts.spec.ts:77
@@ -569,6 +631,7 @@
 - 预期结果:dApp 收到 `accountsChanged`,新数组首项为切换后的账户地址。
 
 ### WL-DAPP-018 未连接时 `eth_accounts` 返回空数组
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-accounts.spec.ts:58
@@ -582,6 +645,7 @@
 ## 九、错误、异常与安全边界
 
 ### WL-DAPP-019 链不匹配的提示与处理
+
 - 优先级:P1
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-chain.spec.ts
@@ -591,6 +655,7 @@
 - 预期结果:钱包给出链不匹配提示或引导切链(`wallet_switchEthereumChain`),不静默在错误链上签名/发交易。
 
 ### WL-DAPP-020 审批窗关闭/超时视为拒绝
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-approval-lifecycle.spec.ts:44
@@ -600,6 +665,7 @@
 - 预期结果:dApp Promise 以用户拒绝/超时错误 reject,不留下悬挂请求,后续请求可正常发起。
 
 ### WL-DAPP-021 同源并发/重复请求复用同一审批窗
+
 - 优先级:P2
 - 类型:DAPP
 - 状态:✅ 已实现 — products/wallet/tests/dapp-approval-lifecycle.spec.ts:86
@@ -609,6 +675,7 @@
 - 预期结果:复用同一审批窗(不叠开多窗);处理一个后另一个按序处理或合并,不产生错乱/丢失。
 
 ### WL-UI-034 连续多次错误解锁密码的处理
+
 - 优先级:P2
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/popup-lock-unlock.spec.ts:116
@@ -621,9 +688,10 @@
 
 ## 十、云端密钥托管与恢复
 
-> 对应钱包仓库验收基线 `docs/钱包测试/密钥托管验收标准.md`。以下 11 条为**离线 stub 模式下可确定性跑通**的子集:自定义托管服务 `custody.e2e.test` 由 `helpers/custody.ts:stubCustody` 经 `context.route` 拦截(Playwright 在本 harness 下可拦截扩展 **service worker** 的 fetch),托管密文由扩展自身的 `encryptObject` 在页面内构造以保证与 SW 的 `decryptObject` 字节对齐;通过 `sendSw` 直接驱动 SW 消息总线。恢复读取用**恢复令牌**路径(未鉴权 `CustodyClient`,无需 UCAN/通行证/身份服务),完整性用例因此完全离线且确定。启用/停用用例依赖已创建并解锁的钱包 + stub HTTP(`ensureCustodyToken` 为纯本地 SIWE 签名)。
+> 对应钱包仓库验收基线 `docs/钱包测试/密钥托管验收标准.md`。CUST-001..071 的 11 条用例通过 `helpers/custody.ts:stubCustody` 经 `context.route` 拦截托管服务，托管密文由扩展自己的 `encryptObject` 生成；恢复读取完整性通过 `sendSw` 驱动 service worker。CUST-073 额外覆盖导出加密托管、Node 恢复授权/PKCE、记录选择、解密恢复原 DID，再由真实注入 Provider 完成身份登录并本地验证 DID 文档和 Presentation 的 Ed25519 签名。Node 与托管服务均为可验证请求体和 PKCE 的 stub，不需要外部密钥或真实 Passkey。
 
 ### CUST-001 默认配置
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-config.spec.ts:33
@@ -633,6 +701,7 @@
 - 预期结果:`endpoint==='https://node.yeying.pub'`;`ucanResource==='custody'`、`ucanAction==='write'` 固定;`enabled===false`;`lastBackupAt===''`、`lastStatus===null`(未开启)。
 
 ### CUST-002 地址校验(配置弹窗)
+
 - 优先级:P1
 - 类型:UI
 - 状态:✅ 已实现 — products/wallet/tests/custody-config.spec.ts:55
@@ -644,6 +713,7 @@
 - 预期结果:非法 URL 被 `readCustodyForm`(`new URL()`)拒绝,弹窗保持打开、存储 endpoint 不变;合法 URL 保存后经 SW `normalizeEndpoint` 去除末尾 `/`(`https://custody.example.com`),弹窗关闭;`ucanResource/ucanAction` 不随地址编辑改变。
 
 ### CUST-011 未绑定通行证开启被拒
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-enable-disable.spec.ts:45
@@ -653,6 +723,7 @@
 - 预期结果:`success:false` 且错误含「打开托管服务前，请先绑定通行证」;**不发生** `POST /custody/secrets`(不上传密文);`settings.enabled` 保持 false。
 
 ### CUST-012 锁定 + 错误密码开启被拒
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-enable-disable.spec.ts:68
@@ -663,6 +734,7 @@
 - 备注:钱包解锁态下 keyring 会缓存已解锁账户,`getUnlockedCoordinatorSigningAccount` 不再校验密码,故错误密码用例必须先锁定钱包方能复现。
 
 ### CUST-030 读取托管记录(恢复令牌)
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-recovery-integrity.spec.ts:59
@@ -672,6 +744,7 @@
 - 预期结果:`success:true`,`secrets.records` 含该 `walletId`,`identityDid` 透传;作为 stub 拦截 SW fetch 的正向对照。
 
 ### CUST-050 密码错误恢复被拒
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-recovery-integrity.spec.ts:83
@@ -681,6 +754,7 @@
 - 预期结果:`success:false` 且错误匹配 `/Invalid password or corrupted data/`(证明密文已取回并真正进入解密且失败,而非网络/stub-miss);不导入任何钱包(`GET_CURRENT_ACCOUNT` 地址为空)。
 
 ### CUST-051 密文篡改被拒
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-recovery-integrity.spec.ts:110
@@ -690,6 +764,7 @@
 - 预期结果:`success:false` 且错误匹配 `/Invalid password or corrupted data/`(GCM 认证失败同错误面);不导入任何钱包。
 
 ### CUST-052 未知版本 / 字段缺失被拒
+
 - 优先级:P1
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-recovery-integrity.spec.ts:141
@@ -699,6 +774,7 @@
 - 预期结果:前四者错误匹配 `/托管记录格式不受支持/`,缺 mnemonic 匹配 `/托管记录缺少助记词/`(证明 `validateCustodySecret` 真正执行);均不导入钱包。
 
 ### CUST-053 地址不匹配被拒
+
 - 优先级:P1
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-recovery-integrity.spec.ts:179
@@ -707,7 +783,22 @@
   1. 以正确密码发起恢复。
 - 预期结果:`success:false` 且错误含「地址校验失败」;不导入钱包。
 
+### CUST-073 新设备云端恢复后以原 Wallet Identity 登录
+
+- 优先级:P0
+- 类型:端到端(UI + 托管服务 + dApp Provider)
+- 状态:✅ 已实现 — products/wallet/tests/custody-identity-login-recovery.spec.ts
+- 前置条件:设备 A 使用 HD 助记词创建 Wallet Identity；设备 B 为干净扩展上下文；Node 授权与托管 HTTP 使用 `stubCustody`。
+- 步骤:
+  1. 设备 A 创建 HD 钱包和 Wallet Identity，通过 `CUSTODY_ENABLE` 向 stub 上传加密快照；检查上传请求不包含明文助记词或 DID。
+  2. 设备 B 从欢迎页选择云端恢复，完成 `identity.basic` + `custody.recovery` 授权请求、PKCE callback/exchange，并确认记录显示原 DID。
+  3. 输入原钱包密码恢复钱包，在 `IDENTITY_LIST` 检查原 DID 被选中且控制公钥存在。
+  4. dApp 请求 `wallet_identity` 权限并发起身份登录。
+- 预期结果:账户地址和 DID 与设备 A 完全一致；Presentation 的 audience、nonce、scope 与请求一致，身份文档和 Presentation 两份签名均通过 Ed25519 验证，响应不泄露私钥或助记词。
+- 边界:Node/托管接口由 stub 验证客户端协议，不代表真实 Node、Passkey 或生产环境联调已通过。
+
 ### CUST-070 正常关闭托管
+
 - 优先级:P0
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-enable-disable.spec.ts:95
@@ -717,6 +808,7 @@
 - 预期结果:`success:true`;`settings.enabled` 翻转为 false;恰好发生 1 次 `DELETE /custody/secrets/{walletId}`。
 
 ### CUST-071 删除失败保留开启
+
 - 优先级:P1
 - 类型:API(SW)
 - 状态:✅ 已实现 — products/wallet/tests/custody-enable-disable.spec.ts:117

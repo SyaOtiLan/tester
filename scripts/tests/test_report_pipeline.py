@@ -125,6 +125,18 @@ class PublicationTests(unittest.TestCase):
         return subprocess.run([sys.executable, str(SCRIPTS / filename), *map(str, args)],
                               env=env, capture_output=True, text=True)
 
+    def test_orchestrator_missing_url_skip_is_environment_category(self):
+        case = ET.Element('testcase')
+        ET.SubElement(case, 'skipped')
+        properties = ET.SubElement(case, 'properties')
+        ET.SubElement(properties, 'property', {
+            'name': 'skip', 'value': 'ORCHESTRATOR_BASE_URL not configured',
+        })
+        self.assertEqual(
+            project_report.skip_info(case),
+            ('environment', 'ORCHESTRATOR_BASE_URL not configured'),
+        )
+
     @unittest.skipUnless(hasattr(os, 'fchmod'), 'Linux publication permissions')
     def test_redacts_html_zip_and_retains_old_on_invalid_source(self):
         fake_key = 'sk-' + 'syntheticcredential123456789'

@@ -11,7 +11,7 @@ if [[ ! "$target_sha" =~ ^[0-9a-f]{40}$ ]]; then
 fi
 case "$project" in
     router) deployment=service ;;
-    agent|chat) deployment=shadow ;;
+    chat) deployment=shadow ;;
     books|marketplace|wallet) deployment=source ;;
     *) echo 'Unsupported project or invalid main commit' >&2; exit 2 ;;
 esac

@@ -1,5 +1,5 @@
 /**
- * node — developer & consumer UI flows covering edit-draft and apply-to-use.
+ * node — developer UI flow covering edit-draft and the open-by-default market.
  *
  * Both flows are real end-to-end (real SIWE login → seeded session → real
  * signed-action network calls through the UI → assertion on API results),
@@ -7,11 +7,10 @@
  *
  * Covers:
  *   - ND-E2E-002 edit a draft application & persist via application_update
- *   - ND-E2E-005 apply-to-use an online (marketplace-listed) application
+ *   - ND-E2E-005 published applications do not require a usage request
  *
  * Selectors verified against node `web/src/views/apply/ApplyEdit.vue`,
- * `views/components/MarketBlock.vue`, `views/components/ApplyUseModal.vue`,
- * and `views/components/ApplicationListTable.vue`.
+ * `views/components/MarketBlock.vue`, and `views/components/ApplicationListTable.vue`.
  */
 import { localizedTitle } from '../../../shared/title';
 import { test, expect, baseURLFor, envFor } from '../fixtures';
@@ -138,16 +137,13 @@ test(localizedTitle("【开发者应用生命周期 / E2E】 ND-E2E-002 编辑�
   }
 });
 
-test(localizedTitle("【申请使用应用 / E2E】 ND-E2E-005 申请使用已上线应用", "ND-E2E-005 apply-to-use an online application"), async ({ page, recorder }) => {
+test(localizedTitle("【应用市场 / E2E】 ND-E2E-005 已发布应用无需申请即可使用", "ND-E2E-005 published applications are open by default"), async ({ page, recorder }) => {
   skipIfNoService();
   const env = envFor('node');
   test.skip(!env['NODE_WALLET_PRIVATE_KEY'], 'NODE_WALLET_PRIVATE_KEY not configured');
   const baseURL = baseURLFor('node')!;
 
-  // A different wallet from any online-app owner so the apply-use owner check
-  // and the audit `approver` resolution both target someone else.
   const wallet = Wallet.createRandom();
-  const applicant = getAddress(wallet.address);
 
   await injectWallet(page, wallet.privateKey);
   await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
@@ -156,55 +152,11 @@ test(localizedTitle("【申请使用应用 / E2E】 ND-E2E-005 申请使用已�
   await page.goto(`${baseURL}/market`, { waitUntil: 'domcontentloaded' });
   const cards = page.locator('.tab.tab-market-clickable');
   await expect(cards.first()).toBeVisible({ timeout: 15_000 });
-  // Each market card carries a bottom "申请使用" action (shown only when the
-  // viewer is not the owner — always true for our fresh wallet). Click it to
-  // open the ApplyUseModal.
-  await cards.first().getByText('申请使用', { exact: true }).click();
-
-  // ApplyUseModal: fill the required reason, hit 确 定 (btn_ok).
-  const modal = page.locator('.el-dialog:visible', { hasText: '申请使用' });
-  await expect(modal).toBeVisible({ timeout: 10_000 });
-  const reason = `e2e-apply-${Date.now()}`;
-  await modal.locator('textarea').fill(reason);
-  await recorder.step(page, '打开申请使用弹窗');
-
-  // Watch for the audit submission (POST .../audits). The modal first lists
-  // existing audits for this applicant+resource, then posts the new
-  // usage-request; we anchor on the create POST to /audits.
-  const [auditRes] = await Promise.all([
-    page.waitForResponse(
-      r =>
-        new URL(r.url()).pathname === '/api/v1/public/audits' &&
-        r.request().method() === 'POST',
-      { timeout: 30_000 },
-    ),
-    modal.getByRole('button', { name: /确\s*定/ }).click(),
-  ]);
-  expect(auditRes.status(), await auditRes.text().catch(() => '')).toBe(200);
-  await recorder.step(page, '提交申请使用');
-
-  // Result modal (ResultChooseModal) confirms success (apply_use_result_main).
-  await expect(page.getByText(/应用申请中/)).toBeVisible({
-    timeout: 10_000,
-  });
-
-  // Persisted on the server: the applicant's "我申请的" list contains the
-  // audit we just created (applicant key is lowercased `addr::addr`).
-  const tokens = await loginWithWallet(baseURL, wallet.privateKey);
-  const ctx = await apiContext(baseURL, { Authorization: `Bearer ${tokens.token}` });
-  try {
-    const key = applicant.toLowerCase();
-    const search = await ctx.post('/api/v1/public/audits/search', {
-      data: { condition: { applicant: `${key}::${key}` } },
-    });
-    expect(search.status()).toBe(200);
-    const body = (await search.json()) as {
-      data: { items: Array<{ meta: { uid?: string }; reason?: string }> };
-    };
-    // A usage request is recorded with reason 'Request Access'; the applicant
-    // now has at least one audit — the same thing the 我申请的 tab shows.
-    expect(body.data.items.length).toBeGreaterThan(0);
-  } finally {
-    await ctx.dispose();
-  }
+  // Published apps are directly usable from the market card. The old
+  // global "申请使用" action is intentionally absent; historical request
+  // records remain available from the request-history tab, but no new
+  // request can be started from the public market.
+  await expect(cards.first().getByText('申请使用', { exact: true })).toHaveCount(0);
+  await expect(cards.first()).toHaveClass(/tab-market-clickable/);
+  await recorder.step(page, '已发布应用默认点击即用且无申请入口');
 });

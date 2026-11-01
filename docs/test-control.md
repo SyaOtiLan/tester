@@ -4,7 +4,7 @@
 
 控制服务每 5 分钟检查一次已启用项目和 Tester 的上游 `main`。产品有新提交时，先按目标 SHA 更新隔离测试实例或源码，再运行该项目；Tester 本身有新提交时，在独立 worktree 中检出该提交并运行全量测试。每日 03:00 的全量计划保持不变。所有入口共用一把运行锁，避免并发测试或部署。
 
-目前已验证自动更新适配器的项目为 `agent`、`books`、`chat`、`marketplace`、`router`、`wallet`。`node`、`project`、`social`、`warehouse` 的隔离部署尚未验证，配置中保持禁用；仍可在控制页手动测试它们当前的环境，但不能把该结果解释为“最新 main 已部署”。
+目前已验证自动更新适配器的项目为 `books`、`chat`、`marketplace`、`router`、`wallet`。`orchestrator` 的新 `backend/web` 目录尚未完成隔离部署适配，和 `node`、`project`、`social`、`warehouse` 一样在配置中保持禁用；仍可在控制页手动测试当前环境，但不能把该结果解释为“最新 main 已部署”。
 
 ## 测试机配置
 

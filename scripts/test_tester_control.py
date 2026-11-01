@@ -71,6 +71,19 @@ class TesterControlTests(unittest.TestCase):
         test_same_project = control.enqueue("router", "manual", mode="test")
         self.assertNotEqual(deploy["id"], test_same_project["id"])
 
+    def test_disabled_project_can_be_registered_without_checkout(self):
+        control = self.module
+        config = Path(self.temp.name) / "projects.json"
+        config.write_text(json.dumps({"projects": {
+            "orchestrator": {
+                "repo": "/root/code/orchestrator",
+                "enabled": False,
+                "reason": "Deployment adapter is not configured",
+            }
+        }}), encoding="utf-8")
+        control.CONFIG = config
+        self.assertEqual(list(control.load_config()), ["orchestrator"])
+
     def test_test_only_runs_single_playwright_project_without_git_or_deploy(self):
         control = self.module
         control.PROJECTS["node"] = {"repo": "/tmp/node", "enabled": False}

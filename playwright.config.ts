@@ -19,7 +19,7 @@ const products = [
   'knowledge',
   'marketplace',
   'books',
-  'agent',
+  'orchestrator',
   'wallet',
 ] as const;
 

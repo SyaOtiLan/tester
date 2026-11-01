@@ -4,7 +4,7 @@
  * IMPORTANT: this module deliberately exposes thin signatures, NOT a single
  * abstraction. The YeYing community products use wildly different auth
  * strategies (Basic/JWT/UCAN for warehouse; SIWE/WebAuthn for node;
- * username/password for social; wallet signatures for chat/agent/project).
+ * username/password for social; wallet signatures for chat/orchestrator/project).
  * Each product's `pages/<role>.page.ts` implements only the strategies it
  * needs. Do not add a base class or factory here — keep helpers honest.
  */

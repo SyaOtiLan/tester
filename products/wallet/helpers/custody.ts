@@ -29,8 +29,7 @@ const CUSTODY_API = '/api/v1/public/custody';
  * Well-known Hardhat/Anvil test vectors (account #0). Deterministic, public,
  * never funded on any real chain in these hermetic tests.
  */
-export const TEST_MNEMONIC =
-  'test test test test test test test test test test test junk';
+export const TEST_MNEMONIC = 'test test test test test test test test test test test junk';
 export const TEST_ADDRESS_0 = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
 export const TEST_ADDRESS_1 = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
 export const TEST_PRIVATE_KEY_0 =
@@ -71,6 +70,10 @@ export interface CustodyStubOptions {
   deleteStatus?: number;
   /** HTTP status for POST /custody/secrets (default 200). */
   upsertStatus?: number;
+  /** DID returned by the mocked Node authorization exchange. */
+  authorizationDid?: string;
+  /** Token returned for the mocked custody.recovery authorization. */
+  recoveryToken?: string;
 }
 
 export interface CustodyStub {
@@ -95,6 +98,7 @@ export async function stubCustody(
   opts: CustodyStubOptions = {},
 ): Promise<CustodyStub> {
   const requests: CapturedRequest[] = [];
+  let authorizationRequest: { redirectUri: string; state: string; requestId: string } | null = null;
 
   await context.route(`${CUSTODY_ENDPOINT}/**`, async (route) => {
     const req = route.request();
@@ -104,10 +108,73 @@ export async function stubCustody(
     const path = url.slice(CUSTODY_ENDPOINT.length).split('?')[0];
     requests.push({ method, url, path, postData });
 
+    if (method === 'POST' && path === '/api/v1/public/identity/authorize/request') {
+      let body: Record<string, unknown> = {};
+      try {
+        body = JSON.parse(postData || '{}');
+      } catch {
+        /* invalid body is asserted by the test */
+      }
+      authorizationRequest = {
+        redirectUri: String(body.redirectUri || ''),
+        state: String(body.state || ''),
+        requestId: 'wallet-recovery-e2e-request',
+      };
+      return route.fulfill(json({ requestId: authorizationRequest.requestId }));
+    }
+    if (method === 'GET' && path === '/identity/authorize') {
+      if (!authorizationRequest?.redirectUri || !authorizationRequest.state) {
+        return route.fulfill({
+          status: 400,
+          contentType: 'text/plain',
+          body: 'authorization request missing',
+        });
+      }
+      const callback = new URL(authorizationRequest.redirectUri);
+      callback.searchParams.set('code', 'wallet-recovery-e2e-code');
+      callback.searchParams.set('state', authorizationRequest.state);
+      const callbackUrl = callback.toString().replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/html; charset=utf-8',
+        body: `<!doctype html><html><body><h1>身份授权</h1><a id="approveRecovery" href="${callbackUrl}">授权并返回钱包</a></body></html>`,
+      });
+    }
+    if (method === 'POST' && path === '/api/v1/public/identity/authorize/exchange') {
+      let body: Record<string, unknown> = {};
+      try {
+        body = JSON.parse(postData || '{}');
+      } catch {
+        /* invalid body is asserted by the test */
+      }
+      const validExchange =
+        body.code === 'wallet-recovery-e2e-code' &&
+        typeof body.codeVerifier === 'string' &&
+        body.codeVerifier.length > 0 &&
+        body.redirectUri === authorizationRequest?.redirectUri;
+      if (!validExchange) {
+        return route.fulfill({
+          status: 400,
+          contentType: 'application/json',
+          body: JSON.stringify({ code: 400, message: 'invalid PKCE exchange' }),
+        });
+      }
+      return route.fulfill(
+        json({
+          did: opts.authorizationDid || opts.identityDid || '',
+          custodyRecovery: {
+            token: opts.recoveryToken || 'custody-recovery-e2e-token',
+            expiresAt: Math.floor(Date.now() / 1000) + 300,
+          },
+        }),
+      );
+    }
+    if (method === 'GET' && path === '/.well-known/openid-credential-issuer') {
+      return route.abort('failed');
+    }
+
     // Order matters: match the more specific recovery paths first.
-    const recSecretMatch = path.match(
-      new RegExp(`^${CUSTODY_API}/recovery/secrets/([^/]+)$`),
-    );
+    const recSecretMatch = path.match(new RegExp(`^${CUSTODY_API}/recovery/secrets/([^/]+)$`));
     const secretMatch = path.match(new RegExp(`^${CUSTODY_API}/secrets/([^/]+)$`));
 
     if (method === 'GET' && path === `${CUSTODY_API}/recovery/secrets`) {
@@ -118,7 +185,12 @@ export async function stubCustody(
     if (method === 'GET' && recSecretMatch) {
       const walletId = decodeURIComponent(recSecretMatch[1]);
       const rec = opts.recoverySecrets?.[walletId];
-      if (!rec) return route.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ code: 404, message: 'not found' }) });
+      if (!rec)
+        return route.fulfill({
+          status: 404,
+          contentType: 'application/json',
+          body: JSON.stringify({ code: 404, message: 'not found' }),
+        });
       return route.fulfill(json(rec));
     }
     if (method === 'GET' && path === `${CUSTODY_API}/status`) {
@@ -132,18 +204,32 @@ export async function stubCustody(
     if (method === 'GET' && secretMatch) {
       const walletId = decodeURIComponent(secretMatch[1]);
       const rec = opts.authorizedSecrets?.[walletId];
-      if (!rec) return route.fulfill({ status: 404, contentType: 'application/json', body: JSON.stringify({ code: 404, message: 'not found' }) });
+      if (!rec)
+        return route.fulfill({
+          status: 404,
+          contentType: 'application/json',
+          body: JSON.stringify({ code: 404, message: 'not found' }),
+        });
       return route.fulfill(json(rec));
     }
     if (method === 'DELETE' && secretMatch) {
       const status = opts.deleteStatus ?? 200;
       if (status >= 200 && status < 300) return route.fulfill(json({ deleted: true }));
-      return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ code: status, message: 'delete failed' }) });
+      return route.fulfill({
+        status,
+        contentType: 'application/json',
+        body: JSON.stringify({ code: status, message: 'delete failed' }),
+      });
     }
     if (method === 'POST' && path === `${CUSTODY_API}/secrets`) {
       const status = opts.upsertStatus ?? 200;
-      if (status >= 200 && status < 300) return route.fulfill(json({ walletId: 'server-assigned' }));
-      return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ code: status, message: 'upsert failed' }) });
+      if (status >= 200 && status < 300)
+        return route.fulfill(json({ walletId: 'server-assigned' }));
+      return route.fulfill({
+        status,
+        contentType: 'application/json',
+        body: JSON.stringify({ code: status, message: 'upsert failed' }),
+      });
     }
 
     // Anything else under the custody host: fail loudly (aborted) so a missing
@@ -177,7 +263,13 @@ export async function encryptSecret(
 export function hdSecret(overrides: Record<string, unknown> = {}) {
   return {
     version: 2,
-    wallet: { id: 'wallet-hd-1', name: '工作钱包', type: 'hd', createdAt: '2026-01-01T00:00:00.000Z', accountCount: 1 },
+    wallet: {
+      id: 'wallet-hd-1',
+      name: '工作钱包',
+      type: 'hd',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      accountCount: 1,
+    },
     mnemonic: TEST_MNEMONIC,
     accounts: [
       {
@@ -199,7 +291,13 @@ export function hdSecret(overrides: Record<string, unknown> = {}) {
 export function importedSecret(overrides: Record<string, unknown> = {}) {
   return {
     version: 2,
-    wallet: { id: 'wallet-pk-1', name: '私钥钱包', type: 'imported', createdAt: '2026-01-01T00:00:00.000Z', accountCount: 1 },
+    wallet: {
+      id: 'wallet-pk-1',
+      name: '私钥钱包',
+      type: 'imported',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      accountCount: 1,
+    },
     accounts: [
       {
         accountId: 'acc-pk-0',
