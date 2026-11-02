@@ -103,8 +103,8 @@ test(
     const indexFiles = [
       'payment/docs/README.md',
       'payment/docs/series-index.md',
-      'payment/docs/rails/card/README.md',
-      'payment/docs/rails/card/跨章索引.md',
+      'payment/docs/acquiring/README.md',
+      'payment/docs/acquiring/跨章索引.md',
     ];
     const missing: string[] = [];
     for (const rel of indexFiles) {
