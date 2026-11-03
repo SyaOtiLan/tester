@@ -136,8 +136,8 @@
 ### BK-DATA-011 payment 索引文档内链接目标存在
 - 优先级:P1
 - 类型:DATA
-- 状态:✅ 已实现 — products/books/tests/links.spec.ts:72
-- 前置条件:`payment/docs/README.md`、`series-index.md`、`acquiring/跨章索引.md` 可读
+- 状态:✅ 已实现 — products/books/tests/links.spec.ts
+- 前置条件:`payment/docs/README.md`、`payment/docs/series-index.md`、`payment/docs/acquiring/README.md`、`payment/docs/acquiring/跨章索引.md` 可读
 - 步骤:
   1. 抽取各索引文件内的相对链接
   2. 逐条断言目标文件存在
@@ -344,18 +344,18 @@
 ### BK-DATA-030 payment 发布导航版本链接齐全
 - 优先级:P1
 - 类型:DATA
-- 状态:✅ 已实现 — products/books/tests/consistency.spec.ts:25
+- 状态:✅ 已实现 — products/books/tests/consistency.spec.ts
 - 前置条件:`payment/docs/acquiring/` 可读
 - 步骤:
-  1. 枚举 `00-发布导航-v*.md`(v1.0 … v2.2,共 13 个版本)
-  2. 校验 README 指向的最新发布导航存在,且各导航内引用的章节链接有效
+  1. 在 `payment/docs/acquiring/` 枚举 `00-发布导航-v*.md`(v1.0 … v2.2,共 13 个版本);历史导航与当前导航均存放在该目录
+  2. 校验该目录 README 指向的 v2.2 发布导航存在,且当前导航内引用的章节链接有效
 - 预期结果:发布导航版本文件齐全,最新版被 README 正确引用,导航内链接无死链
 
 ### BK-DATA-031 payment 章节元信息/跨章索引引用一致
 - 优先级:P2
 - 类型:DATA
-- 状态:✅ 已实现 — products/books/tests/consistency.spec.ts:51
-- 前置条件:`章节元信息总表.md`、`跨章索引.md` 可读
+- 状态:✅ 已实现 — products/books/tests/consistency.spec.ts
+- 前置条件:`payment/docs/acquiring/章节元信息总表.md`、`payment/docs/acquiring/跨章索引.md` 可读
 - 步骤:
   1. 抽取两表引用的章节编号/文件
   2. 与 `acquiring/` 下实际章节比对
