@@ -39,6 +39,30 @@ test(
     const endInput = page.getByLabel(/截止时间|End time/);
     await expect(startInput).toBeVisible();
     await expect(endInput).toBeVisible();
+    await expect(page.locator('.router-log-filter-editor-range-separator')).toHaveText('-');
+
+    const desktopStartBox = await startInput.boundingBox();
+    const desktopEndBox = await endInput.boundingBox();
+    const desktopEditor = page.locator('.router-log-filter-editor-time-range');
+    expect(desktopStartBox).not.toBeNull();
+    expect(desktopEndBox).not.toBeNull();
+    expect(Math.abs(desktopStartBox!.y - desktopEndBox!.y)).toBeLessThan(2);
+    await expect
+      .poll(() => desktopEditor.evaluate((element) => element.scrollWidth - element.clientWidth))
+      .toBeLessThanOrEqual(0);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(startInput).toBeVisible();
+    await expect(endInput).toBeVisible();
+    const mobileStartBox = await startInput.boundingBox();
+    const mobileEndBox = await endInput.boundingBox();
+    expect(mobileStartBox).not.toBeNull();
+    expect(mobileEndBox).not.toBeNull();
+    expect(mobileEndBox!.y).toBeGreaterThan(mobileStartBox!.y);
+    await expect
+      .poll(() => desktopEditor.evaluate((element) => element.scrollWidth - element.clientWidth))
+      .toBeLessThanOrEqual(0);
+    await page.setViewportSize({ width: 1280, height: 900 });
 
     await startInput.fill('2026-11-02T12:00');
     await endInput.fill('2026-11-02T09:52');
