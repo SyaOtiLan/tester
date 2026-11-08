@@ -31,7 +31,9 @@ project_index="$runner_home/scripts/publish-project-report.py"
 project_menu="$runner_home/scripts/add-project-menu.py"
 bilingual_report="$runner_home/scripts/publish-bilingual-report.py"
 notifier="$runner_home/scripts/notify-feishu-report.py"
-export TESTER_REPORT_SOURCE="$tester/reports/index.html"
+runtime=${TESTER_RUNTIME_DIR:-$tester}
+mkdir -p "$runtime"
+export TESTER_REPORT_SOURCE="$runtime/reports/index.html"
 public_root=${TESTER_REPORT_DIR:-/data/test-results}
 private_root=${TESTER_PRIVATE_REPORT_DIR:-/data/test-results-private}
 public=$public_root
@@ -78,7 +80,7 @@ write_attempt() {
     fi
 }
 
-if [[ ! -f "$tester/.env.local" || ! -f "$tester/node_modules/@playwright/test/cli.js" || ! -x "$node_bin" ]]; then
+if [[ ! -f "${TESTER_ENV_FILE:-$tester/.env.local}" || ! -f "$tester/node_modules/@playwright/test/cli.js" || ! -x "$node_bin" ]]; then
     write_attempt 'skipped: Tester environment or dependencies missing'
     if [[ -n "$project" ]]; then exit 75; fi
     exit 0
@@ -131,7 +133,7 @@ test_rc=$?
 set -e
 
 printf '%s\n' "$test_rc" > "$run_dir/exit-code.txt"
-report="$tester/reports/index.html"
+report="$runtime/reports/index.html"
 if [[ "$test_rc" != 0 && "$test_rc" != 1 ]]; then
     write_attempt "not published: test runner exit code $test_rc; previous report retained"
     exit "$test_rc"
@@ -141,11 +143,11 @@ if [[ ! -f "$report" || $(stat -c %Y "$report") -lt "$started" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$tester/junit.xml" || $(stat -c %Y "$tester/junit.xml") -lt "$started" ]]; then
+if [[ ! -f "$runtime/junit.xml" || $(stat -c %Y "$runtime/junit.xml") -lt "$started" ]]; then
     write_attempt 'not published: no fresh JUnit result; previous report retained'
     exit 1
 fi
-cp "$tester/junit.xml" "$run_dir/junit.xml"
+cp "$runtime/junit.xml" "$run_dir/junit.xml"
 
 if ! counts=$(python3 - "$run_dir/junit.xml" <<'PY'
 import sys

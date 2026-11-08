@@ -50,3 +50,10 @@ pnpm-debug.log*
 /.project-execution/
 /.project-execution-*/
 .playwright-cli
+
+# Release output and deployed credentials
+/output/
+/config/runtime.json
+/config/projects.json
+/config/.env.local
+/test-results/

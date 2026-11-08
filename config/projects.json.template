@@ -1,0 +1,54 @@
+{
+  "projects": {
+    "warehouse": {
+      "repo": "/root/code/warehouse",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "node": {
+      "repo": "/root/code/node",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "router": {
+      "repo": "/root/code/router",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "chat": {
+      "repo": "/root/code/chat",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "social": {
+      "repo": "/root/code/social",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "project": {
+      "repo": "/root/code/project",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "marketplace": {
+      "repo": "/root/code/marketplace",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "books": {
+      "repo": "/root/code/books",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "orchestrator": {
+      "repo": "/root/code/orchestrator",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    },
+    "wallet": {
+      "repo": "/root/code/wallet",
+      "enabled": false,
+      "reason": "Artifact mode tests the currently deployed environment; source deployment is disabled."
+    }
+  }
+}
