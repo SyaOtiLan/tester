@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import secrets
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -405,6 +406,12 @@ refresh(); setInterval(refresh, 5000);
 
 
 class Handler(BaseHTTPRequestHandler):
+    def log_message(self, format, *args):
+        if ARTIFACT_MODE:
+            print("Tester control HTTP request", file=sys.stderr)
+        else:
+            super().log_message(format, *args)
+
     def reply(self, code: int, payload: bytes, content_type: str) -> None:
         self.send_response(code)
         self.send_header("Content-Type", content_type)
@@ -425,7 +432,8 @@ class Handler(BaseHTTPRequestHandler):
             self.json_reply(200, {"status": "pass", "unit": "tester",
                                   "version": value.get("version", "development"),
                                   "source_commit": value.get("source_commit"),
-                                  "artifact_mode": ARTIFACT_MODE, "pid": os.getpid()})
+                                  "artifact_mode": ARTIFACT_MODE, "pid": os.getpid(),
+                                  "service_pid": int(os.environ.get("TESTER_SERVICE_PID", os.getpid()))})
             return
         if path == "/":
             self.reply(200, PAGE.replace("__CSRF__", CSRF_TOKEN).encode(), "text/html; charset=utf-8")

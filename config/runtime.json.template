@@ -9,5 +9,7 @@
   "TESTER_CONTROL_LOG": "/opt/logs/tester-control.log",
   "TESTER_CONTROL_HOST": "127.0.0.1",
   "TESTER_CONTROL_PORT": "18082",
-  "TESTER_CONTROL_ORIGIN": "https://tester.tidukongjian.com"
+  "TESTER_CONTROL_ORIGIN": "https://tester.tidukongjian.com",
+  "TESTER_LOG_MAX_BYTES": "1048576",
+  "TESTER_LOG_BACKUPS": "3"
 }
