@@ -33,7 +33,7 @@ def sha(path):
 
 def publishable(relative):
     parts = relative.parts
-    return not any(p in {".git", "__pycache__", ".cache", ".bin"} or p.startswith(".project") for p in parts) and not (
+    return not any(p in {".git", "__pycache__", ".cache", ".bin", ".links"} or p.startswith(".project") for p in parts) and not (
         relative.name.endswith((".pyc", ".log")) or
         (relative.name.startswith(".env") and relative.name != ".env.template")
     )
@@ -89,9 +89,12 @@ def build(args):
         env = dict(os.environ, PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD="1")
         run(["pnpm", "install", "--frozen-lockfile", "--config.node-linker=hoisted"], cwd=checkout, env=env)
         browsers = checkout / "browsers"
-        env["PLAYWRIGHT_BROWSERS_PATH"] = str(browsers)
+        cache = Path(os.environ.get("TESTER_BUILD_BROWSER_CACHE", browsers)).absolute()
+        env["PLAYWRIGHT_BROWSERS_PATH"] = str(cache)
         env.pop("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", None)
         run(["node", "node_modules/@playwright/test/cli.js", "install", "chromium"], cwd=checkout, env=env)
+        if cache != browsers:
+            shutil.copytree(cache, browsers, ignore=shutil.ignore_patterns(".links"))
         staged = temp / package_root
         staged.mkdir()
         for name in FILES:

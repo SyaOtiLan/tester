@@ -425,7 +425,7 @@ class Handler(BaseHTTPRequestHandler):
             self.json_reply(200, {"status": "pass", "unit": "tester",
                                   "version": value.get("version", "development"),
                                   "source_commit": value.get("source_commit"),
-                                  "artifact_mode": ARTIFACT_MODE})
+                                  "artifact_mode": ARTIFACT_MODE, "pid": os.getpid()})
             return
         if path == "/":
             self.reply(200, PAGE.replace("__CSRF__", CSRF_TOKEN).encode(), "text/html; charset=utf-8")

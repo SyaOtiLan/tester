@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import socket
 import subprocess
 import sys
 import time
@@ -84,6 +85,9 @@ def service(action, env):
         if pid is not None and alive(pid):
             get_json(env, "/healthz", 3)
             return
+        host = env.get("TESTER_CONTROL_HOST", "127.0.0.1")
+        with socket.socket() as probe:
+            probe.bind((host, int(env.get("TESTER_CONTROL_PORT", "18082"))))
         log = Path(env.get("TESTER_CONTROL_LOG", "/opt/logs/tester-control.log"))
         log.parent.mkdir(parents=True, exist_ok=True)
         if log.exists() and log.stat().st_size > 1048576:
@@ -99,8 +103,9 @@ def service(action, env):
                 pidfile.unlink(missing_ok=True)
                 raise ValueError("Control service exited during startup")
             try:
-                get_json(env, "/healthz", 1)
-                return
+                ready = get_json(env, "/healthz", 1)
+                if ready.get("pid") == process.pid:
+                    return
             except (OSError, ValueError):
                 time.sleep(0.1)
         # A failed start must not leave an unreported process behind.

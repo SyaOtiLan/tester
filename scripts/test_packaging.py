@@ -84,6 +84,10 @@ class ArtifactServiceTests(unittest.TestCase):
                 report = json.loads(smoke.stdout)
                 self.assertEqual(report["summary"], {"total": 3, "passed": 3, "failed": 0, "skipped": 0})
                 path = root / "private/control/state.json"
+                occupied = dict(env, TESTER_PID_FILE=str(root / "different.pid"))
+                other = subprocess.run(["bash", str(ROOT / "scripts/starter.sh"), "start"], env=occupied, capture_output=True, timeout=20)
+                self.assertNotEqual(other.returncode, 0)
+                self.assertFalse((root / "different.pid").exists())
                 state = json.loads(path.read_text()) if path.exists() else {}
                 self.assertFalse(state.get("pending"))
                 self.assertFalse(state.get("poll_errors"))
