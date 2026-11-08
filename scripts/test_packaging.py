@@ -81,6 +81,8 @@ class ArtifactServiceTests(unittest.TestCase):
                 self.assertEqual(started.returncode, 0, started.stderr)
                 smoke = run("test.sh", "--suite", "smoke", "--format", "json")
                 self.assertEqual(smoke.returncode, 0, smoke.stderr)
+                restarted = run("starter.sh", "restart")
+                self.assertEqual(restarted.returncode, 0, restarted.stderr)
                 report = json.loads(smoke.stdout)
                 self.assertEqual(report["summary"], {"total": 3, "passed": 3, "failed": 0, "skipped": 0})
                 path = root / "private/control/state.json"

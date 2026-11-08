@@ -137,6 +137,7 @@ def service(action, env):
         host = env.get("TESTER_CONTROL_HOST", "127.0.0.1")
         family = socket.AF_INET6 if ":" in host else socket.AF_INET
         with socket.socket(family) as probe:
+            probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             probe.bind((host, int(env.get("TESTER_CONTROL_PORT", "18082"))))
         log = Path(env.get("TESTER_CONTROL_LOG", "/opt/logs/tester-control.log"))
         log.parent.mkdir(parents=True, exist_ok=True)

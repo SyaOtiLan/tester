@@ -29,6 +29,7 @@ class TesterControlTests(unittest.TestCase):
             "router": {"repo": str(repo), "enabled": True}
         }}), encoding="utf-8")
         values = {
+            "TESTER_ARTIFACT_MODE": "0",
             "TESTER_CONTROL_CONFIG": str(config),
             "TESTER_PRIVATE_REPORT_DIR": str(root / "private"),
             "TESTER_REPORT_DIR": str(root / "public"),
@@ -250,6 +251,29 @@ class TesterControlTests(unittest.TestCase):
         self.assertFalse(status["projects"]["node"]["enabled"])
         self.assertNotIn("log", status["full"])
 
+
+class ArtifactModeBoundaryTests(unittest.TestCase):
+    setUp = TesterControlTests.setUp
+
+    def test_artifact_mode_disables_git_polling(self):
+        control = self.module
+        with patch.object(control, "ARTIFACT_MODE", True), patch.object(control, "git_sha") as git:
+            control.poll_main()
+            control.poll_tester_main()
+        git.assert_not_called()
+        self.assertFalse(control.STATE["pending"])
+
+    def test_artifact_mode_uses_only_packaged_runner(self):
+        control = self.module
+        with patch.object(control, "ARTIFACT_MODE", True):
+            with self.assertRaises(ValueError):
+                control.enqueue("router", "manual", mode="deploy")
+            item = control.enqueue("router", "manual", mode="test")
+            summary = {"request_id": item["id"], "run": "fixture", "status": "passed"}
+            with patch.object(control, "cooldown_until", return_value=None), patch.object(control, "git_sha") as git, patch.object(control, "latest_summary", return_value=summary), patch.object(control.subprocess, "run", return_value=SimpleNamespace(returncode=0)) as run:
+                self.assertTrue(control.execute(item))
+            git.assert_not_called()
+            self.assertEqual(run.call_args.args[0], [str(control.FULL_RUNNER), "router"])
 
 if __name__ == "__main__":
     unittest.main()
