@@ -105,6 +105,30 @@ class ServiceContractTests(unittest.TestCase):
             self.assertLessEqual(len(list(Path(folder).glob("control.log*"))), 3)
             self.assertTrue(all(p.stat().st_size <= 1024 for p in Path(folder).glob("control.log*")))
 
+
+    def test_timeout_stops_descendant_processes(self):
+        import signal
+        import time
+        with tempfile.TemporaryDirectory() as folder:
+            info = Path(folder) / "processes.json"
+            child_code = "import signal,time;signal.signal(signal.SIGTERM,signal.SIG_IGN);time.sleep(20)"
+            parent_code = "import subprocess,sys,os,time,json;from pathlib import Path;p=subprocess.Popen([sys.executable,'-c'," + repr(child_code) + "]);Path(" + repr(str(info)) + ").write_text(json.dumps([os.getpid(),p.pid]));time.sleep(20)"
+            group = None
+            try:
+                with self.assertRaises(subprocess.TimeoutExpired):
+                    self.runtime.run_command([sys.executable, "-c", parent_code], os.environ.copy(), 0.5, quiet=True)
+                group, descendant = json.loads(info.read_text())
+                limit = time.monotonic() + 1
+                while self.runtime.alive(descendant) and time.monotonic() < limit:
+                    time.sleep(0.02)
+                self.assertFalse(self.runtime.alive(descendant), "timed-out descendant still running")
+            finally:
+                if group is not None:
+                    try:
+                        os.killpg(group, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+
     def test_tag_changes_only_release_commit_and_pushes_only_to_local_fixture(self):
         import shutil
         with tempfile.TemporaryDirectory() as folder:

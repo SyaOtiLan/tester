@@ -93,14 +93,24 @@ def run_command(command, env, timeout, quiet=False, cwd=ROOT):
         code = child.wait(timeout=timeout)
         if code:
             raise subprocess.CalledProcessError(code, command)
-    except BaseException:
-        if child.poll() is None:
+    except BaseException as cause:
+        # The direct child can exit while descendants still hold this owned group.
+        try:
             os.killpg(child.pid, signal.SIGTERM)
-            try:
-                child.wait(timeout=2)
-            except subprocess.TimeoutExpired:
-                os.killpg(child.pid, signal.SIGKILL)
-                child.wait()
+        except ProcessLookupError:
+            pass
+        try:
+            child.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            pass
+        try:
+            os.killpg(child.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        try:
+            child.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            raise CleanupError("subprocess group did not stop") from cause
         raise
 
 def service(action, env):
