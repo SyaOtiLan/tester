@@ -18,7 +18,7 @@ package-api.json 声明四个统一参数。构建输入的 tag commit 与 main 
 
 ## 目录与运行
 
-从 config/*.template 创建 runtime.json、projects.json 和部署环境 .env.local，私有文件权限设为 600。runtime.json 的 TESTER_* 值是部署环境配置，命令行显式 --config 与现有进程环境变量可覆盖。测试账号和飞书凭据只存受保护配置，不放入发布包。
+从 config/*.template 创建 runtime.json、projects.json 和部署环境 .env.local，私有文件权限设为 600。runtime.json 中的值是部署环境配置，命令行显式 --config 与现有进程环境变量可覆盖。测试账号和飞书凭据只存受保护配置，不放入发布包。
 
 模板使用：
 - 稳定服务入口 /opt/deploy/tester，实际解包到独立版本目录。
@@ -65,3 +65,5 @@ scripts/test.sh --suite e2e --project router --environment test --timeout 600 --
 scripts/upgrade.sh 提供 prepare、copy-config、post-copy、finalize 四阶段；仅复制缺失配置，不覆盖目标已配置值或外置结果。通用升级器负责停止旧服务、启动新版本、检查健康与切换稳定链接；smoke 独立执行。失败时先停止新版本，再从旧目录启动并重新执行健康和 smoke，最后恢复链接。
 
 首次接入前需确认浏览器系统库、Xvfb/bubblewrap、受保护报告路由、数据目录权限、账号与调度配置。现有 GPU 测试环境不会因这次开发自动迁移。TypeScript 全量检查仍有与原 main 相同的既有错误；接入审计必须保留这一项，不能声称所有仓库检查已通过。
+
+停止等待使用规范变量 STOP_TIMEOUT_SECONDS（默认 30）与 FORCE_STOP_TIMEOUT_SECONDS（默认 5）；兼容旧的 TESTER_STOP_TIMEOUT 和 TESTER_FORCE_STOP_TIMEOUT，规范变量优先。两者也可写入 runtime.json，必须为非负整数字符串。

@@ -38,8 +38,8 @@ def environment(config=None, required=True):
     path = Path(config or values.get("TESTER_RUNTIME_CONFIG", ROOT / "config/runtime.json"))
     if path.is_file():
         raw = json.loads(path.read_text())
-        if not isinstance(raw, dict) or any(not isinstance(k, str) or not k.startswith("TESTER_") or not isinstance(v, str) for k, v in raw.items()):
-            raise ValueError("runtime configuration must contain TESTER_* string values")
+        if not isinstance(raw, dict) or any(not isinstance(k, str) or (not k.startswith("TESTER_") and k not in ("STOP_TIMEOUT_SECONDS", "FORCE_STOP_TIMEOUT_SECONDS")) or not isinstance(v, str) for k, v in raw.items()):
+            raise ValueError("runtime configuration contains unsupported keys or non-string values")
         for key, value in raw.items():
             values.setdefault(key, value)
     elif required or config:
@@ -113,7 +113,15 @@ def run_command(command, env, timeout, quiet=False, cwd=ROOT):
             raise CleanupError("subprocess group did not stop") from cause
         raise
 
+def stop_timeouts(env):
+    graceful = int(env.get("STOP_TIMEOUT_SECONDS", env.get("TESTER_STOP_TIMEOUT", "30")))
+    forced = int(env.get("FORCE_STOP_TIMEOUT_SECONDS", env.get("TESTER_FORCE_STOP_TIMEOUT", "5")))
+    if graceful < 0 or forced < 0:
+        raise ValueError("stop timeouts must be non-negative integers")
+    return graceful, forced
+
 def service(action, env):
+    graceful_timeout, forced_timeout = stop_timeouts(env)
     pidfile = Path(env.get("TESTER_PID_FILE", "/data/tester/control.pid"))
     pidfile.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     with pidfile.with_suffix(".lock").open("a") as lock:
@@ -122,8 +130,8 @@ def service(action, env):
         if pid is not None and alive(pid) and not owned(pid):
             raise ValueError("PID ownership mismatch")
         if action in ("stop", "restart") and pid is not None and alive(pid):
-            for sig, limit in ((signal.SIGTERM, int(env.get("TESTER_STOP_TIMEOUT", "30"))),
-                               (signal.SIGKILL, int(env.get("TESTER_FORCE_STOP_TIMEOUT", "5")))):
+            for sig, limit in ((signal.SIGTERM, graceful_timeout),
+                               (signal.SIGKILL, forced_timeout)):
                 if not alive(pid):
                     break
                 if not owned(pid):

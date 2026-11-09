@@ -32,6 +32,20 @@ class ServiceContractTests(unittest.TestCase):
     def setUp(self):
         self.runtime = module("service-runtime")
 
+    def test_standard_stop_timeout_names_override_legacy_aliases(self):
+        self.assertEqual(self.runtime.stop_timeouts({
+            "STOP_TIMEOUT_SECONDS": "7", "FORCE_STOP_TIMEOUT_SECONDS": "2",
+            "TESTER_STOP_TIMEOUT": "99", "TESTER_FORCE_STOP_TIMEOUT": "88",
+        }), (7, 2))
+
+    def test_stop_timeout_defaults_legacy_names_and_validation(self):
+        self.assertEqual(self.runtime.stop_timeouts({}), (30, 5))
+        self.assertEqual(self.runtime.stop_timeouts({
+            "TESTER_STOP_TIMEOUT": "9", "TESTER_FORCE_STOP_TIMEOUT": "1",
+        }), (9, 1))
+        with self.assertRaises(ValueError):
+            self.runtime.stop_timeouts({"STOP_TIMEOUT_SECONDS": "-1"})
+
     def test_unknown_case_is_rejected_before_any_command(self):
         with patch.object(self.runtime, "run_command") as command:
             with self.assertRaises(ValueError):
