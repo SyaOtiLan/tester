@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import secrets
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -33,6 +34,7 @@ RETRY_SECONDS = int(os.environ.get("TESTER_PROJECT_RETRY_SECONDS", "300"))
 ROUTER_COOLDOWN_SECONDS = int(os.environ.get("TESTER_ROUTER_COOLDOWN_SECONDS", "1260"))
 CSRF_TOKEN = secrets.token_urlsafe(32)
 MUTEX = threading.RLock()
+ARTIFACT_MODE = os.environ.get("TESTER_ARTIFACT_MODE") == "1"
 
 
 def now() -> str:
@@ -104,6 +106,8 @@ def enqueue(project: str, source: str, target_sha: str | None = None,
         mode = "test"
     elif project not in PROJECTS:
         raise ValueError(f"Unknown project: {project}")
+    if ARTIFACT_MODE and mode == "deploy":
+        raise ValueError("Artifact mode does not deploy product source checkouts")
     if mode not in ("test", "deploy"):
         raise ValueError("Unknown test mode")
     if project != FULL and mode == "deploy" and not PROJECTS[project].get("enabled", False):
@@ -137,6 +141,8 @@ def enqueue(project: str, source: str, target_sha: str | None = None,
 
 
 def poll_main() -> None:
+    if ARTIFACT_MODE:
+        return
     for name, config in PROJECTS.items():
         if not config.get("enabled", False):
             continue
@@ -159,6 +165,8 @@ def poll_main() -> None:
 
 
 def poll_tester_main() -> None:
+    if ARTIFACT_MODE:
+        return
     try:
         remote_sha = git_sha(str(REPO), remote=True)
         local_sha = git_sha(str(REPO), remote=False)
@@ -232,7 +240,13 @@ def execute(item: dict) -> bool:
     environment["TESTER_TRIGGER"] = item["source"]
     try:
         with log_path.open("w", encoding="utf-8") as log:
-            if project == FULL and item["source"] == "tester-main":
+            if ARTIFACT_MODE:
+                environment["TESTER_SOURCE_DIR"] = str(REPO)
+                metadata = REPO / "release.json"
+                if metadata.exists():
+                    environment["TESTER_SOURCE_SHA"] = json.loads(metadata.read_text())["source_commit"]
+                command = [str(FULL_RUNNER)] + ([] if project == FULL else [project])
+            elif project == FULL and item["source"] == "tester-main":
                 command = [str(TESTER_MAIN_RUNNER), item["target_sha"]]
             elif mode == "test":
                 command = [str(TESTER_MAIN_RUNNER)] + ([] if project == FULL else ["--project", project])
@@ -392,6 +406,12 @@ refresh(); setInterval(refresh, 5000);
 
 
 class Handler(BaseHTTPRequestHandler):
+    def log_message(self, format, *args):
+        if ARTIFACT_MODE:
+            print("Tester control HTTP request", file=sys.stderr)
+        else:
+            super().log_message(format, *args)
+
     def reply(self, code: int, payload: bytes, content_type: str) -> None:
         self.send_response(code)
         self.send_header("Content-Type", content_type)
@@ -406,6 +426,15 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         path = urlsplit(self.path).path
+        if path == "/healthz":
+            metadata = REPO / "release.json"
+            value = json.loads(metadata.read_text()) if metadata.exists() else {}
+            self.json_reply(200, {"status": "pass", "unit": "tester",
+                                  "version": value.get("version", "development"),
+                                  "source_commit": value.get("source_commit"),
+                                  "artifact_mode": ARTIFACT_MODE, "pid": os.getpid(),
+                                  "service_pid": int(os.environ.get("TESTER_SERVICE_PID", os.getpid()))})
+            return
         if path == "/":
             self.reply(200, PAGE.replace("__CSRF__", CSRF_TOKEN).encode(), "text/html; charset=utf-8")
             return

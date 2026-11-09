@@ -63,7 +63,7 @@ const projects: Project[] = products.map((product: ProductName) => ({
   name: product,
   testDir: `products/${product}/tests`,
   testMatch: /.*\.spec\.ts$/,
-  outputDir: `results/${product}`,
+  outputDir: `${process.env.TESTER_RUNTIME_DIR ?? '.'}/results/${product}`,
   // Project (DooTask) is the only suite that writes to a single shared MySQL
   // instance behind Swoole. Under the default per-CPU worker count (~5) the
   // backend saturates and individual write/UI-heavy requests can take well over

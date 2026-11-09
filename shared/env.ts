@@ -32,6 +32,16 @@ function envFilePath(env: TestEnv): string {
 
 function loadTestEnv(): { env: TestEnv | null; path: string | null } {
   const requested = process.env.TEST_ENV?.trim().toLowerCase();
+  const explicitPath = process.env.TESTER_ENV_FILE?.trim();
+  if (explicitPath) {
+    if (requested && !(KNOWN_TEST_ENVS as readonly string[]).includes(requested)) {
+      throw new Error("Invalid TEST_ENV for TESTER_ENV_FILE");
+    }
+    const path = resolve(explicitPath);
+    if (!existsSync(path)) throw new Error("TESTER_ENV_FILE does not exist");
+    loadDotenv({ path, quiet: true });
+    return { env: (requested as TestEnv) || null, path };
+  }
   if (requested) {
     if (!(KNOWN_TEST_ENVS as readonly string[]).includes(requested)) {
       throw new Error(

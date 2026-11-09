@@ -1,0 +1,17 @@
+{
+  "TESTER_CONTROL_CONFIG": "/opt/deploy/tester/config/projects.json",
+  "TESTER_ENV_FILE": "/opt/deploy/tester/config/.env.local",
+  "TESTER_PRIVATE_REPORT_DIR": "/data/tester/private",
+  "TESTER_REPORT_DIR": "/data/test-results",
+  "TESTER_RUNTIME_DIR": "/data/tester/runtime",
+  "TESTER_PID_FILE": "/data/tester/control.pid",
+  "TESTER_LOCK_FILE": "/data/tester/test.lock",
+  "TESTER_CONTROL_LOG": "/opt/logs/tester-control.log",
+  "TESTER_CONTROL_HOST": "127.0.0.1",
+  "TESTER_CONTROL_PORT": "18082",
+  "TESTER_CONTROL_ORIGIN": "https://tester.tidukongjian.com",
+  "TESTER_LOG_MAX_BYTES": "1048576",
+  "TESTER_LOG_BACKUPS": "3",
+  "STOP_TIMEOUT_SECONDS": "30",
+  "FORCE_STOP_TIMEOUT_SECONDS": "5"
+}

@@ -147,3 +147,7 @@ For protected manual runs and main-update triggers on the test machine, see
 ## License
 
 MIT — see `LICENSE`.
+
+## Release packaging
+
+See [Tester packaging](docs/packaging.md) for the service artifact contract, offline checks and migration boundaries.
