@@ -16,6 +16,10 @@ package-api.json 声明四个统一参数。构建输入的 tag commit 与 main 
 
 独立的 scripts/tag.sh 在获批发布事件中调用，支持 --bump patch|minor|major、--unit-version tester=版本。它在临时 worktree 更新 package.json 与 artifact-versions.conf，仅推送 tag，不改 main。package.sh 不调用它。正式发布通过 Deployer 的 compile_packages.sh --publish；开发验收不需要推送任何真实 tag。
 
+## 构建结果核对
+
+验证发布链路时，以 PR 合并后的 main 提交为起点，核对构建日志与 `release-manifest.json` 中的 `source_commit`，并确认对应版本归档已生成、SHA-256 与清单一致。创建 tag 或出现“开始打包”日志不代表构建成功；是否自动触发，以发布节点的实际日志和制品为准。
+
 ## 目录与运行
 
 从 config/*.template 创建 runtime.json、projects.json 和部署环境 .env.local，私有文件权限设为 600。runtime.json 中的值是部署环境配置，命令行显式 --config 与现有进程环境变量可覆盖。测试账号和飞书凭据只存受保护配置，不放入发布包。
